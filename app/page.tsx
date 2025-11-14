@@ -52,7 +52,7 @@ interface RoadmapCardProps {
 interface TokenomicsSlice {
   name: string;
   value: number;
-  [key: string]: string | number; // Recharts için index signature
+  [key: string]: string | number;
 }
 
 const TOKEN = {
@@ -167,7 +167,11 @@ function RoadmapCard({
   items,
 }: RoadmapCardProps): React.ReactElement {
   return (
-    <Card className="border-zinc-800 bg-zinc-950/60">
+    <Card
+      className={`bg-zinc-950/60 ${
+        completed ? "border-emerald-500/40" : "border-zinc-800"
+      }`}
+    >
       <CardHeader className="flex flex-row items-center gap-2 pb-3">
         {completed ? (
           <CheckCircle2 className="h-5 w-5 text-emerald-400" />
@@ -203,16 +207,12 @@ export default function Page(): React.ReactElement {
   }, [amount]);
 
   const costInUSDT = useMemo<number>(() => {
-    if (parsedAmount <= 0) {
-      return 0;
-    }
+    if (parsedAmount <= 0) return 0;
     return parsedAmount * TOKEN.priceUSDT;
   }, [parsedAmount]);
 
   const costInBNB = useMemo<number>(() => {
-    if (costInUSDT <= 0) {
-      return 0;
-    }
+    if (costInUSDT <= 0) return 0;
     return costInUSDT / TOKEN.bnbUsdtRate;
   }, [costInUSDT]);
 
@@ -256,6 +256,7 @@ export default function Page(): React.ReactElement {
     <div className="min-h-screen w-full bg-gradient-to-b from-black via-zinc-950 to-zinc-900 text-zinc-50">
       <Toaster richColors theme="dark" position="top-right" />
 
+      {/* HEADER */}
       <header className="sticky top-0 z-40 border-b border-zinc-800/80 bg-black/70 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
@@ -285,11 +286,11 @@ export default function Page(): React.ReactElement {
       </header>
 
       <main className="mx-auto max-w-6xl space-y-14 px-4 pb-16 pt-10">
-        {/* Hero + Presale Panel */}
+        {/* HERO + PRESALE PANEL */}
         <section className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
-          {/* Hero */}
+          {/* HERO */}
           <div className="flex-1 min-w-0">
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-300">
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/15 px-3 py-1.5 text-xs font-medium text-emerald-200 shadow-[0_0_25px_rgba(16,185,129,0.35)]">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
               Presale Live
             </div>
@@ -304,7 +305,7 @@ export default function Page(): React.ReactElement {
             <p className="mt-4 max-w-xl text-sm text-zinc-300 sm:text-base">
               Join the early supporters of{" "}
               <span className="font-semibold">{TOKEN.symbol}</span> on BNB
-              Chain. Fair tokenomics, transparent roadmap and long-term
+              Chain. Fair tokenomics, a transparent roadmap and long-term
               incentives for holders.
             </p>
 
@@ -324,7 +325,7 @@ export default function Page(): React.ReactElement {
                     .getElementById("tokenomics-section")
                     ?.scrollIntoView({ behavior: "smooth", block: "start" })
                 }
-                className="inline-flex items-center gap-2 text-sm font-medium text-zinc-300 hover:text-zinc-50"
+                className="inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-zinc-300 hover:text-zinc-50"
               >
                 View Tokenomics
                 <ArrowDown className="h-4 w-4" />
@@ -347,7 +348,7 @@ export default function Page(): React.ReactElement {
             </div>
           </div>
 
-          {/* Presale Panel */}
+          {/* PRESALE PANEL */}
           <div className="w-full max-w-xl lg:max-w-md">
             <Card
               id="presale-panel"
@@ -359,6 +360,7 @@ export default function Page(): React.ReactElement {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-5">
+                {/* AMOUNT */}
                 <div className="space-y-2">
                   <Label htmlFor="snake-amount" className="text-xs">
                     Amount ({TOKEN.symbol})
@@ -383,6 +385,7 @@ export default function Page(): React.ReactElement {
                   </p>
                 </div>
 
+                {/* PAY WITH */}
                 <div className="space-y-2">
                   <Label className="text-xs">Pay with</Label>
                   <Tabs
@@ -392,16 +395,16 @@ export default function Page(): React.ReactElement {
                     }
                     className="w-full"
                   >
-                    <TabsList className="flex w-full items-center rounded-xl border border-zinc-700 bg-zinc-900/80 p-1">
+                    <TabsList className="flex w-full items-center gap-1 rounded-full border border-zinc-700 bg-zinc-900/80 p-1">
                       <TabsTrigger
                         value="USDT"
-                        className="flex h-10 flex-1 items-center justify-center rounded-md border border-zinc-700 bg-zinc-800 text-xs text-zinc-100 sm:text-sm data-[state=active]:border-emerald-400 data-[state=active]:bg-emerald-400 data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm"
+                        className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full px-3 text-xs font-medium text-zinc-200 transition-colors sm:text-sm data-[state=active]:bg-emerald-500 data-[state=active]:text-zinc-950 data-[state=active]:shadow-md data-[state=active]:shadow-emerald-500/30"
                       >
                         USDT (BEP-20)
                       </TabsTrigger>
                       <TabsTrigger
                         value="BNB"
-                        className="ml-1 flex h-10 flex-1 items-center justify-center rounded-md border border-zinc-700 bg-zinc-800 text-xs text-zinc-100 sm:text-sm data-[state=active]:border-emerald-400 data-[state=active]:bg-emerald-400 data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm"
+                        className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-full px-3 text-xs font-medium text-zinc-200 transition-colors sm:text-sm data-[state=active]:bg-emerald-500 data-[state=active]:text-zinc-950 data-[state=active]:shadow-md data-[state=active]:shadow-emerald-500/30"
                       >
                         BNB
                       </TabsTrigger>
@@ -415,6 +418,7 @@ export default function Page(): React.ReactElement {
 
                 <Separator className="bg-zinc-800" />
 
+                {/* SUMMARY */}
                 <div className="space-y-2">
                   <SummaryRow
                     label="You pay (estimated)"
@@ -437,8 +441,13 @@ export default function Page(): React.ReactElement {
                         : `0 ${TOKEN.symbol}`
                     }
                   />
+                  <p className="text-[11px] text-zinc-500">
+                    Values are estimates. Final price is confirmed on-chain at
+                    the time of purchase.
+                  </p>
                 </div>
               </CardContent>
+
               <CardFooter className="flex flex-col gap-3 border-t border-zinc-800 bg-zinc-950/80 py-4 sm:flex-row sm:items-center sm:justify-between">
                 <Button
                   variant="outline"
@@ -452,7 +461,7 @@ export default function Page(): React.ReactElement {
                 </Button>
                 <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
                   <Button
-                    className="flex-1 sm:flex-none bg-emerald-500 text-zinc-900 hover:bg-emerald-400 shadow-md shadow-emerald-500/25 font-semibold"
+                    className="flex-1 cursor-pointer bg-emerald-500 font-semibold text-zinc-900 shadow-md shadow-emerald-500/25 hover:bg-emerald-400 sm:flex-none"
                     onClick={handleBuyClick}
                   >
                     Buy Now
@@ -472,7 +481,7 @@ export default function Page(): React.ReactElement {
 
         <Separator className="bg-zinc-800/80" />
 
-        {/* Token details */}
+        {/* TOKEN DETAILS */}
         <section
           aria-label="Token details"
           className="space-y-6"
@@ -517,7 +526,7 @@ export default function Page(): React.ReactElement {
           </Card>
         </section>
 
-        {/* Tokenomics */}
+        {/* TOKENOMICS */}
         <section
           aria-label="Tokenomics"
           className="space-y-6"
@@ -585,7 +594,7 @@ export default function Page(): React.ReactElement {
           </Card>
         </section>
 
-        {/* Roadmap */}
+        {/* ROADMAP */}
         <section aria-label="Roadmap" className="space-y-6" id="roadmap">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h2 className="text-xl font-semibold tracking-tight">Roadmap</h2>
@@ -607,6 +616,7 @@ export default function Page(): React.ReactElement {
         </section>
       </main>
 
+      {/* FOOTER */}
       <footer className="border-t border-zinc-800/80 bg-black/80">
         <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-7 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-3">
