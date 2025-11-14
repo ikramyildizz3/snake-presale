@@ -52,6 +52,7 @@ interface RoadmapCardProps {
 interface TokenomicsSlice {
   name: string;
   value: number;
+  [key: string]: string | number; // Recharts için index signature
 }
 
 const TOKEN = {
@@ -132,7 +133,7 @@ const formatNumber = (value: number, decimals: number = 2): string =>
       })
     : "0";
 
-function LogoBadge(): JSX.Element {
+function LogoBadge(): React.ReactElement {
   return (
     <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-400 via-lime-400 to-emerald-600 text-lg font-bold text-zinc-950 shadow-lg shadow-emerald-500/40">
       🐍
@@ -140,7 +141,7 @@ function LogoBadge(): JSX.Element {
   );
 }
 
-function DetailItem({ label, value }: DetailItemProps): JSX.Element {
+function DetailItem({ label, value }: DetailItemProps): React.ReactElement {
   return (
     <div className="rounded-2xl border border-zinc-800 bg-zinc-950/50 p-4">
       <div className="text-xs font-medium uppercase tracking-wide text-zinc-400">
@@ -151,7 +152,7 @@ function DetailItem({ label, value }: DetailItemProps): JSX.Element {
   );
 }
 
-function SummaryRow({ label, value }: SummaryRowProps): JSX.Element {
+function SummaryRow({ label, value }: SummaryRowProps): React.ReactElement {
   return (
     <div className="flex items-center justify-between text-sm">
       <span className="text-zinc-400">{label}</span>
@@ -164,36 +165,22 @@ function RoadmapCard({
   phase,
   completed,
   items,
-}: RoadmapCardProps): JSX.Element {
+}: RoadmapCardProps): React.ReactElement {
   return (
-    <Card
-      className={`border-zinc-800 bg-zinc-950/60 ${
-        completed ? "border-emerald-500/50 bg-emerald-950/30" : ""
-      }`}
-    >
+    <Card className="border-zinc-800 bg-zinc-950/60">
       <CardHeader className="flex flex-row items-center gap-2 pb-3">
         {completed ? (
           <CheckCircle2 className="h-5 w-5 text-emerald-400" />
         ) : (
           <Clock className="h-5 w-5 text-zinc-400" />
         )}
-        <CardTitle
-          className={`text-base font-semibold ${
-            completed ? "text-emerald-100" : ""
-          }`}
-        >
-          {phase}
-        </CardTitle>
+        <CardTitle className="text-base font-semibold">{phase}</CardTitle>
       </CardHeader>
       <CardContent className="pt-0">
         <ul className="space-y-1 text-sm text-zinc-300">
           {items.map((item) => (
             <li key={item} className="flex gap-2">
-              <span
-                className={`mt-[6px] h-1.5 w-1.5 rounded-full ${
-                  completed ? "bg-emerald-400" : "bg-zinc-500"
-                }`}
-              />
+              <span className="mt-[6px] h-1.5 w-1.5 rounded-full bg-emerald-400" />
               <span>{item}</span>
             </li>
           ))}
@@ -203,7 +190,7 @@ function RoadmapCard({
   );
 }
 
-export default function Page(): JSX.Element {
+export default function Page(): React.ReactElement {
   const [payMethod, setPayMethod] = useState<PayMethod>("USDT");
   const [amount, setAmount] = useState<string>("");
 
@@ -366,16 +353,10 @@ export default function Page(): JSX.Element {
               id="presale-panel"
               className="border-zinc-800 bg-zinc-950/70 shadow-xl shadow-emerald-500/10"
             >
-              <CardHeader className="flex flex-row items-center justify-between gap-2 pb-3">
+              <CardHeader className="pb-3">
                 <CardTitle className="text-lg">
                   Presale Panel — Buy {TOKEN.symbol}
                 </CardTitle>
-                <div className="inline-flex items-center gap-1 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-2 py-0.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                  <span className="text-[10px] font-medium text-emerald-200">
-                    Live
-                  </span>
-                </div>
               </CardHeader>
               <CardContent className="space-y-5">
                 <div className="space-y-2">
@@ -411,16 +392,16 @@ export default function Page(): JSX.Element {
                     }
                     className="w-full"
                   >
-                    <TabsList className="grid w-full grid-cols-2 gap-2 bg-transparent p-0">
+                    <TabsList className="flex w-full items-center rounded-xl border border-zinc-700 bg-zinc-900/80 p-1">
                       <TabsTrigger
                         value="USDT"
-                        className="flex h-10 w-full items-center justify-center rounded-lg border border-zinc-700 bg-zinc-900 text-xs text-zinc-100 sm:text-sm data-[state=active]:border-emerald-400 data-[state=active]:bg-emerald-400 data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm"
+                        className="flex h-10 flex-1 items-center justify-center rounded-md border border-zinc-700 bg-zinc-800 text-xs text-zinc-100 sm:text-sm data-[state=active]:border-emerald-400 data-[state=active]:bg-emerald-400 data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm"
                       >
                         USDT (BEP-20)
                       </TabsTrigger>
                       <TabsTrigger
                         value="BNB"
-                        className="flex h-10 w-full items-center justify-center rounded-lg border border-zinc-700 bg-zinc-900 text-xs text-zinc-100 sm:text-sm data-[state=active]:border-emerald-400 data-[state=active]:bg-emerald-400 data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm"
+                        className="ml-1 flex h-10 flex-1 items-center justify-center rounded-md border border-zinc-700 bg-zinc-800 text-xs text-zinc-100 sm:text-sm data-[state=active]:border-emerald-400 data-[state=active]:bg-emerald-400 data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm"
                       >
                         BNB
                       </TabsTrigger>
@@ -494,7 +475,7 @@ export default function Page(): JSX.Element {
         {/* Token details */}
         <section
           aria-label="Token details"
-          className="space-y-4 md:space-y-5"
+          className="space-y-6"
           id="token-details"
         >
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -550,7 +531,7 @@ export default function Page(): JSX.Element {
           </div>
 
           <Card className="border-zinc-800 bg-zinc-950/70">
-            <CardContent className="grid gap-8 py-5 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] md:items-center">
+            <CardContent className="grid gap-8 py-6 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] md:items-center">
               <ul className="space-y-2 text-sm">
                 {TOKENOMICS.map((slice) => (
                   <li
@@ -595,7 +576,7 @@ export default function Page(): JSX.Element {
                       wrapperStyle={{ fontSize: 11 }}
                       iconSize={10}
                       verticalAlign="bottom"
-                      height={28}
+                      height={32}
                     />
                   </PieChart>
                 </ResponsiveContainer>
@@ -636,8 +617,7 @@ export default function Page(): JSX.Element {
               </div>
               <p className="mt-1 max-w-xs text-xs text-zinc-400">
                 Experimental, community-driven token on BNB Chain. Always do
-                your own research. No guarantees or investment advice. Contract
-                audit planned before full launch.
+                your own research. No guarantees or investment advice.
               </p>
             </div>
           </div>
