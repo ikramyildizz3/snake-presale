@@ -143,7 +143,7 @@ function LogoBadge(): React.ReactElement {
 
 function DetailItem({ label, value }: DetailItemProps): React.ReactElement {
   return (
-    <div className="rounded-2xl border border-zinc-800 bg-zinc-950/50 p-4">
+    <div className="h-full cursor-pointer rounded-2xl border border-zinc-800 bg-zinc-950/50 p-4 transition hover:border-emerald-500/60 hover:bg-zinc-900/80">
       <div className="text-xs font-medium uppercase tracking-wide text-zinc-400">
         {label}
       </div>
@@ -155,8 +155,8 @@ function DetailItem({ label, value }: DetailItemProps): React.ReactElement {
 function SummaryRow({ label, value }: SummaryRowProps): React.ReactElement {
   return (
     <div className="flex items-center justify-between text-sm">
-      <span className="text-zinc-400">{label}</span>
-      <span className="font-semibold text-zinc-50">{value}</span>
+      <span className="text-zinc-300">{label}</span>
+      <span className="font-semibold text-zinc-100">{value}</span>
     </div>
   );
 }
@@ -167,7 +167,7 @@ function RoadmapCard({
   items,
 }: RoadmapCardProps): React.ReactElement {
   return (
-    <Card className="border-zinc-800 bg-zinc-950/60">
+    <Card className="rounded-2xl border-zinc-800 bg-zinc-950/60 shadow-md shadow-black/30">
       <CardHeader className="flex flex-row items-center gap-2 pb-3">
         {completed ? (
           <CheckCircle2 className="h-5 w-5 text-emerald-400" />
@@ -273,7 +273,7 @@ export default function Page(): React.ReactElement {
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
-              className="border-emerald-500/80 bg-zinc-950 text-xs text-emerald-200 hover:bg-emerald-500/10 hover:text-emerald-50 sm:text-sm"
+              className="cursor-pointer border-emerald-500/80 bg-zinc-950 text-xs text-emerald-200 hover:bg-emerald-500/10 hover:text-emerald-50 sm:text-sm"
               onClick={() =>
                 toast.info("Wallet connection will be available soon.")
               }
@@ -289,13 +289,13 @@ export default function Page(): React.ReactElement {
         {/* Hero + Presale Panel */}
         <section className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
           {/* Hero */}
-          <div className="flex-1 min-w-0">
+          <div className="min-w-0 flex-1">
             <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-300">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
               Presale Live
             </div>
 
-            <h1 className="mt-4 text-4xl font-extrabold tracking-tight leading-[1.1] sm:text-5xl lg:text-6xl">
+            <h1 className="mt-4 text-4xl font-extrabold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
               SNAKE Token
               <span className="block bg-gradient-to-r from-emerald-400 to-lime-300 bg-clip-text pb-2 text-transparent">
                 High-utility, community first.
@@ -313,7 +313,7 @@ export default function Page(): React.ReactElement {
               <Button
                 size="lg"
                 variant="secondary"
-                className="px-7 text-sm font-semibold"
+                className="cursor-pointer px-7 text-sm font-semibold"
                 onClick={handleScrollToPresale}
               >
                 Join Presale
@@ -352,7 +352,7 @@ export default function Page(): React.ReactElement {
           <div className="w-full max-w-xl lg:max-w-md">
             <Card
               id="presale-panel"
-              className="border-zinc-800 bg-zinc-950/70 shadow-xl shadow-emerald-500/10"
+              className="rounded-2xl border-zinc-800 bg-zinc-950/70 shadow-xl shadow-emerald-500/10"
             >
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg">
@@ -362,7 +362,7 @@ export default function Page(): React.ReactElement {
               <CardContent className="space-y-5">
                 {/* Amount */}
                 <div className="space-y-2">
-                  <Label htmlFor="snake-amount" className="text-xs">
+                  <Label htmlFor="snake-amount" className="text-xs text-zinc-300">
                     Amount ({TOKEN.symbol})
                   </Label>
                   <Input
@@ -377,17 +377,17 @@ export default function Page(): React.ReactElement {
                     ): void => {
                       setAmount(event.target.value);
                     }}
-                    className="border-zinc-700 bg-zinc-900 text-zinc-100 placeholder:text-zinc-500 focus-visible:ring-emerald-500/60 appearance-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                    className="appearance-none border-zinc-700 bg-zinc-900 text-zinc-100 placeholder:text-zinc-500 focus-visible:ring-emerald-500/60 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                     placeholder="e.g. 1000"
                   />
-                  <p className="text-xs text-zinc-500">
+                  <p className="text-xs text-zinc-400">
                     Price: 1 {TOKEN.symbol} = {TOKEN.priceUSDT} USDT
                   </p>
                 </div>
 
                 {/* Pay with */}
                 <div className="space-y-2">
-                  <Label className="text-xs">Pay with</Label>
+                  <Label className="text-xs text-zinc-300">Pay with</Label>
                   <Tabs
                     value={payMethod}
                     onValueChange={(value: string): void =>
@@ -395,22 +395,22 @@ export default function Page(): React.ReactElement {
                     }
                     className="w-full"
                   >
-                    <TabsList className="grid w-full grid-cols-2 items-center rounded-full border border-zinc-700 bg-zinc-900/80 p-1 shadow-inner shadow-black/40">
+                    <TabsList className="grid w-full grid-cols-2 overflow-hidden rounded-full bg-zinc-900/80 p-0 text-xs shadow-inner shadow-black/40">
                       <TabsTrigger
                         value="USDT"
-                        className="flex h-10 cursor-pointer items-center justify-center rounded-full border border-transparent bg-transparent text-xs text-zinc-100 hover:bg-zinc-800/70 sm:text-sm data-[state=active]:border-emerald-400 data-[state=active]:bg-emerald-400 data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm"
+                        className="flex h-10 w-full cursor-pointer items-center justify-center rounded-full px-3 font-medium text-zinc-300 transition data-[state=active]:bg-emerald-500 data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm"
                       >
                         USDT (BEP-20)
                       </TabsTrigger>
                       <TabsTrigger
                         value="BNB"
-                        className="flex h-10 cursor-pointer items-center justify-center rounded-full border border-transparent bg-transparent text-xs text-zinc-100 hover:bg-zinc-800/70 sm:text-sm data-[state=active]:border-emerald-400 data-[state=active]:bg-emerald-400 data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm"
+                        className="flex h-10 w-full cursor-pointer items-center justify-center rounded-full px-3 font-medium text-zinc-300 transition data-[state=active]:bg-emerald-500 data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm"
                       >
                         BNB
                       </TabsTrigger>
                     </TabsList>
                   </Tabs>
-                  <p className="text-xs text-zinc-500">
+                  <p className="text-xs text-zinc-300">
                     If you choose BNB, a fixed rate of 1 BNB ={" "}
                     {TOKEN.bnbUsdtRate} USDT will be used for the calculation.
                   </p>
@@ -419,7 +419,7 @@ export default function Page(): React.ReactElement {
                 <Separator className="bg-zinc-800" />
 
                 {/* Summary */}
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <SummaryRow
                     label="You pay (estimated)"
                     value={
@@ -441,7 +441,7 @@ export default function Page(): React.ReactElement {
                         : `0 ${TOKEN.symbol}`
                     }
                   />
-                  <p className="text-[11px] leading-snug text-zinc-500">
+                  <p className="text-[11px] leading-snug text-zinc-400">
                     Values are estimates. Final price is confirmed on-chain at
                     the time of purchase.
                   </p>
@@ -452,7 +452,7 @@ export default function Page(): React.ReactElement {
               <CardFooter className="flex flex-col gap-3 border-t border-zinc-800 bg-zinc-950/80 py-4 sm:flex-row sm:items-center sm:justify-between">
                 <Button
                   variant="outline"
-                  className="border-emerald-500/80 bg-zinc-950 text-xs text-emerald-200 hover:bg-emerald-500/10 hover:text-emerald-50 sm:text-sm"
+                  className="cursor-pointer border-emerald-500/80 bg-zinc-950 text-xs text-emerald-200 hover:bg-emerald-500/10 hover:text-emerald-50 sm:text-sm"
                   onClick={() =>
                     toast.info("Wallet connection will be available soon.")
                   }
@@ -462,7 +462,7 @@ export default function Page(): React.ReactElement {
                 </Button>
                 <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
                   <Button
-                    className="flex-1 font-semibold bg-emerald-500 text-zinc-900 shadow-md shadow-emerald-500/25 hover:bg-emerald-400 sm:flex-none"
+                    className="flex-1 cursor-pointer bg-emerald-500 font-semibold text-zinc-900 shadow-md shadow-emerald-500/25 hover:bg-emerald-400 sm:flex-none"
                     onClick={handleBuyClick}
                   >
                     Buy Now
@@ -497,8 +497,8 @@ export default function Page(): React.ReactElement {
             </span>
           </div>
 
-          <Card className="border-zinc-800 bg-zinc-950/70">
-            <CardContent className="grid gap-5 py-5 md:grid-cols-3">
+          <Card className="rounded-2xl border-zinc-800 bg-zinc-950/70">
+            <CardContent className="grid gap-5 p-6 md:grid-cols-3">
               <DetailItem
                 label="Total Supply"
                 value={TOKEN.totalSupply.toLocaleString("en-US")}
@@ -540,7 +540,7 @@ export default function Page(): React.ReactElement {
             </span>
           </div>
 
-          <Card className="border-zinc-800 bg-zinc-950/70">
+          <Card className="rounded-2xl border-zinc-800 bg-zinc-950/70">
             <CardContent className="grid gap-8 py-6 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] md:items-center">
               <ul className="space-y-2 text-sm">
                 {TOKENOMICS.map((slice) => (
@@ -580,10 +580,11 @@ export default function Page(): React.ReactElement {
                         borderRadius: 12,
                         border: "1px solid #27272a",
                         fontSize: 12,
+                        color: "#e5e5e5",
                       }}
                     />
                     <Legend
-                      wrapperStyle={{ fontSize: 11 }}
+                      wrapperStyle={{ fontSize: 11, color: "#e5e5e5" }}
                       iconSize={10}
                       verticalAlign="bottom"
                       height={32}
@@ -638,14 +639,14 @@ export default function Page(): React.ReactElement {
             <div className="flex flex-wrap items-center gap-4">
               <a
                 href="#"
-                className="inline-flex items-center gap-2 text-xs text-zinc-300 hover:text-zinc-50"
+                className="inline-flex cursor-pointer items-center gap-2 text-xs text-zinc-300 hover:text-zinc-50"
               >
                 <Twitter className="h-4 w-4" />
                 X (Twitter)
               </a>
               <a
                 href="#"
-                className="inline-flex items-center gap-2 text-xs text-zinc-300 hover:text-zinc-50"
+                className="inline-flex cursor-pointer items-center gap-2 text-xs text-zinc-300 hover:text-zinc-50"
               >
                 <Send className="h-4 w-4" />
                 Telegram
