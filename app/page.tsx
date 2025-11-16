@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -60,7 +60,7 @@ const TOKEN = {
   symbol: "SNAKE",
   totalSupply: 200_000_000,
   priceUSDT: 0.02,
-  bnbUsdtRate: 300,
+  bnbUsdtRate: 300, // initial fallback
   contractAddress: "",
 };
 
@@ -193,6 +193,7 @@ function RoadmapCard({
 export default function Page(): React.ReactElement {
   const [payMethod, setPayMethod] = useState<PayMethod>("USDT");
   const [amount, setAmount] = useState<string>("");
+  const [bnbUsdtRate, setBnbUsdtRate] = useState<number>(TOKEN.bnbUsdtRate);
 
   const parsedAmount = useMemo<number>(() => {
     const numeric = Number(amount.replace(/\s/g, "").replace(",", "."));
@@ -210,11 +211,44 @@ export default function Page(): React.ReactElement {
   }, [parsedAmount]);
 
   const costInBNB = useMemo<number>(() => {
-    if (costInUSDT <= 0) {
+    if (
+      costInUSDT <= 0 ||
+      !Number.isFinite(bnbUsdtRate) ||
+      bnbUsdtRate <= 0
+    ) {
       return 0;
     }
-    return costInUSDT / TOKEN.bnbUsdtRate;
-  }, [costInUSDT]);
+    return costInUSDT / bnbUsdtRate;
+  }, [costInUSDT, bnbUsdtRate]);
+
+  // Live BNB/USDT price (Binance)
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchBnbPrice = async () => {
+      try {
+        const res = await fetch(
+          "https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT",
+        );
+        if (!res.ok) return;
+        const data: { price: string } = await res.json();
+        const price = parseFloat(data.price);
+        if (isMounted && Number.isFinite(price) && price > 0) {
+          setBnbUsdtRate(price);
+        }
+      } catch {
+        // silent fallback to previous value
+      }
+    };
+
+    fetchBnbPrice();
+    const interval = setInterval(fetchBnbPrice, 60_000);
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
 
   const handleScrollToPresale = (): void => {
     const element = document.getElementById("presale-panel");
@@ -411,8 +445,9 @@ export default function Page(): React.ReactElement {
                     </TabsList>
                   </Tabs>
                   <p className="text-xs text-zinc-300">
-                    If you choose BNB, a fixed rate of 1 BNB ={" "}
-                    {TOKEN.bnbUsdtRate} USDT will be used for the calculation.
+                    If you choose BNB, an indicative live rate from Binance is
+                    used. Current reference: 1 BNB ≈{" "}
+                    {formatNumber(bnbUsdtRate || TOKEN.bnbUsdtRate)} USDT.
                   </p>
                 </div>
 
@@ -442,8 +477,8 @@ export default function Page(): React.ReactElement {
                     }
                   />
                   <p className="text-[11px] leading-snug text-zinc-400">
-                    Values are estimates. Final price is confirmed on-chain at
-                    the time of purchase.
+                    Values are estimates based on live market data. Final price
+                    is confirmed on-chain at the time of purchase.
                   </p>
                 </div>
               </CardContent>
@@ -638,14 +673,18 @@ export default function Page(): React.ReactElement {
             <div className="font-semibold">Social</div>
             <div className="flex flex-wrap items-center gap-4">
               <a
-                href="#"
+                href="https://x.com/memsnake"
+                target="_blank"
+                rel="noreferrer noopener"
                 className="inline-flex cursor-pointer items-center gap-2 text-xs text-zinc-300 hover:text-zinc-50"
               >
                 <Twitter className="h-4 w-4" />
                 X (Twitter)
               </a>
               <a
-                href="#"
+                href="https://t.me/Snkglobal"
+                target="_blank"
+                rel="noreferrer noopener"
                 className="inline-flex cursor-pointer items-center gap-2 text-xs text-zinc-300 hover:text-zinc-50"
               >
                 <Send className="h-4 w-4" />
