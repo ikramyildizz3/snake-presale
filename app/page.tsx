@@ -143,7 +143,7 @@ function LogoBadge(): React.ReactElement {
 
 function DetailItem({ label, value }: DetailItemProps): React.ReactElement {
   return (
-    <div className="h-full cursor-pointer rounded-2xl border border-zinc-800 bg-zinc-950/50 p-4 transition hover:border-emerald-500/60 hover:bg-zinc-900/80">
+    <div className="h-full cursor-pointer rounded-2xl border border-zinc-800 bg-zinc-950/50 p-4 transition-colors duration-150 hover:border-emerald-500/60 hover:bg-zinc-900/80">
       <div className="text-xs font-medium uppercase tracking-wide text-zinc-400">
         {label}
       </div>
@@ -167,7 +167,7 @@ function RoadmapCard({
   items,
 }: RoadmapCardProps): React.ReactElement {
   return (
-    <Card className="rounded-2xl border-zinc-800 bg-zinc-950/60 shadow-md shadow-black/30">
+    <Card className="rounded-2xl border-zinc-800 bg-zinc-950/60 shadow-md shadow-black/30 transition-colors duration-150 hover:border-emerald-500/40 hover:shadow-emerald-500/10">
       <CardHeader className="flex flex-row items-center gap-2 pb-3">
         {completed ? (
           <CheckCircle2 className="h-5 w-5 text-emerald-400" />
@@ -386,7 +386,7 @@ export default function Page(): React.ReactElement {
           <div className="w-full max-w-xl lg:max-w-md">
             <Card
               id="presale-panel"
-              className="rounded-2xl border-zinc-800 bg-zinc-950/70 shadow-xl shadow-emerald-500/10"
+              className="rounded-2xl border-zinc-800 bg-zinc-950/70 shadow-xl shadow-emerald-500/10 transition-colors duration-150 hover:border-emerald-500/40"
             >
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg">
@@ -429,16 +429,16 @@ export default function Page(): React.ReactElement {
                     }
                     className="w-full"
                   >
-                    <TabsList className="grid w-full grid-cols-2 overflow-hidden rounded-full bg-zinc-900/80 p-0 text-xs shadow-inner shadow-black/40">
+                    <TabsList className="grid w-full grid-cols-2 items-center overflow-hidden rounded-full bg-zinc-900/80 p-1 text-xs shadow-inner shadow-black/40">
                       <TabsTrigger
                         value="USDT"
-                        className="flex h-10 w-full cursor-pointer items-center justify-center rounded-full px-3 font-medium text-zinc-300 transition data-[state=active]:bg-emerald-500 data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm"
+                        className="flex h-9 w-full cursor-pointer items-center justify-center rounded-full px-3 font-medium text-zinc-300 transition-colors duration-150 data-[state=active]:bg-emerald-500 data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm"
                       >
                         USDT (BEP-20)
                       </TabsTrigger>
                       <TabsTrigger
                         value="BNB"
-                        className="flex h-10 w-full cursor-pointer items-center justify-center rounded-full px-3 font-medium text-zinc-300 transition data-[state=active]:bg-emerald-500 data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm"
+                        className="flex h-9 w-full cursor-pointer items-center justify-center rounded-full px-3 font-medium text-zinc-300 transition-colors duration-150 data-[state=active]:bg-emerald-500 data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm"
                       >
                         BNB
                       </TabsTrigger>
@@ -532,7 +532,7 @@ export default function Page(): React.ReactElement {
             </span>
           </div>
 
-          <Card className="rounded-2xl border-zinc-800 bg-zinc-950/70">
+          <Card className="rounded-2xl border-zinc-800 bg-zinc-950/70 shadow-sm shadow-black/20">
             <CardContent className="grid gap-5 p-6 md:grid-cols-3">
               <DetailItem
                 label="Total Supply"
@@ -575,13 +575,13 @@ export default function Page(): React.ReactElement {
             </span>
           </div>
 
-          <Card className="rounded-2xl border-zinc-800 bg-zinc-950/70">
+          <Card className="rounded-2xl border-zinc-800 bg-zinc-950/70 shadow-sm shadow-black/20">
             <CardContent className="grid gap-8 py-6 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] md:items-center">
               <ul className="space-y-2 text-sm">
                 {TOKENOMICS.map((slice) => (
                   <li
                     key={slice.name}
-                    className="flex items-center justify-between rounded-xl border border-zinc-800 bg-zinc-950/70 px-3 py-2"
+                    className="flex items-center justify-between rounded-xl border border-zinc-800 bg-zinc-950/70 px-3 py-2 transition-colors duration-150 hover:border-emerald-500/50 hover:bg-zinc-900/80"
                   >
                     <span className="text-zinc-200">{slice.name}</span>
                     <span className="font-semibold text-zinc-50">
@@ -611,11 +611,20 @@ export default function Page(): React.ReactElement {
                     </Pie>
                     <Tooltip
                       contentStyle={{
-                        backgroundColor: "#18181b",
-                        borderRadius: 12,
+                        backgroundColor: "#020617",
+                        borderRadius: 10,
                         border: "1px solid #27272a",
                         fontSize: 12,
-                        color: "#e5e5e5",
+                        color: "#ffffff",
+                        padding: "8px 10px",
+                        boxShadow: "0 10px 25px rgba(0,0,0,0.55)",
+                      }}
+                      labelStyle={{
+                        color: "#f9fafb",
+                        marginBottom: 4,
+                      }}
+                      itemStyle={{
+                        color: "#e5e7eb",
                       }}
                     />
                     <Legend
