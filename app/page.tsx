@@ -55,6 +55,7 @@ interface TokenomicsSlice {
   name: string;
   nameTr: string;
   value: number;
+  [key: string]: string | number;
 }
 
 const TOKEN = {
