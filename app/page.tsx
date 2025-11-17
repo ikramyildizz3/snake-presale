@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
@@ -563,34 +562,32 @@ export default function Page(): React.ReactElement {
                 </div>
 
                 {/* Pay with */}
-                <div className="space-y-3 pt-1">
+                <div className="space-y-2">
                   <Label className="text-xs text-zinc-300">
                     {lang === "en" ? "Pay with" : "Ödeme yöntemi"}
                   </Label>
-                  <div className="flex justify-start">
-                    <Tabs
-                      value={payMethod}
-                      onValueChange={(value: string): void =>
-                        setPayMethod(value as PayMethod)
-                      }
-                      className="w-full"
-                    >
-                      <TabsList className="grid w-full max-w-[260px] grid-cols-2 items-center rounded-full border border-zinc-700 bg-zinc-900/80 p-1 text-xs shadow-inner shadow-black/40">
-                        <TabsTrigger
-                          value="USDT"
-                          className="flex h-9 w-full cursor-pointer items-center justify-center rounded-full px-3 font-medium text-zinc-300 transition-colors duration-150 data-[state=active]:bg-emerald-500 data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm"
-                        >
-                          USDT (BEP-20)
-                        </TabsTrigger>
-                        <TabsTrigger
-                          value="BNB"
-                          className="flex h-9 w-full cursor-pointer items-center justify-center rounded-full px-3 font-medium text-zinc-300 transition-colors duration-150 data-[state=active]:bg-emerald-500 data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm"
-                        >
-                          BNB
-                        </TabsTrigger>
-                      </TabsList>
-                    </Tabs>
-                  </div>
+                  <Tabs
+                    value={payMethod}
+                    onValueChange={(value: string): void =>
+                      setPayMethod(value as PayMethod)
+                    }
+                    className="w-full"
+                  >
+                    <TabsList className="grid w-full grid-cols-2 items-center rounded-full border border-zinc-700 bg-zinc-900/80 p-1 text-xs shadow-inner shadow-black/40">
+                      <TabsTrigger
+                        value="USDT"
+                        className="flex h-9 w-full cursor-pointer items-center justify-center rounded-full px-3 font-medium text-zinc-300 transition-colors duration-150 data-[state=active]:bg-emerald-500 data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm"
+                      >
+                        USDT (BEP-20)
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="BNB"
+                        className="flex h-9 w-full cursor-pointer items-center justify-center rounded-full px-3 font-medium text-zinc-300 transition-colors duration-150 data-[state=active]:bg-emerald-500 data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm"
+                      >
+                        BNB
+                      </TabsTrigger>
+                    </TabsList>
+                  </Tabs>
                   <p className="text-xs text-zinc-300">
                     {lang === "en" ? (
                       <>
@@ -691,7 +688,7 @@ export default function Page(): React.ReactElement {
           <div className="grid gap-4 md:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
             {/* Presale status */}
             <Card className="rounded-2xl border-zinc-800 bg-zinc-950/70 shadow-sm shadow-black/20">
-              <CardHeader className="pb-3">
+              <CardHeader className="pt-3 pb-2">
                 <CardTitle className="text-base font-semibold">
                   {lang === "en" ? "Presale Status" : "Ön Satış Durumu"}
                 </CardTitle>
@@ -725,7 +722,7 @@ export default function Page(): React.ReactElement {
 
             {/* How to buy */}
             <Card className="rounded-2xl border-zinc-800 bg-zinc-950/70 shadow-sm shadow-black/20">
-              <CardHeader className="pb-3">
+              <CardHeader className="pt-3 pb-2">
                 <CardTitle className="text-base font-semibold">
                   {lang === "en" ? "How to Buy" : "Nasıl Satın Alınır?"}
                 </CardTitle>
