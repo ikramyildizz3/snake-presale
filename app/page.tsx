@@ -52,27 +52,33 @@ interface RoadmapCardProps {
 
 interface TokenomicsSlice {
   name: string;
+  nameTr: string;
   value: number;
-  [key: string]: string | number;
 }
 
 const TOKEN = {
   name: "SNAKE Token",
   symbol: "SNAKE",
-  totalSupply: 200_000_000,
+  totalSupply: 400_000_000,
   priceUSDT: 0.02,
   bnbUsdtRate: 300, // initial fallback
   contractAddress: "0xc9F46963Ee83EFd45675867f622Dd3a0B7c494e7",
 };
 
+const LOCKED_TOKENS = 100_000_000;
+
+const PRESALE_SOFT_CAP = 200_000; // USDT (example, adjust later)
+const PRESALE_HARD_CAP = 500_000; // USDT (example, adjust later)
+const PRESALE_RAISED = 0; // static for now, can be wired to backend later
+
 const TOKENOMICS: TokenomicsSlice[] = [
-  { name: "Presale", value: 25 },
-  { name: "Liquidity", value: 20 },
-  { name: "Staking & Rewards", value: 15 },
-  { name: "Team & Advisors", value: 10 },
-  { name: "Marketing", value: 15 },
-  { name: "Reserve", value: 10 },
-  { name: "Airdrop & Community", value: 5 },
+  { name: "Presale", nameTr: "Ön Satış", value: 25 },
+  { name: "Liquidity", nameTr: "Likidite", value: 20 },
+  { name: "Staking & Rewards", nameTr: "Staking & Ödüller", value: 15 },
+  { name: "Team & Advisors", nameTr: "Ekip & Danışmanlar", value: 10 },
+  { name: "Marketing", nameTr: "Pazarlama", value: 15 },
+  { name: "Reserve", nameTr: "Rezerv", value: 10 },
+  { name: "Airdrop & Community", nameTr: "Airdrop & Topluluk", value: 5 },
 ];
 
 const CHART_COLORS: string[] = [
@@ -163,7 +169,7 @@ const ROADMAP_TRANSLATIONS: Record<
     ],
   },
   "Phase 5 — Expansion": {
-    phaseTr: "Aşama 5 — Büyümeye Geçiş",
+    phaseTr: "Aşama 5 — Büyüme",
     itemsTr: [
       "CEX borsa görüşmeleri",
       "Ekosistem araçları",
@@ -277,6 +283,11 @@ export default function Page(): React.ReactElement {
     return costInUSDT / bnbUsdtRate;
   }, [costInUSDT, bnbUsdtRate]);
 
+  const presaleProgressPercent = Math.min(
+    100,
+    PRESALE_HARD_CAP > 0 ? (PRESALE_RAISED / PRESALE_HARD_CAP) * 100 : 0,
+  );
+
   // Live BNB/USDT price (Binance)
   useEffect(() => {
     let isMounted = true;
@@ -383,7 +394,7 @@ export default function Page(): React.ReactElement {
               <span className="text-xs text-zinc-500">
                 {lang === "en"
                   ? "Community-powered presale on BNB Chain"
-                  : "Topluluk odaklı BNB Chain ön satışı"}
+                  : "BNB Chain üzerinde topluluk odaklı ön satış"}
               </span>
             </div>
           </div>
@@ -424,7 +435,7 @@ export default function Page(): React.ReactElement {
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl space-y-14 px-4 pb-16 pt-10">
+      <main className="mx-auto max-w-6xl space-y-12 px-4 pb-16 pt-10">
         {/* Hero + Presale Panel */}
         <section className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
           {/* Hero */}
@@ -448,15 +459,15 @@ export default function Page(): React.ReactElement {
                 <>
                   Join the early supporters of {" "}
                   <span className="font-semibold">{TOKEN.symbol}</span> on BNB
-                  Chain. Fair tokenomics, transparent roadmap and long-term
+                  Chain. Fair tokenomics, a transparent roadmap and long-term
                   incentives for holders.
                 </>
               ) : (
                 <>
                   BNB Chain üzerindeki {" "}
                   <span className="font-semibold">{TOKEN.symbol}</span> tokeninin
-                  ilk destekçileri arasına katıl. Adil dağılım, şeffaf bir
-                  yol haritası ve uzun vadeli holder teşvikleri seni bekliyor.
+                  ilk destekçileri arasına katıl. Adil dağılım, şeffaf bir yol
+                  haritası ve uzun vadeli holder ödülleri seni bekliyor.
                 </>
               )}
             </p>
@@ -550,32 +561,34 @@ export default function Page(): React.ReactElement {
                 </div>
 
                 {/* Pay with */}
-                <div className="space-y-2 pt-1">
+                <div className="space-y-3 pt-1">
                   <Label className="text-xs text-zinc-300">
                     {lang === "en" ? "Pay with" : "Ödeme yöntemi"}
                   </Label>
-                  <Tabs
-                    value={payMethod}
-                    onValueChange={(value: string): void =>
-                      setPayMethod(value as PayMethod)
-                    }
-                    className="w-full"
-                  >
-                    <TabsList className="relative z-10 grid w-full grid-cols-2 items-center overflow-hidden rounded-full border border-emerald-500/40 bg-zinc-950/90 p-1 text-xs shadow-lg shadow-emerald-500/20">
-                      <TabsTrigger
-                        value="USDT"
-                        className="flex h-9 w-full cursor-pointer items-center justify-center rounded-full px-3 font-medium text-zinc-300 transition-colors duration-150 data-[state=active]:bg-emerald-500 data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm"
-                      >
-                        USDT (BEP-20)
-                      </TabsTrigger>
-                      <TabsTrigger
-                        value="BNB"
-                        className="flex h-9 w-full cursor-pointer items-center justify-center rounded-full px-3 font-medium text-zinc-300 transition-colors duration-150 data-[state=active]:bg-emerald-500 data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm"
-                      >
-                        BNB
-                      </TabsTrigger>
-                    </TabsList>
-                  </Tabs>
+                  <div className="flex justify-start">
+                    <Tabs
+                      value={payMethod}
+                      onValueChange={(value: string): void =>
+                        setPayMethod(value as PayMethod)
+                      }
+                      className="w-full"
+                    >
+                      <TabsList className="grid w-full max-w-[260px] grid-cols-2 items-center rounded-full border border-zinc-700 bg-zinc-900/80 p-1 text-xs shadow-inner shadow-black/40">
+                        <TabsTrigger
+                          value="USDT"
+                          className="flex h-9 w-full cursor-pointer items-center justify-center rounded-full px-3 font-medium text-zinc-300 transition-colors duration-150 data-[state=active]:bg-emerald-500 data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm"
+                        >
+                          USDT (BEP-20)
+                        </TabsTrigger>
+                        <TabsTrigger
+                          value="BNB"
+                          className="flex h-9 w-full cursor-pointer items-center justify-center rounded-full px-3 font-medium text-zinc-300 transition-colors duration-150 data-[state=active]:bg-emerald-500 data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm"
+                        >
+                          BNB
+                        </TabsTrigger>
+                      </TabsList>
+                    </Tabs>
+                  </div>
                   <p className="text-xs text-zinc-300">
                     {lang === "en" ? (
                       <>
@@ -585,9 +598,8 @@ export default function Page(): React.ReactElement {
                       </>
                     ) : (
                       <>
-                        BNB ile ödeme yaptığınızda, Binance'ten alınan
-                        yaklaşık piyasa fiyatı kullanılır. Güncel referans:
-                        1 BNB ≈{" "}
+                        BNB ile ödeme yaptığınızda Binance'ten alınan yaklaşık
+                        piyasa fiyatı kullanılır. Güncel referans: 1 BNB ≈{" "}
                         {formatNumber(bnbUsdtRate || TOKEN.bnbUsdtRate)} USDT.
                       </>
                     )}
@@ -672,12 +684,103 @@ export default function Page(): React.ReactElement {
           </div>
         </section>
 
+        {/* Presale status + How to buy */}
+        <section className="space-y-4" aria-label="Presale info">
+          <div className="grid gap-4 md:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
+            {/* Presale status */}
+            <Card className="rounded-2xl border-zinc-800 bg-zinc-950/70 shadow-sm shadow-black/20">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base font-semibold">
+                  {lang === "en" ? "Presale Status" : "Ön Satış Durumu"}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3 pt-0 text-sm text-zinc-200">
+                <div className="flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm">
+                  <span>
+                    {lang === "en" ? "Raised" : "Toplanan"}: {" "}
+                    {PRESALE_RAISED.toLocaleString("en-US")} / {" "}
+                    {PRESALE_HARD_CAP.toLocaleString("en-US")} USDT
+                  </span>
+                  <span className="text-zinc-400">
+                    {lang === "en"
+                      ? "Soft cap"
+                      : "Soft cap"}{" "}
+                    {PRESALE_SOFT_CAP.toLocaleString("en-US")} USDT
+                  </span>
+                </div>
+                <div className="mt-1 h-2.5 w-full overflow-hidden rounded-full bg-zinc-900">
+                  <div
+                    className="h-full rounded-full bg-emerald-500 transition-all"
+                    style={{ width: `${presaleProgressPercent}%` }}
+                  />
+                </div>
+                <div className="flex items-center justify-between text-xs text-zinc-400">
+                  <span>
+                    {lang === "en" ? "Sale progress" : "Satış ilerlemesi"}
+                  </span>
+                  <span>{formatNumber(presaleProgressPercent, 2)}%</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* How to buy */}
+            <Card className="rounded-2xl border-zinc-800 bg-zinc-950/70 shadow-sm shadow-black/20">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base font-semibold">
+                  {lang === "en" ? "How to Buy" : "Nasıl Satın Alınır?"}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2 pt-0 text-xs text-zinc-200 sm:text-sm">
+                <ol className="space-y-1.5 list-decimal pl-4">
+                  <li>
+                    {lang === "en"
+                      ? "Install a Web3 wallet (MetaMask, Trust Wallet, SafePal, etc.)."
+                      : "MetaMask, Trust Wallet veya SafePal gibi bir Web3 cüzdanı kur."}
+                  </li>
+                  <li>
+                    {lang === "en"
+                      ? "Deposit BNB or USDT (BEP-20) into your wallet."
+                      : "Cüzdanına BNB veya USDT (BEP-20) yükle."}
+                  </li>
+                  <li>
+                    {lang === "en" ? (
+                      <>
+                        Connect your wallet on this site, choose USDT or BNB in
+                        the presale panel, enter the {TOKEN.symbol} amount and
+                        confirm the transaction.
+                      </>
+                    ) : (
+                      <>
+                        Bu sitede cüzdanını bağla, ön satış panelinden USDT veya
+                        BNB'yi seç, almak istediğin {TOKEN.symbol} miktarını gir
+                        ve işlemi onayla.
+                      </>
+                    )}
+                  </li>
+                  <li>
+                    {lang === "en" ? (
+                      <>After the presale ends, claim your SNAKE tokens.</>
+                    ) : (
+                      <>Ön satış bittikten sonra SNAKE tokenlerini Claim et.</>
+                    )}
+                  </li>
+                </ol>
+                <p className="pt-1 text-[11px] text-zinc-400">
+                  {lang === "en"
+                    ? "Always double-check the official links from the Telegram and X (Twitter) channels."
+                    : "Resmi bağlantıları daima Telegram ve X (Twitter) kanallarından doğruladığından emin ol."}
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
         <Separator className="bg-zinc-800/80" />
 
         {/* Token details */}
         <section
           aria-label="Token details"
-          className="space-y-6"
+          className="space-y-5"
           id="token-details"
         >
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -692,7 +795,7 @@ export default function Page(): React.ReactElement {
           </div>
 
           <Card className="rounded-2xl border-zinc-800 bg-zinc-950/70 shadow-sm shadow-black/20">
-            <CardContent className="grid gap-5 p-6 md:grid-cols-3">
+            <CardContent className="grid gap-4 p-6 md:grid-cols-3">
               <DetailItem
                 label={lang === "en" ? "Total Supply" : "Toplam Arz"}
                 value={TOKEN.totalSupply.toLocaleString("en-US")}
@@ -733,10 +836,26 @@ export default function Page(): React.ReactElement {
               />
               <DetailItem
                 label={
+                  lang === "en" ? "Locked Tokens" : "Kilitli Tokenler"
+                }
+                value={
+                  lang === "en" ? (
+                    <>{
+                      LOCKED_TOKENS.toLocaleString("en-US")
+                    } {" "}(locked for 6 months)</>
+                  ) : (
+                    <>
+                      {LOCKED_TOKENS.toLocaleString("en-US")} (6 ay kilitli)
+                    </>
+                  )
+                }
+              />
+              <DetailItem
+                label={
                   lang === "en" ? "Contract Address" : "Kontrat Adresi"
                 }
                 value={
-                  <span className="break-all font-mono text-xs sm:text-sm text-emerald-300">
+                  <span className="break-all font-mono text-xs text-emerald-300 sm:text-sm">
                     {TOKEN.contractAddress}
                   </span>
                 }
@@ -748,7 +867,7 @@ export default function Page(): React.ReactElement {
         {/* Tokenomics */}
         <section
           aria-label="Tokenomics"
-          className="space-y-6"
+          className="space-y-5"
           id="tokenomics-section"
         >
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -763,14 +882,16 @@ export default function Page(): React.ReactElement {
           </div>
 
           <Card className="rounded-2xl border-zinc-800 bg-zinc-950/70 shadow-sm shadow-black/20">
-            <CardContent className="grid gap-8 py-6 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] md:items-center">
+            <CardContent className="grid gap-6 py-5 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] md:items-center">
               <ul className="space-y-2 text-sm">
                 {TOKENOMICS.map((slice) => (
                   <li
                     key={slice.name}
                     className="flex items-center justify-between rounded-xl border border-zinc-800 bg-zinc-950/70 px-3 py-2 transition-colors duration-150 hover:border-emerald-500/50 hover:bg-zinc-900/80"
                   >
-                    <span className="text-zinc-200">{slice.name}</span>
+                    <span className="text-zinc-200">
+                      {lang === "en" ? slice.name : slice.nameTr}
+                    </span>
                     <span className="font-semibold text-zinc-50">
                       {slice.value}%
                     </span>
@@ -778,13 +899,13 @@ export default function Page(): React.ReactElement {
                 ))}
               </ul>
 
-              <div className="h-72 w-full min-w-0">
+              <div className="h-64 w-full min-w-0 sm:h-72">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
                       data={TOKENOMICS}
                       dataKey="value"
-                      nameKey="name"
+                      nameKey={lang === "en" ? "name" : "nameTr"}
                       outerRadius={100}
                       innerRadius={55}
                       stroke="#020617"
@@ -828,7 +949,7 @@ export default function Page(): React.ReactElement {
         </section>
 
         {/* Roadmap */}
-        <section aria-label="Roadmap" className="space-y-6" id="roadmap">
+        <section aria-label="Roadmap" className="space-y-5" id="roadmap">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h2 className="text-xl font-semibold tracking-tight">
               {lang === "en" ? "Roadmap" : "Yol Haritası"}
@@ -879,7 +1000,7 @@ export default function Page(): React.ReactElement {
             <p className="mt-2 text-sm text-zinc-300">
               {lang === "en"
                 ? "Earn $SNAKE while playing!"
-                : "Oynadıkça $SNAKE kazan!"}
+                : "Ön satışa katıl, oyundaki başarılarınla ekstra SNAKE kazan."}
             </p>
             <p className="mt-1 text-xs text-zinc-400 sm:text-sm">
               {lang === "en"
@@ -908,8 +1029,8 @@ export default function Page(): React.ReactElement {
                 ) : (
                   <>
                     BNB Chain üzerinde deneysel, topluluk odaklı bir token.
-                    Yatırım kararlarınızı kendi araştırmanıza göre verin;
-                    hiçbir garanti veya yatırım tavsiyesi sunulmaz.
+                    Yatırım kararlarını kendi araştırmana göre ver; hiçbir
+                    garanti veya yatırım tavsiyesi sunulmaz.
                   </>
                 )}
               </p>
@@ -954,6 +1075,17 @@ export default function Page(): React.ReactElement {
                 {lang === "en" ? "Audit coming soon" : "Denetim yakında"}
               </span>
               <span className="text-zinc-500/80">
+                {lang === "en"
+                  ? "View on BscScan (soon)"
+                  : "BscScan'de görüntüle (yakında)"}
+              </span>
+            </span>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
                 {lang === "en"
                   ? "View on BscScan (soon)"
                   : "BscScan'de görüntüle (yakında)"}
