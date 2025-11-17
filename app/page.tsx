@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
@@ -457,14 +458,14 @@ export default function Page(): React.ReactElement {
             <p className="mt-4 max-w-xl text-sm text-zinc-300 sm:text-base">
               {lang === "en" ? (
                 <>
-                  Join the early supporters of {" "}
+                  Join the early supporters of{" "}
                   <span className="font-semibold">{TOKEN.symbol}</span> on BNB
                   Chain. Fair tokenomics, a transparent roadmap and long-term
                   incentives for holders.
                 </>
               ) : (
                 <>
-                  BNB Chain üzerindeki {" "}
+                  BNB Chain üzerindeki{" "}
                   <span className="font-semibold">{TOKEN.symbol}</span> tokeninin
                   ilk destekçileri arasına katıl. Adil dağılım, şeffaf bir yol
                   haritası ve uzun vadeli holder ödülleri seni bekliyor.
@@ -555,7 +556,7 @@ export default function Page(): React.ReactElement {
                     placeholder={lang === "en" ? "e.g. 1000" : "örn. 1000"}
                   />
                   <p className="text-xs text-zinc-400">
-                    {lang === "en" ? "Price" : "Fiyat"}: 1 {TOKEN.symbol} = {" "}
+                    {lang === "en" ? "Price" : "Fiyat"}: 1 {TOKEN.symbol} ={" "}
                     {TOKEN.priceUSDT} USDT
                   </p>
                 </div>
@@ -697,14 +698,12 @@ export default function Page(): React.ReactElement {
               <CardContent className="space-y-3 pt-0 text-sm text-zinc-200">
                 <div className="flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm">
                   <span>
-                    {lang === "en" ? "Raised" : "Toplanan"}: {" "}
-                    {PRESALE_RAISED.toLocaleString("en-US")} / {" "}
+                    {lang === "en" ? "Raised" : "Toplanan"}:{" "}
+                    {PRESALE_RAISED.toLocaleString("en-US")} /{" "}
                     {PRESALE_HARD_CAP.toLocaleString("en-US")} USDT
                   </span>
                   <span className="text-zinc-400">
-                    {lang === "en"
-                      ? "Soft cap"
-                      : "Soft cap"}{" "}
+                    {lang === "en" ? "Soft cap" : "Soft cap"}{" "}
                     {PRESALE_SOFT_CAP.toLocaleString("en-US")} USDT
                   </span>
                 </div>
@@ -824,7 +823,7 @@ export default function Page(): React.ReactElement {
                     ? "Accepted Currencies"
                     : "Kabul Edilen Para Birimleri"
                 }
-                value={"USDT (BEP-20), BNB"}
+                value="USDT (BEP-20), BNB"
               />
               <DetailItem
                 label={lang === "en" ? "Claim Time" : "Claim Zamanı"}
@@ -840,9 +839,10 @@ export default function Page(): React.ReactElement {
                 }
                 value={
                   lang === "en" ? (
-                    <>{
-                      LOCKED_TOKENS.toLocaleString("en-US")
-                    } {" "}(locked for 6 months)</>
+                    <>
+                      {LOCKED_TOKENS.toLocaleString("en-US")} (locked for 6
+                      months)
+                    </>
                   ) : (
                     <>
                       {LOCKED_TOKENS.toLocaleString("en-US")} (6 ay kilitli)
@@ -1075,17 +1075,6 @@ export default function Page(): React.ReactElement {
                 {lang === "en" ? "Audit coming soon" : "Denetim yakında"}
               </span>
               <span className="text-zinc-500/80">
-                {lang === "en"
-                  ? "View on BscScan (soon)"
-                  : "BscScan'de görüntüle (yakında)"}
-              </span>
-            </span>
-          </div>
-        </div>
-      </footer>
-    </div>
-  );
-}
                 {lang === "en"
                   ? "View on BscScan (soon)"
                   : "BscScan'de görüntüle (yakında)"}
