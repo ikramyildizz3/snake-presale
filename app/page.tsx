@@ -32,6 +32,7 @@ import {
 } from "lucide-react";
 
 type PayMethod = "USDT" | "BNB";
+type Language = "en" | "tr";
 
 interface DetailItemProps {
   label: string;
@@ -61,7 +62,7 @@ const TOKEN = {
   totalSupply: 200_000_000,
   priceUSDT: 0.02,
   bnbUsdtRate: 300, // initial fallback
-  contractAddress: "",
+  contractAddress: "0xc9F46963Ee83EFd45675867f622Dd3a0B7c494e7",
 };
 
 const TOKENOMICS: TokenomicsSlice[] = [
@@ -124,6 +125,60 @@ const ROADMAP: RoadmapCardProps[] = [
     items: ["New utilities", "Partnership integrations", "Sustainable growth"],
   },
 ];
+
+const ROADMAP_TRANSLATIONS: Record<
+  string,
+  { phaseTr: string; itemsTr: string[] }
+> = {
+  "Phase 1 — Launch": {
+    phaseTr: "Aşama 1 — Lansman",
+    itemsTr: [
+      "Akıllı kontrat dağıtımı",
+      "Web sitesi ve marka tasarımı",
+      "Topluluk oluşturmaya başlanması",
+    ],
+  },
+  "Phase 2 — Presale": {
+    phaseTr: "Aşama 2 — Ön Satış",
+    itemsTr: [
+      "Ön satışın başlatılması",
+      "İlk pazarlama itmesi",
+      "KOL iş birlikleri",
+    ],
+  },
+  "Phase 3 — Listing": {
+    phaseTr: "Aşama 3 — Listeleme",
+    itemsTr: [
+      "DEX listeleme (PancakeSwap)",
+      "Likidite havuzu kurulumu",
+      "Lansman sonrası kampanyalar",
+    ],
+  },
+  "Phase 4 — Staking": {
+    phaseTr: "Aşama 4 — Staking",
+    itemsTr: [
+      "Staking paneli",
+      "Ödül havuzları",
+      "Uzun vadeli teşvikler",
+    ],
+  },
+  "Phase 5 — Expansion": {
+    phaseTr: "Aşama 5 — Büyümeye Geçiş",
+    itemsTr: [
+      "CEX borsa görüşmeleri",
+      "Ekosistem araçları",
+      "Küresel topluluk etkinlikleri",
+    ],
+  },
+  "Phase 6 — Scale": {
+    phaseTr: "Aşama 6 — Ölçekleme",
+    itemsTr: [
+      "Yeni kullanım alanları",
+      "Ortaklık entegrasyonları",
+      "Sürdürülebilir büyüme",
+    ],
+  },
+};
 
 const formatNumber = (value: number, decimals: number = 2): string =>
   Number.isFinite(value)
@@ -191,6 +246,7 @@ function RoadmapCard({
 }
 
 export default function Page(): React.ReactElement {
+  const [lang, setLang] = useState<Language>("en");
   const [payMethod, setPayMethod] = useState<PayMethod>("USDT");
   const [amount, setAmount] = useState<string>("");
   const [bnbUsdtRate, setBnbUsdtRate] = useState<number>(TOKEN.bnbUsdtRate);
@@ -257,30 +313,55 @@ export default function Page(): React.ReactElement {
     }
   };
 
+  const handleConnectClick = (): void => {
+    toast.info(
+      lang === "en"
+        ? "Wallet connection will be available soon."
+        : "Cüzdan bağlantısı yakında aktif olacak.",
+    );
+  };
+
   const handleBuyClick = (): void => {
     if (parsedAmount <= 0) {
-      toast.error("Please enter a valid SNAKE amount.");
+      toast.error(
+        lang === "en"
+          ? "Please enter a valid SNAKE amount."
+          : "Lütfen geçerli bir SNAKE miktarı girin.",
+      );
       return;
     }
 
     if (payMethod === "USDT") {
       toast.success(
-        `Buy request submitted: ${formatNumber(
-          parsedAmount,
-          0,
-        )} SNAKE — Estimated cost: ${formatNumber(costInUSDT)} USDT`,
+        lang === "en"
+          ? `Buy request submitted: ${formatNumber(
+              parsedAmount,
+              0,
+            )} SNAKE — Estimated cost: ${formatNumber(costInUSDT)} USDT`
+          : `Alım isteği gönderildi: ${formatNumber(
+              parsedAmount,
+              0,
+            )} SNAKE — Tahmini maliyet: ${formatNumber(costInUSDT)} USDT`,
       );
       return;
     }
 
     toast.success(
-      `Buy request submitted: ${formatNumber(
-        parsedAmount,
-        0,
-      )} SNAKE — Estimated cost: ${formatNumber(
-        costInBNB,
-        6,
-      )} BNB (~${formatNumber(costInUSDT)} USDT)`,
+      lang === "en"
+        ? `Buy request submitted: ${formatNumber(
+            parsedAmount,
+            0,
+          )} SNAKE — Estimated cost: ${formatNumber(
+            costInBNB,
+            6,
+          )} BNB (~${formatNumber(costInUSDT)} USDT)`
+        : `Alım isteği gönderildi: ${formatNumber(
+            parsedAmount,
+            0,
+          )} SNAKE — Tahmini maliyet: ${formatNumber(
+            costInBNB,
+            6,
+          )} BNB (~${formatNumber(costInUSDT)} USDT)`,
     );
   };
 
@@ -300,20 +381,44 @@ export default function Page(): React.ReactElement {
                 {TOKEN.symbol}
               </span>
               <span className="text-xs text-zinc-500">
-                Community-powered presale on BNB Chain
+                {lang === "en"
+                  ? "Community-powered presale on BNB Chain"
+                  : "Topluluk odaklı BNB Chain ön satışı"}
               </span>
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 rounded-full border border-zinc-800 bg-zinc-900/80 p-1 text-xs">
+              <button
+                type="button"
+                onClick={() => setLang("en")}
+                className={`rounded-full px-2.5 py-1 text-[11px] font-medium transition ${
+                  lang === "en"
+                    ? "bg-zinc-100 text-zinc-900"
+                    : "text-zinc-400 hover:text-zinc-100"
+                }`}
+              >
+                EN
+              </button>
+              <button
+                type="button"
+                onClick={() => setLang("tr")}
+                className={`rounded-full px-2.5 py-1 text-[11px] font-medium transition ${
+                  lang === "tr"
+                    ? "bg-zinc-100 text-zinc-900"
+                    : "text-zinc-400 hover:text-zinc-100"
+                }`}
+              >
+                TR
+              </button>
+            </div>
             <Button
               variant="outline"
               className="cursor-pointer border-emerald-500/80 bg-zinc-950 text-xs text-emerald-200 hover:bg-emerald-500/10 hover:text-emerald-50 sm:text-sm"
-              onClick={() =>
-                toast.info("Wallet connection will be available soon.")
-              }
+              onClick={handleConnectClick}
             >
               <Wallet className="mr-2 h-4 w-4" />
-              Connect Wallet
+              {lang === "en" ? "Connect Wallet" : "Cüzdanı Bağla"}
             </Button>
           </div>
         </div>
@@ -326,21 +431,34 @@ export default function Page(): React.ReactElement {
           <div className="min-w-0 flex-1">
             <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-300">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-              Presale Live
+              {lang === "en" ? "Presale Live" : "Ön Satış Aktif"}
             </div>
 
             <h1 className="mt-4 text-4xl font-extrabold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
               SNAKE Token
               <span className="block bg-gradient-to-r from-emerald-400 to-lime-300 bg-clip-text pb-2 text-transparent">
-                High-utility, community first.
+                {lang === "en"
+                  ? "High-utility, community first."
+                  : "Yüksek fayda, önce topluluk."}
               </span>
             </h1>
 
             <p className="mt-4 max-w-xl text-sm text-zinc-300 sm:text-base">
-              Join the early supporters of{" "}
-              <span className="font-semibold">{TOKEN.symbol}</span> on BNB
-              Chain. Fair tokenomics, transparent roadmap and long-term
-              incentives for holders.
+              {lang === "en" ? (
+                <>
+                  Join the early supporters of {" "}
+                  <span className="font-semibold">{TOKEN.symbol}</span> on BNB
+                  Chain. Fair tokenomics, transparent roadmap and long-term
+                  incentives for holders.
+                </>
+              ) : (
+                <>
+                  BNB Chain üzerindeki {" "}
+                  <span className="font-semibold">{TOKEN.symbol}</span> tokeninin
+                  ilk destekçileri arasına katıl. Adil dağılım, şeffaf bir
+                  yol haritası ve uzun vadeli holder teşvikleri seni bekliyor.
+                </>
+              )}
             </p>
 
             <div className="mt-6 flex flex-wrap items-center gap-3">
@@ -350,7 +468,7 @@ export default function Page(): React.ReactElement {
                 className="cursor-pointer px-7 text-sm font-semibold"
                 onClick={handleScrollToPresale}
               >
-                Join Presale
+                {lang === "en" ? "Join Presale" : "Ön Satışa Katıl"}
               </Button>
               <button
                 type="button"
@@ -361,23 +479,27 @@ export default function Page(): React.ReactElement {
                 }
                 className="inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-zinc-300 hover:text-zinc-50"
               >
-                View Tokenomics
+                {lang === "en" ? "View Tokenomics" : "Tokenomikleri Gör"}
                 <ArrowDown className="h-4 w-4" />
               </button>
             </div>
 
             <div className="mt-8 grid gap-4 sm:grid-cols-3">
               <DetailItem
-                label="Total Supply"
+                label={lang === "en" ? "Total Supply" : "Toplam Arz"}
                 value={TOKEN.totalSupply.toLocaleString("en-US")}
               />
               <DetailItem
-                label="Presale Price"
+                label={lang === "en" ? "Presale Price" : "Ön Satış Fiyatı"}
                 value={`1 ${TOKEN.symbol} = ${TOKEN.priceUSDT} USDT`}
               />
               <DetailItem
-                label="Network"
-                value={<span>BNB Chain (BEP-20)</span>}
+                label={lang === "en" ? "Network" : "Ağ"}
+                value={
+                  <span>
+                    {lang === "en" ? "BNB Chain (BEP-20)" : "BNB Zinciri (BEP-20)"}
+                  </span>
+                }
               />
             </div>
           </div>
@@ -390,14 +512,21 @@ export default function Page(): React.ReactElement {
             >
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg">
-                  Presale Panel — Buy {TOKEN.symbol}
+                  {lang === "en"
+                    ? `Presale Panel — Buy ${TOKEN.symbol}`
+                    : `Ön Satış Paneli — ${TOKEN.symbol} Satın Al`}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-5">
                 {/* Amount */}
                 <div className="space-y-2">
-                  <Label htmlFor="snake-amount" className="text-xs text-zinc-300">
-                    Amount ({TOKEN.symbol})
+                  <Label
+                    htmlFor="snake-amount"
+                    className="text-xs text-zinc-300"
+                  >
+                    {lang === "en"
+                      ? `Amount (${TOKEN.symbol})`
+                      : `Miktar (${TOKEN.symbol})`}
                   </Label>
                   <Input
                     id="snake-amount"
@@ -412,16 +541,19 @@ export default function Page(): React.ReactElement {
                       setAmount(event.target.value);
                     }}
                     className="appearance-none border-zinc-700 bg-zinc-900 text-zinc-100 placeholder:text-zinc-500 focus-visible:ring-emerald-500/60 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                    placeholder="e.g. 1000"
+                    placeholder={lang === "en" ? "e.g. 1000" : "örn. 1000"}
                   />
                   <p className="text-xs text-zinc-400">
-                    Price: 1 {TOKEN.symbol} = {TOKEN.priceUSDT} USDT
+                    {lang === "en" ? "Price" : "Fiyat"}: 1 {TOKEN.symbol} = {" "}
+                    {TOKEN.priceUSDT} USDT
                   </p>
                 </div>
 
                 {/* Pay with */}
-                <div className="space-y-2">
-                  <Label className="text-xs text-zinc-300">Pay with</Label>
+                <div className="space-y-2 pt-1">
+                  <Label className="text-xs text-zinc-300">
+                    {lang === "en" ? "Pay with" : "Ödeme yöntemi"}
+                  </Label>
                   <Tabs
                     value={payMethod}
                     onValueChange={(value: string): void =>
@@ -429,7 +561,7 @@ export default function Page(): React.ReactElement {
                     }
                     className="w-full"
                   >
-                    <TabsList className="grid w-full grid-cols-2 items-center overflow-hidden rounded-full bg-zinc-900/80 p-1 text-xs shadow-inner shadow-black/40">
+                    <TabsList className="relative z-10 grid w-full grid-cols-2 items-center overflow-hidden rounded-full border border-emerald-500/40 bg-zinc-950/90 p-1 text-xs shadow-lg shadow-emerald-500/20">
                       <TabsTrigger
                         value="USDT"
                         className="flex h-9 w-full cursor-pointer items-center justify-center rounded-full px-3 font-medium text-zinc-300 transition-colors duration-150 data-[state=active]:bg-emerald-500 data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm"
@@ -445,9 +577,20 @@ export default function Page(): React.ReactElement {
                     </TabsList>
                   </Tabs>
                   <p className="text-xs text-zinc-300">
-                    If you choose BNB, an indicative live rate from Binance is
-                    used. Current reference: 1 BNB ≈{" "}
-                    {formatNumber(bnbUsdtRate || TOKEN.bnbUsdtRate)} USDT.
+                    {lang === "en" ? (
+                      <>
+                        If you choose BNB, an indicative live rate from Binance
+                        is used. Current reference: 1 BNB ≈{" "}
+                        {formatNumber(bnbUsdtRate || TOKEN.bnbUsdtRate)} USDT.
+                      </>
+                    ) : (
+                      <>
+                        BNB ile ödeme yaptığınızda, Binance'ten alınan
+                        yaklaşık piyasa fiyatı kullanılır. Güncel referans:
+                        1 BNB ≈{" "}
+                        {formatNumber(bnbUsdtRate || TOKEN.bnbUsdtRate)} USDT.
+                      </>
+                    )}
                   </p>
                 </div>
 
@@ -456,7 +599,11 @@ export default function Page(): React.ReactElement {
                 {/* Summary */}
                 <div className="space-y-3">
                   <SummaryRow
-                    label="You pay (estimated)"
+                    label={
+                      lang === "en"
+                        ? "You pay (estimated)"
+                        : "Ödeyeceğiniz tutar (tahmini)"
+                    }
                     value={
                       payMethod === "USDT"
                         ? `${formatNumber(costInUSDT)} USDT`
@@ -467,7 +614,9 @@ export default function Page(): React.ReactElement {
                     }
                   />
                   <SummaryRow
-                    label="You receive"
+                    label={
+                      lang === "en" ? "You receive" : "Alacağınız miktar"
+                    }
                     value={
                       parsedAmount > 0
                         ? `${parsedAmount.toLocaleString("en-US")} ${
@@ -477,8 +626,18 @@ export default function Page(): React.ReactElement {
                     }
                   />
                   <p className="text-[11px] leading-snug text-zinc-400">
-                    Values are estimates based on live market data. Final price
-                    is confirmed on-chain at the time of purchase.
+                    {lang === "en" ? (
+                      <>
+                        Values are estimates based on live market data. Final
+                        price is confirmed on-chain at the time of purchase.
+                      </>
+                    ) : (
+                      <>
+                        Değerler anlık piyasa verilerine göre yaklaşık olarak
+                        hesaplanır. Nihai fiyat, satın alma anında zincir
+                        üzerinde kesinleşir.
+                      </>
+                    )}
                   </p>
                 </div>
               </CardContent>
@@ -488,26 +647,24 @@ export default function Page(): React.ReactElement {
                 <Button
                   variant="outline"
                   className="cursor-pointer border-emerald-500/80 bg-zinc-950 text-xs text-emerald-200 hover:bg-emerald-500/10 hover:text-emerald-50 sm:text-sm"
-                  onClick={() =>
-                    toast.info("Wallet connection will be available soon.")
-                  }
+                  onClick={handleConnectClick}
                 >
                   <Wallet className="mr-2 h-4 w-4" />
-                  Connect Wallet
+                  {lang === "en" ? "Connect Wallet" : "Cüzdanı Bağla"}
                 </Button>
                 <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
                   <Button
                     className="flex-1 cursor-pointer bg-emerald-500 font-semibold text-zinc-900 shadow-md shadow-emerald-500/25 hover:bg-emerald-400 sm:flex-none"
                     onClick={handleBuyClick}
                   >
-                    Buy Now
+                    {lang === "en" ? "Buy Now" : "Hemen Satın Al"}
                   </Button>
                   <Button
                     variant="secondary"
                     disabled
                     className="flex-1 sm:flex-none"
                   >
-                    Claim (soon)
+                    {lang === "en" ? "Claim (soon)" : "Claim (yakında)"}
                   </Button>
                 </div>
               </CardFooter>
@@ -525,38 +682,64 @@ export default function Page(): React.ReactElement {
         >
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h2 className="text-xl font-semibold tracking-tight">
-              Token Details
+              {lang === "en" ? "Token Details" : "Token Detayları"}
             </h2>
             <span className="text-xs text-zinc-400">
-              Transparent distribution and long-term alignment.
+              {lang === "en"
+                ? "Transparent distribution and long-term alignment."
+                : "Şeffaf dağıtım ve uzun vadeli hizalanma."}
             </span>
           </div>
 
           <Card className="rounded-2xl border-zinc-800 bg-zinc-950/70 shadow-sm shadow-black/20">
             <CardContent className="grid gap-5 p-6 md:grid-cols-3">
               <DetailItem
-                label="Total Supply"
+                label={lang === "en" ? "Total Supply" : "Toplam Arz"}
                 value={TOKEN.totalSupply.toLocaleString("en-US")}
               />
               <DetailItem
-                label="Presale Allocation"
-                value="25% of total supply"
+                label={
+                  lang === "en" ? "Presale Allocation" : "Ön Satış Ayrılan Miktar"
+                }
+                value={
+                  lang === "en"
+                    ? "25% of total supply"
+                    : "Toplam arzın %25'i"
+                }
               />
               <DetailItem
-                label="Listing Target"
-                value="PancakeSwap, 2–3 months post-presale"
+                label={lang === "en" ? "Listing Target" : "Listeleme Hedefi"}
+                value={
+                  lang === "en"
+                    ? "PancakeSwap, 2–3 months post-presale"
+                    : "PancakeSwap, ön satıştan 2–3 ay sonra"
+                }
               />
               <DetailItem
-                label="Accepted Currencies"
-                value="USDT (BEP-20), BNB"
+                label={
+                  lang === "en"
+                    ? "Accepted Currencies"
+                    : "Kabul Edilen Para Birimleri"
+                }
+                value={"USDT (BEP-20), BNB"}
               />
               <DetailItem
-                label="Claim Time"
-                value="After presale finalization"
+                label={lang === "en" ? "Claim Time" : "Claim Zamanı"}
+                value={
+                  lang === "en"
+                    ? "After presale finalization"
+                    : "Ön satış tamamlandıktan sonra"
+                }
               />
               <DetailItem
-                label="Contract Address"
-                value={TOKEN.contractAddress || "TBA after audit"}
+                label={
+                  lang === "en" ? "Contract Address" : "Kontrat Adresi"
+                }
+                value={
+                  <span className="break-all font-mono text-xs sm:text-sm text-emerald-300">
+                    {TOKEN.contractAddress}
+                  </span>
+                }
               />
             </CardContent>
           </Card>
@@ -569,9 +752,13 @@ export default function Page(): React.ReactElement {
           id="tokenomics-section"
         >
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 className="text-xl font-semibold tracking-tight">Tokenomics</h2>
+            <h2 className="text-xl font-semibold tracking-tight">
+              {lang === "en" ? "Tokenomics" : "Tokenomik"}
+            </h2>
             <span className="text-xs text-zinc-400">
-              Balanced allocations for growth, liquidity and rewards.
+              {lang === "en"
+                ? "Balanced allocations for growth, liquidity and rewards."
+                : "Büyüme, likidite ve ödüller için dengeli dağılım."}
             </span>
           </div>
 
@@ -643,21 +830,62 @@ export default function Page(): React.ReactElement {
         {/* Roadmap */}
         <section aria-label="Roadmap" className="space-y-6" id="roadmap">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 className="text-xl font-semibold tracking-tight">Roadmap</h2>
+            <h2 className="text-xl font-semibold tracking-tight">
+              {lang === "en" ? "Roadmap" : "Yol Haritası"}
+            </h2>
             <span className="text-xs text-zinc-400">
-              Milestones to deliver a sustainable ecosystem.
+              {lang === "en"
+                ? "Milestones to deliver a sustainable ecosystem."
+                : "Sürdürülebilir bir ekosistem için hedeflenen aşamalar."}
             </span>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {ROADMAP.map((phase) => (
-              <RoadmapCard
-                key={phase.phase}
-                phase={phase.phase}
-                completed={phase.completed}
-                items={phase.items}
-              />
-            ))}
+            {ROADMAP.map((phase) => {
+              const translation = ROADMAP_TRANSLATIONS[phase.phase];
+              const phaseTitle =
+                lang === "en" || !translation
+                  ? phase.phase
+                  : translation.phaseTr;
+              const phaseItems =
+                lang === "en" || !translation
+                  ? phase.items
+                  : translation.itemsTr;
+
+              return (
+                <RoadmapCard
+                  key={phase.phase}
+                  phase={phaseTitle}
+                  completed={phase.completed}
+                  items={phaseItems}
+                />
+              );
+            })}
+          </div>
+        </section>
+
+        {/* Game section placeholder */}
+        <section
+          aria-label="Snake game teaser"
+          className="space-y-4"
+          id="game-section"
+        >
+          <div className="rounded-2xl border border-emerald-500/40 bg-zinc-950/70 p-6 text-center shadow-sm shadow-emerald-500/10">
+            <p className="text-base font-semibold sm:text-lg">
+              {lang === "en"
+                ? "🎮 Snake Game Coming Soon"
+                : "🎮 Snake Oyunu Çok Yakında"}
+            </p>
+            <p className="mt-2 text-sm text-zinc-300">
+              {lang === "en"
+                ? "Earn $SNAKE while playing!"
+                : "Oynadıkça $SNAKE kazan!"}
+            </p>
+            <p className="mt-1 text-xs text-zinc-400 sm:text-sm">
+              {lang === "en"
+                ? "A Play-to-Earn arcade experience launching soon. Compete, score, and win."
+                : "Yakında başlayacak bir Play-to-Earn arcade deneyimi. Yarış, skor yap ve kazan."}
+            </p>
           </div>
         </section>
       </main>
@@ -672,14 +900,26 @@ export default function Page(): React.ReactElement {
                 {TOKEN.name}
               </div>
               <p className="mt-1 max-w-xs text-xs text-zinc-400">
-                Experimental, community-driven token on BNB Chain. Always do
-                your own research. No guarantees or investment advice.
+                {lang === "en" ? (
+                  <>
+                    Experimental, community-driven token on BNB Chain. Always
+                    do your own research. No guarantees or investment advice.
+                  </>
+                ) : (
+                  <>
+                    BNB Chain üzerinde deneysel, topluluk odaklı bir token.
+                    Yatırım kararlarınızı kendi araştırmanıza göre verin;
+                    hiçbir garanti veya yatırım tavsiyesi sunulmaz.
+                  </>
+                )}
               </p>
             </div>
           </div>
 
           <div className="flex flex-col gap-2 text-sm text-zinc-300">
-            <div className="font-semibold">Social</div>
+            <div className="font-semibold">
+              {lang === "en" ? "Social" : "Sosyal"}
+            </div>
             <div className="flex flex-wrap items-center gap-4">
               <a
                 href="https://x.com/memsnake"
@@ -688,7 +928,7 @@ export default function Page(): React.ReactElement {
                 className="inline-flex cursor-pointer items-center gap-2 text-xs text-zinc-300 hover:text-zinc-50"
               >
                 <Twitter className="h-4 w-4" />
-                X (Twitter)
+                {lang === "en" ? "X (Twitter)" : "X (Twitter)"}
               </a>
               <a
                 href="https://t.me/Snkglobal"
@@ -702,8 +942,24 @@ export default function Page(): React.ReactElement {
             </div>
           </div>
         </div>
-        <div className="border-t border-zinc-800/80 py-4 text-center text-xs text-zinc-500">
-          © {currentYear} {TOKEN.name}. All rights reserved.
+        <div className="border-t border-zinc-800/80 py-4">
+          <div className="mx-auto flex max-w-6xl flex-col items-center gap-1 px-4 text-[11px] text-zinc-500 sm:flex-row sm:justify-between">
+            <span>
+              {lang === "en"
+                ? `© ${currentYear} ${TOKEN.name}. All rights reserved.`
+                : `© ${currentYear} ${TOKEN.name}. Tüm hakları saklıdır.`}
+            </span>
+            <span className="flex flex-wrap items-center gap-3">
+              <span>
+                {lang === "en" ? "Audit coming soon" : "Denetim yakında"}
+              </span>
+              <span className="text-zinc-500/80">
+                {lang === "en"
+                  ? "View on BscScan (soon)"
+                  : "BscScan'de görüntüle (yakında)"}
+              </span>
+            </span>
+          </div>
         </div>
       </footer>
     </div>
