@@ -652,6 +652,109 @@
             transform: rotate(45deg);
         }
 
+        /* How to Buy Styles */
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .step-card {
+            background: var(--dark-card);
+            border: 1px solid var(--dark-border);
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .step-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin: 0 auto 20px;
+        }
+
+        .step-card h3 {
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .step-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .wallet-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+            justify-content: center;
+        }
+
+        .wallet-badge {
+            background: rgba(0, 212, 106, 0.1);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .special-info {
+            background: var(--dark-card);
+            border: 1px solid var(--primary);
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 50px;
+        }
+
+        .special-info h3 {
+            color: var(--primary);
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .info-item {
+            text-align: center;
+            padding: 15px;
+        }
+
+        .info-item h4 {
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .info-item p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
         /* Disclaimer Styles */
         .disclaimer-content {
             background: var(--dark-card);
@@ -669,6 +772,46 @@
         .disclaimer-text p {
             margin-bottom: 15px;
             line-height: 1.6;
+        }
+
+        .timeline-note {
+            background: rgba(0, 212, 106, 0.05);
+            border: 1px solid rgba(0, 212, 106, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .timeline-note h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .timeline-note ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .timeline-note li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .timeline-note li:before {
+            content: '▸';
+            color: var(--primary);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .highlight {
+            background: rgba(0, 212, 106, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 12px 15px;
+            border-radius: 4px;
+            margin-top: 15px;
         }
 
         /* Footer */
@@ -907,7 +1050,7 @@
                 </div>
                 
                 <div class="price-info">
-                    <p id="bnbPrice">Current reference: 1 BNB ≈ 918.34 USDT</p>
+                    <p id="bnbPrice">Current reference: 1 BNB ≈ Loading...</p>
                     <p class="price-note">
                         If you choose BNB, an indicative live rate from Binance is used. 
                         Final price is confirmed on-chain at the time of purchase.
@@ -917,7 +1060,7 @@
                 <div class="summary">
                     <div class="summary-row">
                         <span class="summary-label">You pay (estimated)</span>
-                        <span class="summary-value" id="youPay">0.00 BNB (~0.00 USDT)</span>
+                        <span class="summary-value" id="youPay">0.00 USDT</span>
                     </div>
                     <div class="summary-row">
                         <span class="summary-label">You receive</span>
@@ -1016,6 +1159,7 @@
             
             <div class="roadmap">
                 <div class="roadmap-items">
+                    <!-- Phase 1 -->
                     <div class="roadmap-item">
                         <div class="roadmap-content">
                             <div class="roadmap-phase">
@@ -1028,11 +1172,13 @@
                                 <li>Website and branding launch</li>
                                 <li>Community building initiatives</li>
                                 <li>Presale platform development</li>
+                                <li>Initial marketing strategy formulation</li>
                             </ul>
                         </div>
                         <div class="roadmap-marker"></div>
                     </div>
                     
+                    <!-- Phase 2 -->
                     <div class="roadmap-item">
                         <div class="roadmap-content">
                             <div class="roadmap-phase">
@@ -1045,26 +1191,134 @@
                                 <li>Marketing and partnership expansion</li>
                                 <li>Exchange listings preparation</li>
                                 <li>Community reward programs</li>
+                                <li>Game development initiation</li>
                             </ul>
                         </div>
                         <div class="roadmap-marker"></div>
                     </div>
                     
+                    <!-- Phase 3 -->
                     <div class="roadmap-item">
                         <div class="roadmap-content">
                             <div class="roadmap-phase">
                                 <i class="fas fa-clock"></i>
                                 Phase 3 - Upcoming
                             </div>
-                            <h3 class="roadmap-title">Expansion & Utilities</h3>
+                            <h3 class="roadmap-title">Ecosystem Development</h3>
                             <ul class="roadmap-list">
-                                <li>DEX and CEX listings</li>
+                                <li>PancakeSwap listing and liquidity</li>
                                 <li>Staking platform launch</li>
-                                <li>Game development integration</li>
+                                <li>Play-to-Earn game beta testing</li>
+                                <li>Major CEX listing negotiations</li>
                                 <li>Ecosystem expansion</li>
                             </ul>
                         </div>
                         <div class="roadmap-marker"></div>
+                    </div>
+
+                    <!-- Phase 4 - YENİ -->
+                    <div class="roadmap-item">
+                        <div class="roadmap-content">
+                            <div class="roadmap-phase">
+                                <i class="fas fa-rocket"></i>
+                                Phase 4 - Planned
+                            </div>
+                            <h3 class="roadmap-title">Global Scaling</h3>
+                            <ul class="roadmap-list">
+                                <li>Full game launch with Play-to-Earn</li>
+                                <li>Tier 1 exchange listings</li>
+                                <li>Mobile app development</li>
+                                <li>Cross-chain integration</li>
+                                <li>Global marketing campaigns</li>
+                            </ul>
+                        </div>
+                        <div class="roadmap-marker"></div>
+                    </div>
+
+                    <!-- Phase 5 - YENİ -->
+                    <div class="roadmap-item">
+                        <div class="roadmap-content">
+                            <div class="roadmap-phase">
+                                <i class="fas fa-infinity"></i>
+                                Phase 5 - Vision
+                            </div>
+                            <h3 class="roadmap-title">Sustainable Ecosystem</h3>
+                            <ul class="roadmap-list">
+                                <li>DAO implementation</li>
+                                <li>Additional game features</li>
+                                <li>Strategic partnerships</li>
+                                <li>Token utility expansion</li>
+                                <li>Long-term sustainability</li>
+                            </ul>
+                        </div>
+                        <div class="roadmap-marker"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Buy Section -->
+    <section id="how-to-buy">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">How to Buy Snake Token</h2>
+                <p class="section-subtitle">Step-by-step guide to purchase SNAKE tokens</p>
+            </div>
+            
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Setup Wallet</h3>
+                    <p>Install <strong>MetaMask</strong>, <strong>Trust Wallet</strong>, <strong>Binance Web3 Wallet</strong>, or any Web3 wallet. Make sure you're on Binance Smart Chain network.</p>
+                    <div class="wallet-badges">
+                        <span class="wallet-badge">MetaMask</span>
+                        <span class="wallet-badge">Trust Wallet</span>
+                        <span class="wallet-badge">Binance Web3</span>
+                        <span class="wallet-badge">SafePal</span>
+                    </div>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>Get BNB or USDT</h3>
+                    <p>Deposit BNB or USDT (BEP-20) into your wallet. 
+                       <strong>Binance Web3 Wallet users:</strong> You can easily bridge assets from other chains.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>Connect & Buy</h3>
+                    <p>Connect your wallet to our presale platform, enter the SNAKE amount, and confirm the transaction.</p>
+                    <p><strong>All major wallets supported:</strong> Including Binance Web3 Wallet with one-click connection.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3>Claim Tokens</h3>
+                    <p>After presale ends, return to claim your SNAKE tokens. They'll be automatically sent to your connected wallet.</p>
+                </div>
+            </div>
+
+            <!-- Binance Web3 Wallet Special Info -->
+            <div class="special-info">
+                <h3>🎯 For Binance Web3 Wallet Users</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <h4>✅ Easy Setup</h4>
+                        <p>Built into Binance App - no separate installation needed</p>
+                    </div>
+                    <div class="info-item">
+                        <h4>🔗 Simple Bridging</h4>
+                        <p>Easily move assets between chains with low fees</p>
+                    </div>
+                    <div class="info-item">
+                        <h4>🛡️ Enhanced Security</h4>
+                        <p>Backed by Binance's security infrastructure</p>
+                    </div>
+                    <div class="info-item">
+                        <h4>💫 One-Click Connect</h4>
+                        <p>Seamless connection to dApps like our presale</p>
                     </div>
                 </div>
             </div>
@@ -1096,7 +1350,7 @@
                         <span class="faq-toggle">+</span>
                     </div>
                     <div class="faq-answer">
-                        <p>During presale: Connect your wallet (MetaMask, Trust Wallet) and use USDT or BNB. After launch: Available on PancakeSwap.</p>
+                        <p>During presale: Connect your wallet (MetaMask, Trust Wallet, Binance Web3 Wallet) and use USDT or BNB. After launch: Available on PancakeSwap.</p>
                     </div>
                 </div>
                 
@@ -1106,7 +1360,21 @@
                         <span class="faq-toggle">+</span>
                     </div>
                     <div class="faq-answer">
-                        <p>Our Play-to-Earn Snake game is in development and will launch Q2 2025. Follow our social media for updates!</p>
+                        <p><strong>🎯 Target Launch: Q2 2025</strong></p>
+                        <p>Our Play-to-Earn Snake game is currently in active development and is scheduled to launch <strong>prior to our major exchange listings</strong>.</p>
+                        
+                        <div class="timeline-note">
+                            <h4>🚀 Development Timeline:</h4>
+                            <ul>
+                                <li><strong>Q1 2025:</strong> Game mechanics completion & alpha testing</li>
+                                <li><strong>Q2 2025:</strong> Beta launch & community testing</li>
+                                <li><strong>Q2 2025:</strong> Full game release before major CEX listings</li>
+                            </ul>
+                        </div>
+                        
+                        <p><strong>Why before exchange listings?</strong> We believe in delivering real utility and gaming experience first, creating organic demand before pursuing major exchange partnerships.</p>
+                        
+                        <p class="highlight">📅 <strong>Stay Updated:</strong> Follow our Telegram and Twitter for development progress and exact launch date announcements!</p>
                     </div>
                 </div>
                 
@@ -1148,6 +1416,52 @@
                     <p><strong>🔒 Security:</strong> Ensure you're using official links from our verified social media. Never share your private keys or seed phrases.</p>
                     
                     <p><strong>By participating in Snake Token presale, you acknowledge and accept these risks.</strong></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Privacy Policy Section -->
+    <section id="privacy">
+        <div class="container">
+            <div class="disclaimer-content">
+                <h2>Privacy Policy</h2>
+                <div class="disclaimer-text">
+                    <p><strong>Last Updated:</strong> December 2024</p>
+                    
+                    <p><strong>Information Collection:</strong> We do not collect any personal information. Our website is static and does not use tracking cookies or analytics.</p>
+                    
+                    <p><strong>Wallet Connection:</strong> When you connect your wallet, we only access public blockchain information. We never see your private keys or seed phrases.</p>
+                    
+                    <p><strong>Third-Party Services:</strong> We use Binance API for price data and Vercel for hosting. Please review their privacy policies.</p>
+                    
+                    <p><strong>Changes to Policy:</strong> We may update this policy. Continued use of the site constitutes acceptance.</p>
+                    
+                    <p><strong>Contact:</strong> For privacy concerns, contact us via Telegram.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Terms of Service Section -->
+    <section id="terms">
+        <div class="container">
+            <div class="disclaimer-content">
+                <h2>Terms of Service</h2>
+                <div class="disclaimer-text">
+                    <p><strong>Acceptance of Terms:</strong> By using this website, you agree to these terms.</p>
+                    
+                    <p><strong>Eligibility:</strong> You must be of legal age in your jurisdiction to participate in cryptocurrency activities.</p>
+                    
+                    <p><strong>No Financial Advice:</strong> This platform provides information only, not financial advice.</p>
+                    
+                    <p><strong>Investment Risks:</strong> Cryptocurrency investments are volatile. You alone bear responsibility for investment decisions.</p>
+                    
+                    <p><strong>Prohibited Use:</strong> You may not use this site for illegal activities or fraud.</p>
+                    
+                    <p><strong>Termination:</strong> We reserve the right to restrict access for violation of these terms.</p>
+                    
+                    <p><strong>Governing Law:</strong> These terms are governed by applicable international laws.</p>
                 </div>
             </div>
         </div>
@@ -1281,13 +1595,15 @@
                 alert('Purchase functionality will be implemented after wallet integration!');
             });
 
-            // Language switcher placeholder
+            // Language switcher - sessiz versiyon
             const langButtons = document.querySelectorAll('.lang-btn');
             langButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     langButtons.forEach(btn => btn.classList.remove('active'));
                     this.classList.add('active');
-                    alert('Language switching will be implemented in the next update!');
+                    
+                    const lang = this.textContent.trim().toLowerCase();
+                    console.log(`Language switched to: ${lang}`);
                 });
             });
 
@@ -1300,6 +1616,7 @@
             // Fetch live BNB price from Binance
             async function fetchBNBPrice() {
                 try {
+                    bnbPriceElement.textContent = `Current reference: 1 BNB ≈ Loading...`;
                     const response = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT');
                     const data = await response.json();
                     const bnbPrice = parseFloat(data.price);
@@ -1307,7 +1624,8 @@
                     return bnbPrice;
                 } catch (error) {
                     console.error('Error fetching BNB price:', error);
-                    return 918.34; // Fallback price
+                    bnbPriceElement.textContent = `Current reference: 1 BNB ≈ 918.34 USDT`;
+                    return 918.34;
                 }
             }
 
@@ -1318,9 +1636,6 @@
                 const totalUSDT = snakeAmount * snakePrice;
                 
                 youReceiveElement.textContent = `${snakeAmount.toLocaleString()} SNAKE`;
-                
-                // For now, we'll show USDT calculation
-                // BNB calculation will be implemented with live price
                 youPayElement.textContent = `${totalUSDT.toFixed(2)} USDT`;
             }
 
