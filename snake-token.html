@@ -1,0 +1,1141 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Token - Premium Crypto Investment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #00D46A;
+            --primary-dark: #00B359;
+            --primary-light: #00FF88;
+            --dark: #0A0A0A;
+            --dark-card: #151515;
+            --dark-border: #2A2A2A;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B0B0B0;
+            --text-muted: #6B7280;
+            --gradient: linear-gradient(135deg, var(--primary), var(--primary-light));
+            --shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            --shadow-glow: 0 0 30px rgba(0, 212, 106, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--dark-border);
+            padding: 15px 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .lang-switcher {
+            display: flex;
+            background: var(--dark-card);
+            border-radius: 8px;
+            padding: 4px;
+            border: 1px solid var(--dark-border);
+        }
+
+        .lang-btn {
+            padding: 6px 12px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .lang-btn.active {
+            background: var(--primary);
+            color: var(--dark);
+        }
+
+        .connect-wallet {
+            background: var(--gradient);
+            color: var(--dark);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .connect-wallet:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 180px 0 100px;
+            background: radial-gradient(circle at top right, rgba(0, 212, 106, 0.1), transparent 50%),
+                        radial-gradient(circle at bottom left, rgba(0, 255, 136, 0.05), transparent 50%);
+        }
+
+        .hero-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .hero-text {
+            flex: 1;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 212, 106, 0.1);
+            border: 1px solid rgba(0, 212, 106, 0.3);
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .badge .pulse {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero-description {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 40px;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .stat-card {
+            background: var(--dark-card);
+            border: 1px solid var(--dark-border);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Presale Card */
+        .presale-card {
+            background: var(--dark-card);
+            border: 1px solid var(--dark-border);
+            border-radius: 16px;
+            padding: 30px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-header {
+            margin-bottom: 25px;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .card-subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--dark-border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 16px;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .payment-methods {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .payment-btn {
+            flex: 1;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--dark-border);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .payment-btn.active {
+            background: rgba(0, 212, 106, 0.1);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .price-info {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .price-note {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 10px;
+            line-height: 1.4;
+        }
+
+        .summary {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .summary-label {
+            color: var(--text-secondary);
+        }
+
+        .summary-value {
+            font-weight: 600;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: var(--dark);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            border: 1px solid var(--dark-border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Sections */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Tokenomics */
+        .tokenomics-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .tokenomics-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .tokenomics-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: var(--dark-card);
+            border: 1px solid var(--dark-border);
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .tokenomics-item:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .tokenomics-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tokenomics-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .tokenomics-value {
+            font-weight: 600;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        /* Roadmap */
+        .roadmap {
+            position: relative;
+        }
+
+        .roadmap::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: var(--dark-border);
+        }
+
+        .roadmap-items {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .roadmap-item {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .roadmap-item:nth-child(odd) {
+            flex-direction: row;
+        }
+
+        .roadmap-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .roadmap-content {
+            flex: 1;
+            background: var(--dark-card);
+            border: 1px solid var(--dark-border);
+            border-radius: 12px;
+            padding: 25px;
+            position: relative;
+        }
+
+        .roadmap-item:nth-child(odd) .roadmap-content {
+            margin-right: 40px;
+        }
+
+        .roadmap-item:nth-child(even) .roadmap-content {
+            margin-left: 40px;
+        }
+
+        .roadmap-phase {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 212, 106, 0.1);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .roadmap-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .roadmap-list {
+            list-style: none;
+        }
+
+        .roadmap-list li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .roadmap-list li::before {
+            content: '✓';
+            color: var(--primary);
+            font-weight: bold;
+            margin-top: 2px;
+        }
+
+        .roadmap-marker {
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .roadmap-item:nth-child(odd) .roadmap-marker {
+            right: -50px;
+        }
+
+        .roadmap-item:nth-child(even) .roadmap-marker {
+            left: -50px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-card);
+            border-top: 1px solid var(--dark-border);
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .footer-description {
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            max-width: 400px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--dark-border);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .social-link:hover {
+            background: var(--primary);
+            color: var(--dark);
+            transform: translateY(-3px);
+        }
+
+        .footer-heading {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            padding-top: 30px;
+            border-top: 1px solid var(--dark-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-content {
+                flex-direction: column;
+            }
+            
+            .presale-card {
+                max-width: 100%;
+            }
+            
+            .tokenomics-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .roadmap::before {
+                left: 20px;
+            }
+            
+            .roadmap-item {
+                flex-direction: row !important;
+            }
+            
+            .roadmap-content {
+                margin-left: 50px !important;
+                margin-right: 0 !important;
+            }
+            
+            .roadmap-marker {
+                left: 10px !important;
+                right: auto !important;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container nav-container">
+            <div class="logo">
+                <div class="logo-icon">S</div>
+                <span>Snake Token</span>
+            </div>
+            
+            <nav class="nav-links">
+                <a href="#home" class="active">Home</a>
+                <a href="#tokenomics">Tokenomics</a>
+                <a href="#roadmap">Roadmap</a>
+                <a href="#how-to-buy">How to Buy</a>
+                <a href="#game">Game</a>
+            </nav>
+            
+            <div class="nav-actions">
+                <div class="lang-switcher">
+                    <button class="lang-btn active">EN</button>
+                    <button class="lang-btn">TR</button>
+                </div>
+                <button class="connect-wallet">
+                    <i class="fas fa-wallet"></i>
+                    Connect Wallet
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container hero-content">
+            <div class="hero-text">
+                <div class="badge">
+                    <div class="pulse"></div>
+                    Presale Live
+                </div>
+                
+                <h1>
+                    Revolutionizing Crypto with
+                    <span class="gradient-text">Snake Token</span>
+                </h1>
+                
+                <p class="hero-description">
+                    Join the next generation of community-driven cryptocurrency. 
+                    Snake Token combines innovative tokenomics with real utility 
+                    for sustainable growth and long-term value.
+                </p>
+                
+                <div class="hero-stats">
+                    <div class="stat-card">
+                        <div class="stat-value">400M</div>
+                        <div class="stat-label">Total Supply</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">$0.02</div>
+                        <div class="stat-label">Presale Price</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">BSC</div>
+                        <div class="stat-label">Network</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="presale-card">
+                <div class="card-header">
+                    <h2 class="card-title">Presale Panel</h2>
+                    <p class="card-subtitle">Buy SNAKE tokens before listing</p>
+                </div>
+                
+                <div class="input-group">
+                    <div class="input-label">
+                        <span>Amount (SNAKE)</span>
+                        <span>Price: 1 SNAKE = 0.02 USDT</span>
+                    </div>
+                    <input type="number" class="input-field" placeholder="Enter amount">
+                </div>
+                
+                <div class="payment-methods">
+                    <button class="payment-btn active">USDT</button>
+                    <button class="payment-btn">BNB</button>
+                </div>
+                
+                <div class="price-info">
+                    <p>Current reference: 1 BNB ≈ 918.34 USDT</p>
+                    <p class="price-note">
+                        If you choose BNB, an indicative live rate from Binance is used. 
+                        Final price is confirmed on-chain at the time of purchase.
+                    </p>
+                </div>
+                
+                <div class="summary">
+                    <div class="summary-row">
+                        <span class="summary-label">You pay (estimated)</span>
+                        <span class="summary-value">0.00 BNB (~0.00 USDT)</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">You receive</span>
+                        <span class="summary-value">0 SNAKE</span>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-shopping-cart"></i>
+                        Buy Now
+                    </button>
+                    <button class="btn btn-secondary">
+                        Claim (Soon)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tokenomics Section -->
+    <section id="tokenomics">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Tokenomics</h2>
+                <p class="section-subtitle">Transparent and sustainable token distribution</p>
+            </div>
+            
+            <div class="tokenomics-container">
+                <div class="tokenomics-list">
+                    <div class="tokenomics-item">
+                        <div class="tokenomics-name">
+                            <div class="tokenomics-color" style="background-color: #22c55e;"></div>
+                            <span>Presale</span>
+                        </div>
+                        <div class="tokenomics-value">25%</div>
+                    </div>
+                    <div class="tokenomics-item">
+                        <div class="tokenomics-name">
+                            <div class="tokenomics-color" style="background-color: #06b6d4;"></div>
+                            <span>Liquidity</span>
+                        </div>
+                        <div class="tokenomics-value">20%</div>
+                    </div>
+                    <div class="tokenomics-item">
+                        <div class="tokenomics-name">
+                            <div class="tokenomics-color" style="background-color: #8b5cf6;"></div>
+                            <span>Staking & Rewards</span>
+                        </div>
+                        <div class="tokenomics-value">15%</div>
+                    </div>
+                    <div class="tokenomics-item">
+                        <div class="tokenomics-name">
+                            <div class="tokenomics-color" style="background-color: #f97316;"></div>
+                            <span>Marketing</span>
+                        </div>
+                        <div class="tokenomics-value">15%</div>
+                    </div>
+                    <div class="tokenomics-item">
+                        <div class="tokenomics-name">
+                            <div class="tokenomics-color" style="background-color: #eab308;"></div>
+                            <span>Team & Advisors</span>
+                        </div>
+                        <div class="tokenomics-value">10%</div>
+                    </div>
+                    <div class="tokenomics-item">
+                        <div class="tokenomics-name">
+                            <div class="tokenomics-color" style="background-color: #ef4444;"></div>
+                            <span>Reserve</span>
+                        </div>
+                        <div class="tokenomics-value">10%</div>
+                    </div>
+                    <div class="tokenomics-item">
+                        <div class="tokenomics-name">
+                            <div class="tokenomics-color" style="background-color: #3b82f6;"></div>
+                            <span>Airdrop & Community</span>
+                        </div>
+                        <div class="tokenomics-value">5%</div>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="tokenomicsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section id="roadmap">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Roadmap</h2>
+                <p class="section-subtitle">Our strategic plan for growth and development</p>
+            </div>
+            
+            <div class="roadmap">
+                <div class="roadmap-items">
+                    <div class="roadmap-item">
+                        <div class="roadmap-content">
+                            <div class="roadmap-phase">
+                                <i class="fas fa-check"></i>
+                                Phase 1 - Completed
+                            </div>
+                            <h3 class="roadmap-title">Foundation & Launch</h3>
+                            <ul class="roadmap-list">
+                                <li>Smart contract development and audit</li>
+                                <li>Website and branding launch</li>
+                                <li>Community building initiatives</li>
+                                <li>Presale platform development</li>
+                            </ul>
+                        </div>
+                        <div class="roadmap-marker"></div>
+                    </div>
+                    
+                    <div class="roadmap-item">
+                        <div class="roadmap-content">
+                            <div class="roadmap-phase">
+                                <i class="fas fa-spinner"></i>
+                                Phase 2 - In Progress
+                            </div>
+                            <h3 class="roadmap-title">Presale & Growth</h3>
+                            <ul class="roadmap-list">
+                                <li>Public presale launch</li>
+                                <li>Marketing and partnership expansion</li>
+                                <li>Exchange listings preparation</li>
+                                <li>Community reward programs</li>
+                            </ul>
+                        </div>
+                        <div class="roadmap-marker"></div>
+                    </div>
+                    
+                    <div class="roadmap-item">
+                        <div class="roadmap-content">
+                            <div class="roadmap-phase">
+                                <i class="fas fa-clock"></i>
+                                Phase 3 - Upcoming
+                            </div>
+                            <h3 class="roadmap-title">Expansion & Utilities</h3>
+                            <ul class="roadmap-list">
+                                <li>DEX and CEX listings</li>
+                                <li>Staking platform launch</li>
+                                <li>Game development integration</li>
+                                <li>Ecosystem expansion</li>
+                            </ul>
+                        </div>
+                        <div class="roadmap-marker"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <div class="logo-icon">S</div>
+                        <span>Snake Token</span>
+                    </div>
+                    <p class="footer-description">
+                        A community-driven cryptocurrency with innovative tokenomics 
+                        and real utility on the Binance Smart Chain.
+                    </p>
+                    <div class="social-links">
+                        <a href="https://t.me/mmsnaketr" class="social-link">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                        <a href="https://x.com/memsnake" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-medium"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-links-container">
+                    <h3 class="footer-heading">Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Whitepaper</a></li>
+                        <li><a href="#">Audit Report</a></li>
+                        <li><a href="#">BscScan</a></li>
+                        <li><a href="#">How to Buy</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links-container">
+                    <h3 class="footer-heading">Legal</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Disclaimer</a></li>
+                        <li><a href="#">Risk Warning</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div>© 2023 Snake Token. All rights reserved.</div>
+                <div>Contract: 0xc9F46963Ee83EFd45675867f622Dd3a0B7c494e7</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Tokenomics Chart
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('tokenomicsChart').getContext('2d');
+            const tokenomicsChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Presale', 'Liquidity', 'Staking & Rewards', 'Marketing', 'Team & Advisors', 'Reserve', 'Airdrop & Community'],
+                    datasets: [{
+                        data: [25, 20, 15, 15, 10, 10, 5],
+                        backgroundColor: [
+                            '#22c55e',
+                            '#06b6d4',
+                            '#8b5cf6',
+                            '#f97316',
+                            '#eab308',
+                            '#ef4444',
+                            '#3b82f6'
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 15
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#B0B0B0',
+                                padding: 20,
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.raw}%`;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '65%'
+                }
+            });
+            
+            // Language switcher
+            const langButtons = document.querySelectorAll('.lang-btn');
+            langButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    langButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Here you would implement language change logic
+                    const lang = this.textContent.trim();
+                    console.log(`Language changed to: ${lang}`);
+                });
+            });
+            
+            // Payment method switcher
+            const paymentButtons = document.querySelectorAll('.payment-btn');
+            paymentButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    paymentButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Connect wallet button
+            const connectButton = document.querySelector('.connect-wallet');
+            connectButton.addEventListener('click', function() {
+                alert('Wallet connection functionality will be implemented soon!');
+            });
+            
+            // Buy button
+            const buyButton = document.querySelector('.btn-primary');
+            buyButton.addEventListener('click', function() {
+                alert('Purchase functionality will be implemented after wallet integration!');
+            });
+        });
+    </script>
+</body>
+</html>
