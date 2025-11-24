@@ -6,7 +6,7 @@ let currentLanguage = 'en';
 // Tokenomics Chart
 document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('tokenomicsChart').getContext('2d');
-    const tokenomicsChart = new Chart(ctx, {
+    window.tokenomicsChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
             labels: [
@@ -72,20 +72,21 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Dil butonlarına event listener ekle - DÜZELTİLDİ
-    document.querySelectorAll('.lang-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            // Tüm butonlardan active classını kaldır
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            // Sadece tıklanana active classını ekle
-            this.classList.add('active');
-            
-            const lang = this.textContent.trim().toLowerCase();
-            changeLanguage(lang);
+document.querySelectorAll('.lang-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        const lang = this.getAttribute('data-lang');
+        
+        // Tüm butonlardan active classını kaldır
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.classList.remove('active');
         });
+        
+        // Sadece tıklanana active classını ekle
+        this.classList.add('active');
+        
+        changeLanguage(lang);
     });
+});
 
     // FAQ Toggle Function
     document.querySelectorAll('.faq-question').forEach(question => {
@@ -228,6 +229,25 @@ function changeLanguage(lang) {
         priceDisplay.textContent = translations[lang]['presale.price'];
     }
 
+    // Chart etiketlerini güncelle - BU SATIRI EKLEYİN
+    updateChartLabels(lang);
+
     // Aktif dili kaydet
     localStorage.setItem('preferred-language', lang);
+}
+
+// Chart etiketlerini güncelleyen fonksiyon - BU FONKSİYONU EKLEYİN
+function updateChartLabels(lang) {
+    if (window.tokenomicsChart) {
+        window.tokenomicsChart.data.labels = [
+            translations[lang]['tokenomics.presale'],
+            translations[lang]['tokenomics.liquidity'], 
+            translations[lang]['tokenomics.staking'],
+            translations[lang]['tokenomics.marketing'],
+            translations[lang]['tokenomics.team'],
+            translations[lang]['tokenomics.reserve'],
+            translations[lang]['tokenomics.community']
+        ];
+        window.tokenomicsChart.update();
+    }
 }
