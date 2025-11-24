@@ -657,7 +657,7 @@ section {
     border-radius: 50%;
     z-index: 2;
     border: 3px solid var(--dark-card);
-    animation: pulse 2s infinite;
+    animation: pulse-roadmap 2s infinite;
     box-shadow: 0 0 0 3px var(--primary), 0 0 30px rgba(0, 212, 106, 0.7);
 }
 
