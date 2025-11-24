@@ -190,9 +190,10 @@ header {
     flex: 1;
 }
 
+/* Presale rozeti */
 .badge {
     display: inline-flex;
-    align-items: center;
+    align-items: center;                /* noktayı ve yazıyı dikeyde ortala */
     gap: 8px;
     background: rgba(0, 212, 106, 0.1);
     border: 1px solid rgba(0, 212, 106, 0.3);
@@ -202,17 +203,22 @@ header {
     font-size: 14px;
     font-weight: 500;
     margin-bottom: 20px;
-    line-height: 1;            /* 🔹 EKLENDİ: metin yüksekliğini sıkıştır */
+    line-height: 1;                     /* satır yüksekliğini sıkıştır */
+}
+
+.badge span {
+    line-height: 1;                     /* yazıyı da tam ortala */
 }
 
 .badge .pulse {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     background: var(--primary);
     border-radius: 50%;
     animation: pulse 2s infinite;
-    position: relative;        /* 🔹 EKLENDİ */
-    top: 1px;                  /* 🔹 Noktayı hafifçe aşağı indir */
+    flex-shrink: 0;
+    position: relative;
+    top: 1.5px;                         /* hafif aşağı çek (gerekirse 2px yap) */
 }
 
 @keyframes pulse {
@@ -689,24 +695,45 @@ section {
 
 /* Responsive */
 @media (max-width: 768px) {
-    /* 🔹 Hamburger görünür, sıralama: EN/TR - Cüzdan - Menü (en sağda) */
-    .menu-toggle {
+    /* HEADER HİZALAMA */
+    .nav-container {
+        align-items: center;
+    }
+
+    .nav-actions {
         display: flex;
         align-items: center;
-        justify-content: center;
-        margin-left: 10px;
-        order: 3; /* en sağda */
+        gap: 8px;
     }
 
     .lang-switcher {
         order: 1;
+        padding: 2px 4px;
+    }
+
+    .lang-btn {
+        padding: 6px 10px;
+        line-height: 1;
     }
 
     .connect-wallet {
         order: 2;
+        padding: 8px 14px;      /* biraz incelttik, yukarı çıktı */
+        line-height: 1;
+        display: flex;
+        align-items: center;
     }
 
-    /* 🔹 Mobil dropdown menü */
+    /* Hamburger: en sağda */
+    .menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 8px;
+        order: 3;
+    }
+
+    /* MOBİL DROPDOWN MENÜ */
     .nav-links {
         display: none; /* varsayılan: kapalı */
         position: absolute;
@@ -720,27 +747,27 @@ section {
         border: 1px solid var(--dark-border);
         box-shadow: var(--shadow);
         z-index: 1001;
-        align-items: flex-start;   /* linkleri sola hizala */
+        align-items: flex-start;   /* tüm blok sola */
         min-width: 160px;
     }
 
     .nav-links a {
-        display: block;            /* tamamı tıklanabilir satır */
+        display: block;
         width: 100%;
-        text-align: left;
+        text-align: left !important;  /* sağ/ortayı ez */
         text-decoration: none;
-        color: var(--text-secondary);
+        padding: 4px 0;
     }
 
     .nav-links a.active {
         color: var(--primary);
     }
 
-    /* JS .open ekleyince açılacak */
     .nav-links.open {
         display: flex;
     }
 
+    /* HERO */
     h1 {
         font-size: 2.5rem;
     }
@@ -753,6 +780,7 @@ section {
         grid-template-columns: 1fr;
     }
     
+    /* ROADMAP */
     .roadmap::before {
         left: 20px;
     }
@@ -771,11 +799,12 @@ section {
         right: auto !important;
     }
 
-    /* 🔹 Faz 2 yanındaki yeşil topu mobilde gizle */
+    /* Faz 2 yanındaki yeşil top mobilde gizli */
     .roadmap-item:nth-child(2)::before {
         display: none;
     }
     
+    /* FOOTER */
     .footer-content {
         grid-template-columns: 1fr;
     }
