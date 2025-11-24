@@ -602,50 +602,42 @@ section {
     flex-shrink: 0;
 }
 
-/* Roadmap Marker Tamamen Düzeltilmiş */
-.roadmap-marker {
-    width: 24px;
-    height: 24px;
-    background: var(--primary);
-    border-radius: 50%;
+/* Sadece Faz 2'de marker olsun - diğerlerini kaldır */
+.roadmap-item:not(:nth-child(2)) .roadmap-marker {
+    display: none;
+}
+
+/* Faz 2 için çift marker */
+.roadmap-item:nth-child(2)::before,
+.roadmap-item:nth-child(2)::after {
+    content: '';
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 2;
-    border: 3px solid var(--dark-card);
-    box-shadow: 0 0 0 2px var(--primary), var(--shadow-glow);
-}
-
-/* Faz 1 - Tamamlanmış */
-.roadmap-item:nth-child(1) .roadmap-marker {
-    background: var(--primary);
-    box-shadow: 0 0 0 2px var(--primary), 0 0 20px rgba(0, 212, 106, 0.5);
-}
-
-/* Faz 2 - Aktif (Büyük ve animasyonlu) */
-.roadmap-item:nth-child(2) .roadmap-marker {
-    background: var(--primary);
     width: 28px;
     height: 28px;
+    background: var(--primary);
+    border-radius: 50%;
+    z-index: 2;
+    border: 3px solid var(--dark-card);
     animation: pulse 2s infinite;
     box-shadow: 0 0 0 3px var(--primary), 0 0 30px rgba(0, 212, 106, 0.7);
 }
 
-/* Faz 3 ve 4 - Gelecek (Daha soluk) */
-.roadmap-item:nth-child(3) .roadmap-marker,
-.roadmap-item:nth-child(4) .roadmap-marker {
-    background: var(--primary);
-    opacity: 0.4;
-    box-shadow: 0 0 0 2px var(--primary), 0 0 10px rgba(0, 212, 106, 0.3);
+/* Sol marker */
+.roadmap-item:nth-child(2)::before {
+    left: -14px;
 }
 
-/* Marker pozisyonları */
-.roadmap-item:nth-child(odd) .roadmap-marker {
-    right: -12px;
+/* Sağ marker */
+.roadmap-item:nth-child(2)::after {
+    right: -14px;
 }
 
-.roadmap-item:nth-child(even) .roadmap-marker {
-    left: -12px;
+/* Faz 2 içeriğine özel stil */
+.roadmap-item:nth-child(2) .roadmap-content {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-glow);
 }
 
 /* Aktif faz için özel stil */
