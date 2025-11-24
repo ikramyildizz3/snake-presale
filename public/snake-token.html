@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snake Token - Premium Crypto Investment</title>
+    <title>Snake Token - Play-to-Earn Crypto Ecosystem</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -260,6 +260,26 @@
             font-size: 14px;
         }
 
+        /* Presale Details */
+        .presale-details {
+            background: rgba(0, 212, 106, 0.05);
+            border: 1px solid rgba(0, 212, 106, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .detail-item:last-child {
+            margin-bottom: 0;
+        }
+
         /* Presale Card */
         .presale-card {
             background: var(--dark-card);
@@ -344,6 +364,11 @@
             border-radius: 8px;
             margin-bottom: 20px;
             text-align: center;
+            display: none;
+        }
+
+        .price-info.visible {
+            display: block;
         }
 
         .price-note {
@@ -1004,23 +1029,37 @@
                 </div>
                 
                 <h1>
-                    <span data-translate="hero.title">Revolutionizing Crypto with</span>
-                    <span class="gradient-text">Snake Token</span>
+                    <span data-translate="hero.title">Snake Token: Play-to-Earn Focused</span>
+                    <span class="gradient-text" data-translate="hero.title2">BNB Chain Ecosystem Token</span>
                 </h1>
                 
                 <p class="hero-description" data-translate="hero.description">
-                    Join the next generation of community-driven cryptocurrency. 
-                    Snake Token combines innovative tokenomics with real utility 
-                    for sustainable growth and long-term value.
+                    Community-focused, transparent token distribution and real in-game usage - 
+                    we aim for sustainable demand, not hype.
                 </p>
+                
+                <div class="presale-details">
+                    <div class="detail-item">
+                        <span data-translate="presale.soft-cap">Soft Cap:</span>
+                        <span>50,000 USDT</span>
+                    </div>
+                    <div class="detail-item">
+                        <span data-translate="presale.hard-cap">Hard Cap:</span>
+                        <span>200,000 USDT</span>
+                    </div>
+                    <div class="detail-item">
+                        <span data-translate="presale.min-max">Min/Max Buy:</span>
+                        <span>0.05 - 5 BNB</span>
+                    </div>
+                </div>
                 
                 <div class="hero-stats">
                     <div class="stat-card">
-                        <div class="stat-value">400M</div>
+                        <div class="stat-value">200M</div>
                         <div class="stat-label" data-translate="hero.total-supply">Total Supply</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-value">$0.02</div>
+                        <div class="stat-value">$0.015</div>
                         <div class="stat-label" data-translate="hero.presale-price">Presale Price</div>
                     </div>
                     <div class="stat-card">
@@ -1039,7 +1078,7 @@
                 <div class="input-group">
                     <div class="input-label">
                         <span data-translate="presale.amount">Amount (SNAKE)</span>
-                        <span data-translate="presale.price">Price: 1 SNAKE = 0.02 USDT</span>
+                        <span id="priceDisplay" data-translate="presale.price">Price: 1 SNAKE = 0.015 USDT</span>
                     </div>
                     <input type="number" class="input-field" placeholder="Enter amount" id="snakeAmount" data-translate-placeholder="presale.enter-amount">
                 </div>
@@ -1049,9 +1088,9 @@
                     <button class="payment-btn" data-method="bnb">BNB</button>
                 </div>
                 
-                <div class="price-info">
+                <div class="price-info" id="bnbPriceInfo">
                     <p id="bnbPrice">Current reference: 1 BNB ≈ Loading...</p>
-                    <p class="price-note">
+                    <p class="price-note" data-translate="presale.bnb-note">
                         If you choose BNB, an indicative live rate from Binance is used. 
                         Final price is confirmed on-chain at the time of purchase.
                     </p>
@@ -1094,51 +1133,51 @@
                     <div class="tokenomics-item">
                         <div class="tokenomics-name">
                             <div class="tokenomics-color" style="background-color: #22c55e;"></div>
-                            <span>Presale</span>
+                            <span data-translate="tokenomics.presale">Presale</span>
+                        </div>
+                        <div class="tokenomics-value">30%</div>
+                    </div>
+                    <div class="tokenomics-item">
+                        <div class="tokenomics-name">
+                            <div class="tokenomics-color" style="background-color: #06b6d4;"></div>
+                            <span data-translate="tokenomics.liquidity">Liquidity</span>
                         </div>
                         <div class="tokenomics-value">25%</div>
                     </div>
                     <div class="tokenomics-item">
                         <div class="tokenomics-name">
-                            <div class="tokenomics-color" style="background-color: #06b6d4;"></div>
-                            <span>Liquidity</span>
+                            <div class="tokenomics-color" style="background-color: #8b5cf6;"></div>
+                            <span data-translate="tokenomics.staking">Staking & Rewards</span>
                         </div>
                         <div class="tokenomics-value">20%</div>
                     </div>
                     <div class="tokenomics-item">
                         <div class="tokenomics-name">
-                            <div class="tokenomics-color" style="background-color: #8b5cf6;"></div>
-                            <span>Staking & Rewards</span>
-                        </div>
-                        <div class="tokenomics-value">15%</div>
-                    </div>
-                    <div class="tokenomics-item">
-                        <div class="tokenomics-name">
                             <div class="tokenomics-color" style="background-color: #f97316;"></div>
-                            <span>Marketing</span>
+                            <span data-translate="tokenomics.marketing">Marketing</span>
                         </div>
-                        <div class="tokenomics-value">15%</div>
+                        <div class="tokenomics-value">10%</div>
                     </div>
                     <div class="tokenomics-item">
                         <div class="tokenomics-name">
                             <div class="tokenomics-color" style="background-color: #eab308;"></div>
-                            <span>Team & Advisors</span>
+                            <span data-translate="tokenomics.team">Team & Advisors</span>
                         </div>
-                        <div class="tokenomics-value">10%</div>
+                        <div class="tokenomics-value">8%</div>
                     </div>
                     <div class="tokenomics-item">
                         <div class="tokenomics-name">
                             <div class="tokenomics-color" style="background-color: #ef4444;"></div>
-                            <span>Reserve</span>
+                            <span data-translate="tokenomics.reserve">Reserve</span>
                         </div>
-                        <div class="tokenomics-value">10%</div>
+                        <div class="tokenomics-value">5%</div>
                     </div>
                     <div class="tokenomics-item">
                         <div class="tokenomics-name">
                             <div class="tokenomics-color" style="background-color: #3b82f6;"></div>
-                            <span>Airdrop & Community</span>
+                            <span data-translate="tokenomics.community">Airdrop & Community</span>
                         </div>
-                        <div class="tokenomics-value">5%</div>
+                        <div class="tokenomics-value">2%</div>
                     </div>
                 </div>
                 
@@ -1164,15 +1203,14 @@
                         <div class="roadmap-content">
                             <div class="roadmap-phase">
                                 <i class="fas fa-check"></i>
-                                Phase 1 - Completed
+                                <span data-translate="roadmap.phase1">Phase 1 - Completed</span>
                             </div>
-                            <h3 class="roadmap-title">Foundation & Launch</h3>
+                            <h3 class="roadmap-title" data-translate="roadmap.phase1.title">Foundation & Launch</h3>
                             <ul class="roadmap-list">
-                                <li>Smart contract development and audit</li>
-                                <li>Website and branding launch</li>
-                                <li>Community building initiatives</li>
-                                <li>Presale platform development</li>
-                                <li>Initial marketing strategy formulation</li>
+                                <li data-translate="roadmap.phase1.item1">Smart contract development and audit</li>
+                                <li data-translate="roadmap.phase1.item2">Website and branding launch</li>
+                                <li data-translate="roadmap.phase1.item3">Community building initiatives</li>
+                                <li data-translate="roadmap.phase1.item4">Presale platform development</li>
                             </ul>
                         </div>
                         <div class="roadmap-marker"></div>
@@ -1183,15 +1221,14 @@
                         <div class="roadmap-content">
                             <div class="roadmap-phase">
                                 <i class="fas fa-spinner"></i>
-                                Phase 2 - In Progress
+                                <span data-translate="roadmap.phase2">Phase 2 - In Progress</span>
                             </div>
-                            <h3 class="roadmap-title">Presale & Growth</h3>
+                            <h3 class="roadmap-title" data-translate="roadmap.phase2.title">Presale & Growth</h3>
                             <ul class="roadmap-list">
-                                <li>Public presale launch</li>
-                                <li>Marketing and partnership expansion</li>
-                                <li>Exchange listings preparation</li>
-                                <li>Community reward programs</li>
-                                <li>Game development initiation</li>
+                                <li data-translate="roadmap.phase2.item1">Public presale launch</li>
+                                <li data-translate="roadmap.phase2.item2">Marketing and partnership expansion</li>
+                                <li data-translate="roadmap.phase2.item3">Exchange listings preparation</li>
+                                <li data-translate="roadmap.phase2.item4">Game development initiation</li>
                             </ul>
                         </div>
                         <div class="roadmap-marker"></div>
@@ -1202,53 +1239,32 @@
                         <div class="roadmap-content">
                             <div class="roadmap-phase">
                                 <i class="fas fa-clock"></i>
-                                Phase 3 - Upcoming
+                                <span data-translate="roadmap.phase3">Phase 3 - Q2 2025</span>
                             </div>
-                            <h3 class="roadmap-title">Ecosystem Development</h3>
+                            <h3 class="roadmap-title" data-translate="roadmap.phase3.title">Ecosystem Development</h3>
                             <ul class="roadmap-list">
-                                <li>PancakeSwap listing and liquidity</li>
-                                <li>Staking platform launch</li>
-                                <li>Play-to-Earn game beta testing</li>
-                                <li>Major CEX listing negotiations</li>
-                                <li>Ecosystem expansion</li>
+                                <li data-translate="roadmap.phase3.item1">PancakeSwap listing and liquidity</li>
+                                <li data-translate="roadmap.phase3.item2">Staking platform launch</li>
+                                <li data-translate="roadmap.phase3.item3">Play-to-Earn game beta testing</li>
+                                <li data-translate="roadmap.phase3.item4">Major CEX listing negotiations</li>
                             </ul>
                         </div>
                         <div class="roadmap-marker"></div>
                     </div>
 
-                    <!-- Phase 4 - YENİ -->
+                    <!-- Phase 4 -->
                     <div class="roadmap-item">
                         <div class="roadmap-content">
                             <div class="roadmap-phase">
                                 <i class="fas fa-rocket"></i>
-                                Phase 4 - Planned
+                                <span data-translate="roadmap.phase4">Phase 4 - Q3 2025</span>
                             </div>
-                            <h3 class="roadmap-title">Global Scaling</h3>
+                            <h3 class="roadmap-title" data-translate="roadmap.phase4.title">Global Scaling</h3>
                             <ul class="roadmap-list">
-                                <li>Full game launch with Play-to-Earn</li>
-                                <li>Tier 1 exchange listings</li>
-                                <li>Mobile app development</li>
-                                <li>Cross-chain integration</li>
-                                <li>Global marketing campaigns</li>
-                            </ul>
-                        </div>
-                        <div class="roadmap-marker"></div>
-                    </div>
-
-                    <!-- Phase 5 - YENİ -->
-                    <div class="roadmap-item">
-                        <div class="roadmap-content">
-                            <div class="roadmap-phase">
-                                <i class="fas fa-infinity"></i>
-                                Phase 5 - Vision
-                            </div>
-                            <h3 class="roadmap-title">Sustainable Ecosystem</h3>
-                            <ul class="roadmap-list">
-                                <li>DAO implementation</li>
-                                <li>Additional game features</li>
-                                <li>Strategic partnerships</li>
-                                <li>Token utility expansion</li>
-                                <li>Long-term sustainability</li>
+                                <li data-translate="roadmap.phase4.item1">Full game launch with Play-to-Earn</li>
+                                <li data-translate="roadmap.phase4.item2">Tier 1 exchange listings</li>
+                                <li data-translate="roadmap.phase4.item3">Mobile app development</li>
+                                <li data-translate="roadmap.phase4.item4">Cross-chain integration</li>
                             </ul>
                         </div>
                         <div class="roadmap-marker"></div>
@@ -1269,8 +1285,8 @@
             <div class="steps-container">
                 <div class="step-card">
                     <div class="step-number">1</div>
-                    <h3>Setup Wallet</h3>
-                    <p>Install <strong>MetaMask</strong>, <strong>Trust Wallet</strong>, <strong>Binance Web3 Wallet</strong>, or any Web3 wallet. Make sure you're on Binance Smart Chain network.</p>
+                    <h3 data-translate="steps.step1.title">Setup Wallet</h3>
+                    <p data-translate="steps.step1.desc">Install MetaMask, Trust Wallet, Binance Web3 Wallet, or any Web3 wallet. Make sure you're on Binance Smart Chain network.</p>
                     <div class="wallet-badges">
                         <span class="wallet-badge">MetaMask</span>
                         <span class="wallet-badge">Trust Wallet</span>
@@ -1281,44 +1297,42 @@
                 
                 <div class="step-card">
                     <div class="step-number">2</div>
-                    <h3>Get BNB or USDT</h3>
-                    <p>Deposit BNB or USDT (BEP-20) into your wallet. 
-                       <strong>Binance Web3 Wallet users:</strong> You can easily bridge assets from other chains.</p>
+                    <h3 data-translate="steps.step2.title">Get BNB or USDT</h3>
+                    <p data-translate="steps.step2.desc">Deposit BNB or USDT (BEP-20) into your wallet. Binance Web3 Wallet users: You can easily bridge assets from other chains.</p>
                 </div>
                 
                 <div class="step-card">
                     <div class="step-number">3</div>
-                    <h3>Connect & Buy</h3>
-                    <p>Connect your wallet to our presale platform, enter the SNAKE amount, and confirm the transaction.</p>
-                    <p><strong>All major wallets supported:</strong> Including Binance Web3 Wallet with one-click connection.</p>
+                    <h3 data-translate="steps.step3.title">Connect & Buy</h3>
+                    <p data-translate="steps.step3.desc">Connect your wallet to our presale platform, enter the SNAKE amount, and confirm the transaction.</p>
                 </div>
                 
                 <div class="step-card">
                     <div class="step-number">4</div>
-                    <h3>Claim Tokens</h3>
-                    <p>After presale ends, return to claim your SNAKE tokens. They'll be automatically sent to your connected wallet.</p>
+                    <h3 data-translate="steps.step4.title">Claim Tokens</h3>
+                    <p data-translate="steps.step4.desc">After presale ends, return to claim your SNAKE tokens. They'll be automatically sent to your connected wallet.</p>
                 </div>
             </div>
 
             <!-- Binance Web3 Wallet Special Info -->
             <div class="special-info">
-                <h3>🎯 For Binance Web3 Wallet Users</h3>
+                <h3>🎯 <span data-translate="binance.title">For Binance Web3 Wallet Users</span></h3>
                 <div class="info-grid">
                     <div class="info-item">
-                        <h4>✅ Easy Setup</h4>
-                        <p>Built into Binance App - no separate installation needed</p>
+                        <h4>✅ <span data-translate="binance.feature1">Easy Setup</span></h4>
+                        <p data-translate="binance.desc1">Built into Binance App - no separate installation needed</p>
                     </div>
                     <div class="info-item">
-                        <h4>🔗 Simple Bridging</h4>
-                        <p>Easily move assets between chains with low fees</p>
+                        <h4>🔗 <span data-translate="binance.feature2">Simple Bridging</span></h4>
+                        <p data-translate="binance.desc2">Easily move assets between chains with low fees</p>
                     </div>
                     <div class="info-item">
-                        <h4>🛡️ Enhanced Security</h4>
-                        <p>Backed by Binance's security infrastructure</p>
+                        <h4>🛡️ <span data-translate="binance.feature3">Enhanced Security</span></h4>
+                        <p data-translate="binance.desc3">Backed by Binance's security infrastructure</p>
                     </div>
                     <div class="info-item">
-                        <h4>💫 One-Click Connect</h4>
-                        <p>Seamless connection to dApps like our presale</p>
+                        <h4>💫 <span data-translate="binance.feature4">One-Click Connect</span></h4>
+                        <p data-translate="binance.desc4">Seamless connection to dApps like our presale</p>
                     </div>
                 </div>
             </div>
@@ -1336,65 +1350,51 @@
             <div class="faq-container">
                 <div class="faq-item">
                     <div class="faq-question">
-                        <h3>What is Snake Token?</h3>
+                        <h3 data-translate="faq.q1">What is Snake Token?</h3>
                         <span class="faq-toggle">+</span>
                     </div>
                     <div class="faq-answer">
-                        <p>Snake Token is a community-driven meme token on Binance Smart Chain with real utility through upcoming Play-to-Earn gaming integration.</p>
+                        <p data-translate="faq.a1">Snake Token is a community-driven meme token on Binance Smart Chain with real utility through upcoming Play-to-Earn gaming integration.</p>
                     </div>
                 </div>
                 
                 <div class="faq-item">
                     <div class="faq-question">
-                        <h3>How can I buy Snake Token?</h3>
+                        <h3 data-translate="faq.q2">How can I buy Snake Token?</h3>
                         <span class="faq-toggle">+</span>
                     </div>
                     <div class="faq-answer">
-                        <p>During presale: Connect your wallet (MetaMask, Trust Wallet, Binance Web3 Wallet) and use USDT or BNB. After launch: Available on PancakeSwap.</p>
+                        <p data-translate="faq.a2">During presale: Connect your wallet and use USDT or BNB. After launch: Available on PancakeSwap.</p>
                     </div>
                 </div>
                 
                 <div class="faq-item">
                     <div class="faq-question">
-                        <h3>When is the game launching?</h3>
+                        <h3 data-translate="faq.q3">When is the game launching?</h3>
                         <span class="faq-toggle">+</span>
                     </div>
                     <div class="faq-answer">
-                        <p><strong>🎯 Target Launch: Q2 2025</strong></p>
-                        <p>Our Play-to-Earn Snake game is currently in active development and is scheduled to launch <strong>prior to our major exchange listings</strong>.</p>
-                        
-                        <div class="timeline-note">
-                            <h4>🚀 Development Timeline:</h4>
-                            <ul>
-                                <li><strong>Q1 2025:</strong> Game mechanics completion & alpha testing</li>
-                                <li><strong>Q2 2025:</strong> Beta launch & community testing</li>
-                                <li><strong>Q2 2025:</strong> Full game release before major CEX listings</li>
-                            </ul>
-                        </div>
-                        
-                        <p><strong>Why before exchange listings?</strong> We believe in delivering real utility and gaming experience first, creating organic demand before pursuing major exchange partnerships.</p>
-                        
-                        <p class="highlight">📅 <strong>Stay Updated:</strong> Follow our Telegram and Twitter for development progress and exact launch date announcements!</p>
+                        <p data-translate="faq.a3"><strong>Target Launch: Q2 2025</strong> - Our Play-to-Earn Snake game is in active development.</p>
                     </div>
                 </div>
                 
                 <div class="faq-item">
                     <div class="faq-question">
-                        <h3>What is the total supply?</h3>
+                        <h3 data-translate="faq.q4">What is the total supply?</h3>
                         <span class="faq-toggle">+</span>
                     </div>
                     <div class="faq-answer">
-                        <p>Total supply is 400,000,000 SNAKE tokens with fair distribution across presale, liquidity, rewards, and ecosystem.</p>
+                        <p data-translate="faq.a4">Total supply is 200,000,000 SNAKE tokens with fair distribution.</p>
                     </div>
                 </div>
                 
                 <div class="faq-item">
                     <div class="faq-question">
-                        <h3>Is there a vesting period?</h3>
+                        <h3 data-translate="faq.q5">Where will SNAKE be listed?</h3>
                         <span class="faq-toggle">+</span>
                     </div>
                     <div class="faq-answer">
-                        <p>Team tokens are locked for 6 months. Presale tokens are immediately claimable after sale concludes.</p>
+                        <p data-translate="faq.a5">Initially on PancakeSwap, with plans for major CEX listings after game launch.</p>
                     </div>
                 </div>
             </div>
@@ -1405,15 +1405,11 @@
     <section id="disclaimer">
         <div class="container">
             <div class="disclaimer-content">
-                <h2>Important Risk Disclaimer</h2>
+                <h2 data-translate="legal.disclaimer">Important Risk Disclaimer</h2>
                 <div class="disclaimer-text">
-                    <p><strong>🚨 Investment Warning:</strong> Snake Token is a experimental community project. Cryptocurrency investments are highly volatile and risky. Only invest what you can afford to lose.</p>
+                    <p><strong>🚨 <span data-translate="legal.warning">Investment Warning:</span></strong> <span data-translate="legal.warning-desc">Snake Token is an experimental community project. Cryptocurrency investments are highly volatile and risky. Only invest what you can afford to lose.</span></p>
                     
-                    <p><strong>📊 No Financial Advice:</strong> This website and its content do not constitute financial advice. Always do your own research (DYOR) before investing.</p>
-                    
-                    <p><strong>🎮 Utility Note:</strong> While we're developing Play-to-Earn gaming utilities, success is not guaranteed. Token value may fluctuate based on market conditions.</p>
-                    
-                    <p><strong>🔒 Security:</strong> Ensure you're using official links from our verified social media. Never share your private keys or seed phrases.</p>
+                    <p><strong>📊 <span data-translate="legal.advice">No Financial Advice:</span></strong> <span data-translate="legal.advice-desc">This website does not constitute financial advice. Always do your own research (DYOR) before investing.</span></p>
                     
                     <p><strong>By participating in Snake Token presale, you acknowledge and accept these risks.</strong></p>
                 </div>
@@ -1425,19 +1421,11 @@
     <section id="privacy">
         <div class="container">
             <div class="disclaimer-content">
-                <h2>Privacy Policy</h2>
+                <h2 data-translate="legal.privacy">Privacy Policy</h2>
                 <div class="disclaimer-text">
-                    <p><strong>Last Updated:</strong> December 2024</p>
+                    <p><strong data-translate="legal.updated">Last Updated:</strong> December 2024</p>
                     
-                    <p><strong>Information Collection:</strong> We do not collect any personal information. Our website is static and does not use tracking cookies or analytics.</p>
-                    
-                    <p><strong>Wallet Connection:</strong> When you connect your wallet, we only access public blockchain information. We never see your private keys or seed phrases.</p>
-                    
-                    <p><strong>Third-Party Services:</strong> We use Binance API for price data and Vercel for hosting. Please review their privacy policies.</p>
-                    
-                    <p><strong>Changes to Policy:</strong> We may update this policy. Continued use of the site constitutes acceptance.</p>
-                    
-                    <p><strong>Contact:</strong> For privacy concerns, contact us via Telegram.</p>
+                    <p data-translate="legal.privacy-desc">We do not collect personal information. Our website is static and does not use tracking cookies. When connecting your wallet, we only access public blockchain information.</p>
                 </div>
             </div>
         </div>
@@ -1447,21 +1435,9 @@
     <section id="terms">
         <div class="container">
             <div class="disclaimer-content">
-                <h2>Terms of Service</h2>
+                <h2 data-translate="legal.terms">Terms of Service</h2>
                 <div class="disclaimer-text">
-                    <p><strong>Acceptance of Terms:</strong> By using this website, you agree to these terms.</p>
-                    
-                    <p><strong>Eligibility:</strong> You must be of legal age in your jurisdiction to participate in cryptocurrency activities.</p>
-                    
-                    <p><strong>No Financial Advice:</strong> This platform provides information only, not financial advice.</p>
-                    
-                    <p><strong>Investment Risks:</strong> Cryptocurrency investments are volatile. You alone bear responsibility for investment decisions.</p>
-                    
-                    <p><strong>Prohibited Use:</strong> You may not use this site for illegal activities or fraud.</p>
-                    
-                    <p><strong>Termination:</strong> We reserve the right to restrict access for violation of these terms.</p>
-                    
-                    <p><strong>Governing Law:</strong> These terms are governed by applicable international laws.</p>
+                    <p data-translate="legal.terms-desc">By using this website, you agree to these terms. You must be of legal age in your jurisdiction. This platform provides information only, not financial advice. Cryptocurrency investments are volatile and you bear full responsibility for investment decisions.</p>
                 </div>
             </div>
         </div>
@@ -1476,7 +1452,7 @@
                         <div class="logo-icon">🐍</div>
                         <span>Snake Token</span>
                     </div>
-                    <p class="footer-description">
+                    <p class="footer-description" data-translate="footer.desc">
                         A community-driven cryptocurrency with innovative tokenomics 
                         and real utility on the Binance Smart Chain.
                     </p>
@@ -1491,22 +1467,22 @@
                 </div>
                 
                 <div class="footer-links-container">
-                    <h3 class="footer-heading">Resources</h3>
+                    <h3 class="footer-heading" data-translate="footer.resources">Resources</h3>
                     <ul class="footer-links">
-                        <li><a href="#tokenomics">Tokenomics</a></li>
-                        <li><a href="#roadmap">Roadmap</a></li>
+                        <li><a href="#tokenomics" data-translate="nav.tokenomics">Tokenomics</a></li>
+                        <li><a href="#roadmap" data-translate="nav.roadmap">Roadmap</a></li>
                         <li><a href="https://bscscan.com/address/0xc9F46963Ee83EFd45675867f622Dd3a0B7c494e7" target="_blank">BscScan</a></li>
-                        <li><a href="#how-to-buy">How to Buy</a></li>
-                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#how-to-buy" data-translate="nav.how-to-buy">How to Buy</a></li>
+                        <li><a href="#faq" data-translate="nav.faq">FAQ</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-links-container">
-                    <h3 class="footer-heading">Legal</h3>
+                    <h3 class="footer-heading" data-translate="footer.legal">Legal</h3>
                     <ul class="footer-links">
-                        <li><a href="#disclaimer">Disclaimer</a></li>
-                        <li><a href="#privacy">Privacy Policy</a></li>
-                        <li><a href="#terms">Terms of Service</a></li>
+                        <li><a href="#disclaimer" data-translate="legal.disclaimer">Disclaimer</a></li>
+                        <li><a href="#privacy" data-translate="legal.privacy">Privacy Policy</a></li>
+                        <li><a href="#terms" data-translate="legal.terms">Terms of Service</a></li>
                     </ul>
                 </div>
             </div>
@@ -1532,22 +1508,29 @@
                 
                 // Hero Section
                 'hero.presale': 'Presale Live',
-                'hero.title': 'Revolutionizing Crypto with',
-                'hero.description': 'Join the next generation of community-driven cryptocurrency. Snake Token combines innovative tokenomics with real utility for sustainable growth and long-term value.',
+                'hero.title': 'Snake Token: Play-to-Earn Focused',
+                'hero.title2': 'BNB Chain Ecosystem Token',
+                'hero.description': 'Community-focused, transparent token distribution and real in-game usage - we aim for sustainable demand, not hype.',
                 'hero.total-supply': 'Total Supply',
                 'hero.presale-price': 'Presale Price',
                 'hero.network': 'Network',
+                
+                // Presale Details
+                'presale.soft-cap': 'Soft Cap:',
+                'presale.hard-cap': 'Hard Cap:',
+                'presale.min-max': 'Min/Max Buy:',
                 
                 // Presale Panel
                 'presale.title': 'Presale Panel',
                 'presale.subtitle': 'Buy SNAKE tokens before listing',
                 'presale.amount': 'Amount (SNAKE)',
-                'presale.price': 'Price: 1 SNAKE = 0.02 USDT',
+                'presale.price': 'Price: 1 SNAKE = 0.015 USDT',
                 'presale.enter-amount': 'Enter amount',
                 'presale.you-pay': 'You pay (estimated)',
                 'presale.you-receive': 'You receive',
                 'presale.buy-now': 'Buy Now',
                 'presale.claim': 'Claim (Soon)',
+                'presale.bnb-note': 'If you choose BNB, an indicative live rate from Binance is used. Final price is confirmed on-chain at the time of purchase.',
                 
                 // Section Titles
                 'section.tokenomics': 'Tokenomics',
@@ -1557,7 +1540,95 @@
                 'section.how-to-buy': 'How to Buy Snake Token',
                 'section.how-to-buy.sub': 'Step-by-step guide to purchase SNAKE tokens',
                 'section.faq': 'Frequently Asked Questions',
-                'section.faq.sub': 'Everything you need to know about Snake Token'
+                'section.faq.sub': 'Everything you need to know about Snake Token',
+                
+                // Tokenomics
+                'tokenomics.presale': 'Presale',
+                'tokenomics.liquidity': 'Liquidity',
+                'tokenomics.staking': 'Staking & Rewards',
+                'tokenomics.marketing': 'Marketing',
+                'tokenomics.team': 'Team & Advisors',
+                'tokenomics.reserve': 'Reserve',
+                'tokenomics.community': 'Airdrop & Community',
+                
+                // Roadmap
+                'roadmap.phase1': 'Phase 1 - Completed',
+                'roadmap.phase1.title': 'Foundation & Launch',
+                'roadmap.phase1.item1': 'Smart contract development and audit',
+                'roadmap.phase1.item2': 'Website and branding launch',
+                'roadmap.phase1.item3': 'Community building initiatives',
+                'roadmap.phase1.item4': 'Presale platform development',
+                
+                'roadmap.phase2': 'Phase 2 - In Progress',
+                'roadmap.phase2.title': 'Presale & Growth',
+                'roadmap.phase2.item1': 'Public presale launch',
+                'roadmap.phase2.item2': 'Marketing and partnership expansion',
+                'roadmap.phase2.item3': 'Exchange listings preparation',
+                'roadmap.phase2.item4': 'Game development initiation',
+                
+                'roadmap.phase3': 'Phase 3 - Q2 2025',
+                'roadmap.phase3.title': 'Ecosystem Development',
+                'roadmap.phase3.item1': 'PancakeSwap listing and liquidity',
+                'roadmap.phase3.item2': 'Staking platform launch',
+                'roadmap.phase3.item3': 'Play-to-Earn game beta testing',
+                'roadmap.phase3.item4': 'Major CEX listing negotiations',
+                
+                'roadmap.phase4': 'Phase 4 - Q3 2025',
+                'roadmap.phase4.title': 'Global Scaling',
+                'roadmap.phase4.item1': 'Full game launch with Play-to-Earn',
+                'roadmap.phase4.item2': 'Tier 1 exchange listings',
+                'roadmap.phase4.item3': 'Mobile app development',
+                'roadmap.phase4.item4': 'Cross-chain integration',
+                
+                // Steps
+                'steps.step1.title': 'Setup Wallet',
+                'steps.step1.desc': 'Install MetaMask, Trust Wallet, Binance Web3 Wallet, or any Web3 wallet. Make sure you\'re on Binance Smart Chain network.',
+                'steps.step2.title': 'Get BNB or USDT',
+                'steps.step2.desc': 'Deposit BNB or USDT (BEP-20) into your wallet. Binance Web3 Wallet users: You can easily bridge assets from other chains.',
+                'steps.step3.title': 'Connect & Buy',
+                'steps.step3.desc': 'Connect your wallet to our presale platform, enter the SNAKE amount, and confirm the transaction.',
+                'steps.step4.title': 'Claim Tokens',
+                'steps.step4.desc': 'After presale ends, return to claim your SNAKE tokens. They\'ll be automatically sent to your connected wallet.',
+                
+                // Binance Wallet
+                'binance.title': 'For Binance Web3 Wallet Users',
+                'binance.feature1': 'Easy Setup',
+                'binance.desc1': 'Built into Binance App - no separate installation needed',
+                'binance.feature2': 'Simple Bridging',
+                'binance.desc2': 'Easily move assets between chains with low fees',
+                'binance.feature3': 'Enhanced Security',
+                'binance.desc3': 'Backed by Binance\'s security infrastructure',
+                'binance.feature4': 'One-Click Connect',
+                'binance.desc4': 'Seamless connection to dApps like our presale',
+                
+                // FAQ
+                'faq.q1': 'What is Snake Token?',
+                'faq.a1': 'Snake Token is a community-driven meme token on Binance Smart Chain with real utility through upcoming Play-to-Earn gaming integration.',
+                'faq.q2': 'How can I buy Snake Token?',
+                'faq.a2': 'During presale: Connect your wallet and use USDT or BNB. After launch: Available on PancakeSwap.',
+                'faq.q3': 'When is the game launching?',
+                'faq.a3': 'Target Launch: Q2 2025 - Our Play-to-Earn Snake game is in active development.',
+                'faq.q4': 'What is the total supply?',
+                'faq.a4': 'Total supply is 200,000,000 SNAKE tokens with fair distribution.',
+                'faq.q5': 'Where will SNAKE be listed?',
+                'faq.a5': 'Initially on PancakeSwap, with plans for major CEX listings after game launch.',
+                
+                // Legal
+                'legal.disclaimer': 'Important Risk Disclaimer',
+                'legal.warning': 'Investment Warning:',
+                'legal.warning-desc': 'Snake Token is an experimental community project. Cryptocurrency investments are highly volatile and risky. Only invest what you can afford to lose.',
+                'legal.advice': 'No Financial Advice:',
+                'legal.advice-desc': 'This website does not constitute financial advice. Always do your own research (DYOR) before investing.',
+                'legal.privacy': 'Privacy Policy',
+                'legal.updated': 'Last Updated:',
+                'legal.privacy-desc': 'We do not collect personal information. Our website is static and does not use tracking cookies. When connecting your wallet, we only access public blockchain information.',
+                'legal.terms': 'Terms of Service',
+                'legal.terms-desc': 'By using this website, you agree to these terms. You must be of legal age in your jurisdiction. This platform provides information only, not financial advice. Cryptocurrency investments are volatile and you bear full responsibility for investment decisions.',
+                
+                // Footer
+                'footer.desc': 'A community-driven cryptocurrency with innovative tokenomics and real utility on the Binance Smart Chain.',
+                'footer.resources': 'Resources',
+                'footer.legal': 'Legal'
             },
             tr: {
                 // Navigation
@@ -1570,22 +1641,29 @@
                 
                 // Hero Section
                 'hero.presale': 'Ön Satış Aktif',
-                'hero.title': 'Snake Token ile Kriptoda Devrim',
-                'hero.description': 'Topluluk odaklı kripto para biriminin yeni nesline katılın. Snake Token, yenilikçi tokenomikleri gerçek kullanım alanlarıyla birleştirerek sürdürülebilir büyüme ve uzun vadeli değer sunar.',
+                'hero.title': 'Snake Token: Play-to-Earn Odaklı',
+                'hero.title2': 'BNB Chain Ekosistem Tokeni',
+                'hero.description': 'Topluluk odaklı, şeffaf token dağılımı ve gerçek oyun içi kullanım - hype değil, sürdürülebilir talep hedefliyoruz.',
                 'hero.total-supply': 'Toplam Arz',
                 'hero.presale-price': 'Ön Satış Fiyatı',
                 'hero.network': 'Ağ',
+                
+                // Presale Details
+                'presale.soft-cap': 'Soft Cap:',
+                'presale.hard-cap': 'Hard Cap:',
+                'presale.min-max': 'Min/Max Alım:',
                 
                 // Presale Panel
                 'presale.title': 'Ön Satış Paneli',
                 'presale.subtitle': 'Listeleme öncesi SNAKE tokenlerini satın alın',
                 'presale.amount': 'Miktar (SNAKE)',
-                'presale.price': 'Fiyat: 1 SNAKE = 0.02 USDT',
+                'presale.price': 'Fiyat: 1 SNAKE = 0.015 USDT',
                 'presale.enter-amount': 'Miktar girin',
                 'presale.you-pay': 'Ödeyeceğiniz tutar (tahmini)',
                 'presale.you-receive': 'Alacağınız miktar',
                 'presale.buy-now': 'Hemen Satın Al',
                 'presale.claim': 'Claim (Yakında)',
+                'presale.bnb-note': 'BNB seçerseniz, Binance\'ten canlı gösterge oranı kullanılır. Son fiyat işlem anında on-chain olarak onaylanır.',
                 
                 // Section Titles
                 'section.tokenomics': 'Tokenomik',
@@ -1595,7 +1673,95 @@
                 'section.how-to-buy': 'Snake Token Nasıl Alınır',
                 'section.how-to-buy.sub': 'SNAKE tokenlerini satın alma rehberi',
                 'section.faq': 'Sık Sorulan Sorular',
-                'section.faq.sub': 'Snake Token hakkında bilmeniz gereken her şey'
+                'section.faq.sub': 'Snake Token hakkında bilmeniz gereken her şey',
+                
+                // Tokenomics
+                'tokenomics.presale': 'Ön Satış',
+                'tokenomics.liquidity': 'Likidite',
+                'tokenomics.staking': 'Staking & Ödüller',
+                'tokenomics.marketing': 'Marketing',
+                'tokenomics.team': 'Ekip & Danışmanlar',
+                'tokenomics.reserve': 'Rezerv',
+                'tokenomics.community': 'Airdrop & Topluluk',
+                
+                // Roadmap
+                'roadmap.phase1': 'Faz 1 - Tamamlandı',
+                'roadmap.phase1.title': 'Temel & Lansman',
+                'roadmap.phase1.item1': 'Smart contract geliştirme ve denetim',
+                'roadmap.phase1.item2': 'Web sitesi ve marka lansmanı',
+                'roadmap.phase1.item3': 'Topluluk oluşturma girişimleri',
+                'roadmap.phase1.item4': 'Ön satış platformu geliştirme',
+                
+                'roadmap.phase2': 'Faz 2 - Devam Ediyor',
+                'roadmap.phase2.title': 'Ön Satış & Büyüme',
+                'roadmap.phase2.item1': 'Halka açık ön satış başlangıcı',
+                'roadmap.phase2.item2': 'Marketing ve ortaklık genişlemesi',
+                'roadmap.phase2.item3': 'Borsa listeleme hazırlıkları',
+                'roadmap.phase2.item4': 'Oyun geliştirme başlangıcı',
+                
+                'roadmap.phase3': 'Faz 3 - Q2 2025',
+                'roadmap.phase3.title': 'Ekosistem Geliştirme',
+                'roadmap.phase3.item1': 'PancakeSwap listeleme ve likidite',
+                'roadmap.phase3.item2': 'Staking platformu lansmanı',
+                'roadmap.phase3.item3': 'Play-to-Earn oyun beta testi',
+                'roadmap.phase3.item4': 'Büyük CEX listeleme görüşmeleri',
+                
+                'roadmap.phase4': 'Faz 4 - Q3 2025',
+                'roadmap.phase4.title': 'Küresel Ölçeklenme',
+                'roadmap.phase4.item1': 'Play-to-Earn ile tam oyun lansmanı',
+                'roadmap.phase4.item2': 'Tier 1 borsa listeleri',
+                'roadmap.phase4.item3': 'Mobil uygulama geliştirme',
+                'roadmap.phase4.item4': 'Cross-chain entegrasyon',
+                
+                // Steps
+                'steps.step1.title': 'Cüzdan Kurulumu',
+                'steps.step1.desc': 'MetaMask, Trust Wallet, Binance Web3 Wallet veya herhangi bir Web3 cüzdanını yükleyin. Binance Smart Chain ağında olduğunuzdan emin olun.',
+                'steps.step2.title': 'BNB veya USDT Alın',
+                'steps.step2.desc': 'Cüzdanınıza BNB veya USDT (BEP-20) yatırın. Binance Web3 Wallet kullanıcıları: Diğer ağlardan varlıkları kolayca taşıyabilir.',
+                'steps.step3.title': 'Bağlan & Satın Al',
+                'steps.step3.desc': 'Cüzdanınızı ön satış platformumuza bağlayın, SNAKE miktarını girip işlemi onaylayın.',
+                'steps.step4.title': 'Tokenleri Claim Et',
+                'steps.step4.desc': 'Ön satış sona erdikten sonra, SNAKE tokenlerinizi claim etmek için geri dönün. Tokenler otomatik olarak bağlı cüzdanınıza gönderilecek.',
+                
+                // Binance Wallet
+                'binance.title': 'Binance Web3 Wallet Kullanıcıları İçin',
+                'binance.feature1': 'Kolay Kurulum',
+                'binance.desc1': 'Binance App içinde yerleşik - ayrı kurulum gerekmez',
+                'binance.feature2': 'Basit Köprüleme',
+                'binance.desc2': 'Düşük ücretlerle zincirler arası varlık transferi',
+                'binance.feature3': 'Gelişmiş Güvenlik',
+                'binance.desc3': 'Binance altyapısı tarafından desteklenir',
+                'binance.feature4': 'Tek Tıkla Bağlan',
+                'binance.desc4': 'Ön satışımız gibi dApp\'lere sorunsuz bağlantı',
+                
+                // FAQ
+                'faq.q1': 'Snake Token nedir?',
+                'faq.a1': 'Snake Token, Binance Smart Chain üzerinde gerçek Play-to-Earn oyun entegrasyonu ile utility sağlayan topluluk odaklı bir meme tokenidir.',
+                'faq.q2': 'Snake Token nasıl alınır?',
+                'faq.a2': 'Ön satış sırasında: Cüzdanınızı bağlayıp USDT veya BNB kullanın. Lansman sonrası: PancakeSwap\'ta mevcut olacak.',
+                'faq.q3': 'Oyun ne zaman çıkıyor?',
+                'faq.a3': 'Hedef Lansman: Q2 2025 - Play-to-Earn Snake oyunumuz aktif geliştirme aşamasında.',
+                'faq.q4': 'Toplam arz nedir?',
+                'faq.a4': 'Toplam arz 200,000,000 SNAKE tokenıdır ve adil dağıtım yapılmıştır.',
+                'faq.q5': 'SNAKE nerede listelenecek?',
+                'faq.a5': 'İlk olarak PancakeSwap\'ta, oyun lansmanı sonrası büyük borsa listeleri planlanıyor.',
+                
+                // Legal
+                'legal.disclaimer': 'Önemli Risk Uyarısı',
+                'legal.warning': 'Yatırım Uyarısı:',
+                'legal.warning-desc': 'Snake Token deneysel bir topluluk projesidir. Kripto para yatırımları oldukça volatil ve risklidir. Yalnızca kaybetmeyi göze alabileceğiniz tutarları yatırın.',
+                'legal.advice': 'Finansal Tavsiye Değildir:',
+                'legal.advice-desc': 'Bu web sitesi finansal tavsiye oluşturmaz. Yatırım yapmadan önce mutlaka kendi araştırmanızı yapın (DYOR).',
+                'legal.privacy': 'Gizlilik Politikası',
+                'legal.updated': 'Son Güncelleme:',
+                'legal.privacy-desc': 'Kişisel bilgi toplamıyoruz. Web sitemiz statiktir ve takip çerezleri kullanmaz. Cüzdan bağlarken yalnızca public blockchain bilgilerine erişiriz.',
+                'legal.terms': 'Kullanım Şartları',
+                'legal.terms-desc': 'Bu web sitesini kullanarak şartları kabul etmiş olursunuz. Yargı yetkinizde yasal yaşta olmalısınız. Bu platform yalnızca bilgi sağlar, finansal tavsiye değildir. Kripto para yatırımları volatildir ve yatırım kararlarının tam sorumluluğu size aittir.',
+                
+                // Footer
+                'footer.desc': 'Binance Smart Chain üzerinde yenilikçi tokenomikler ve gerçek kullanım alanına sahip topluluk odaklı bir kripto para.',
+                'footer.resources': 'Kaynaklar',
+                'footer.legal': 'Yasal'
             }
         };
 
@@ -1617,7 +1783,6 @@
 
             // Aktif dili kaydet
             localStorage.setItem('preferred-language', lang);
-            console.log(`Language changed to: ${lang}`);
         }
 
         // Tokenomics Chart
@@ -1626,9 +1791,17 @@
             const tokenomicsChart = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Presale', 'Liquidity', 'Staking & Rewards', 'Marketing', 'Team & Advisors', 'Reserve', 'Airdrop & Community'],
+                    labels: [
+                        translations['en']['tokenomics.presale'],
+                        translations['en']['tokenomics.liquidity'], 
+                        translations['en']['tokenomics.staking'],
+                        translations['en']['tokenomics.marketing'],
+                        translations['en']['tokenomics.team'],
+                        translations['en']['tokenomics.reserve'],
+                        translations['en']['tokenomics.community']
+                    ],
                     datasets: [{
-                        data: [25, 20, 15, 15, 10, 10, 5],
+                        data: [30, 25, 20, 10, 8, 5, 2],
                         backgroundColor: [
                             '#22c55e',
                             '#06b6d4',
@@ -1699,10 +1872,25 @@
 
             // Payment method switcher
             const paymentButtons = document.querySelectorAll('.payment-btn');
+            const bnbPriceInfo = document.getElementById('bnbPriceInfo');
+            let currentPaymentMethod = 'usdt';
+            let bnbPrice = 0;
+
             paymentButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     paymentButtons.forEach(btn => btn.classList.remove('active'));
                     this.classList.add('active');
+                    
+                    currentPaymentMethod = this.getAttribute('data-method');
+                    
+                    // BNB fiyat bilgisini göster/gizle
+                    if (currentPaymentMethod === 'bnb') {
+                        bnbPriceInfo.classList.add('visible');
+                    } else {
+                        bnbPriceInfo.classList.remove('visible');
+                    }
+                    
+                    calculatePayment();
                 });
             });
 
@@ -1723,6 +1911,7 @@
             const youPayElement = document.getElementById('youPay');
             const youReceiveElement = document.getElementById('youReceive');
             const bnbPriceElement = document.getElementById('bnbPrice');
+            const priceDisplay = document.getElementById('priceDisplay');
 
             // Fetch live BNB price from Binance
             async function fetchBNBPrice() {
@@ -1730,28 +1919,39 @@
                     bnbPriceElement.textContent = `Current reference: 1 BNB ≈ Loading...`;
                     const response = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT');
                     const data = await response.json();
-                    const bnbPrice = parseFloat(data.price);
+                    bnbPrice = parseFloat(data.price);
                     bnbPriceElement.textContent = `Current reference: 1 BNB ≈ ${bnbPrice.toFixed(2)} USDT`;
                     return bnbPrice;
                 } catch (error) {
                     console.error('Error fetching BNB price:', error);
-                    bnbPriceElement.textContent = `Current reference: 1 BNB ≈ 918.34 USDT`;
-                    return 918.34;
+                    bnbPrice = 854.51;
+                    bnbPriceElement.textContent = `Current reference: 1 BNB ≈ ${bnbPrice.toFixed(2)} USDT`;
+                    return bnbPrice;
                 }
             }
 
             // Calculate payment amount
             function calculatePayment() {
                 const snakeAmount = parseFloat(snakeAmountInput.value) || 0;
-                const snakePrice = 0.02; // USDT
-                const totalUSDT = snakeAmount * snakePrice;
+                const snakePrice = 0.015; // USDT
                 
                 youReceiveElement.textContent = `${snakeAmount.toLocaleString()} SNAKE`;
-                youPayElement.textContent = `${totalUSDT.toFixed(2)} USDT`;
+                
+                if (currentPaymentMethod === 'usdt') {
+                    const totalUSDT = snakeAmount * snakePrice;
+                    youPayElement.textContent = `${totalUSDT.toFixed(2)} USDT`;
+                } else if (currentPaymentMethod === 'bnb' && bnbPrice > 0) {
+                    const totalUSDT = snakeAmount * snakePrice;
+                    const totalBNB = totalUSDT / bnbPrice;
+                    youPayElement.textContent = `${totalBNB.toFixed(6)} BNB`;
+                }
             }
 
             // Initialize
-            fetchBNBPrice();
+            fetchBNBPrice().then(() => {
+                calculatePayment();
+            });
+            
             snakeAmountInput.addEventListener('input', calculatePayment);
         });
     </script>
