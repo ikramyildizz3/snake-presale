@@ -72,14 +72,14 @@ const translations = {
         'roadmap.phase2.item3': 'Exchange listings preparation',
         'roadmap.phase2.item4': 'Game development initiation',
         
-        'roadmap.phase3': 'Phase 3 - Q2 2025',
+        'roadmap.phase3': 'Phase 3 – Game & Utility Expansion (Q2–Q3 2026)',
         'roadmap.phase3.title': 'Ecosystem Development',
         'roadmap.phase3.item1': 'PancakeSwap listing and liquidity',
         'roadmap.phase3.item2': 'Staking platform launch',
         'roadmap.phase3.item3': 'Play-to-Earn game beta testing',
         'roadmap.phase3.item4': 'Major CEX listing negotiations',
         
-        'roadmap.phase4': 'Phase 4 - Q3 2025',
+        'roadmap.phase4': 'Phase 4 – Ecosystem Growth (Q4 2026 and beyond)',
         'roadmap.phase4.title': 'Global Scaling',
         'roadmap.phase4.item1': 'Full game launch with Play-to-Earn',
         'roadmap.phase4.item2': 'Tier 1 exchange listings',
@@ -222,14 +222,14 @@ const translations = {
         'roadmap.phase2.item3': 'Borsa listeleme hazırlıkları',
         'roadmap.phase2.item4': 'Oyun geliştirme başlangıcı',
         
-        'roadmap.phase3': 'Faz 3 - Q2 2025',
+        'roadmap.phase3': 'Faz 3 – Oyun & Utility Genişleme (2.-3. Çeyrek 2026)',
         'roadmap.phase3.title': 'Ekosistem Geliştirme',
         'roadmap.phase3.item1': 'PancakeSwap listeleme ve likidite',
         'roadmap.phase3.item2': 'Staking platformu lansmanı',
         'roadmap.phase3.item3': 'Play-to-Earn oyun beta testi',
         'roadmap.phase3.item4': 'Büyük CEX listeleme görüşmeleri',
         
-        'roadmap.phase4': 'Faz 4 - Q3 2025',
+        'roadmap.phase4': 'Faz 4 – Ekosistem Büyüme (4. Çeyrek 2026 ve Sonrası)'
         'roadmap.phase4.title': 'Küresel Ölçeklenme',
         'roadmap.phase4.item1': 'Play-to-Earn ile tam oyun lansmanı',
         'roadmap.phase4.item2': 'Tier 1 borsa listeleri',
