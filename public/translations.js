@@ -116,7 +116,23 @@ const translations = {
         'faq.q5': 'Where will SNAKE be listed?',
         'faq.a5': 'Initially on PancakeSwap, with plans for major CEX listings after game launch.',
         
-        // Legal
+        // Legal - Terms of Service
+        'legal.terms': 'Terms of Service',
+        'legal.terms.intro': 'By using this website and interacting with the Snake Token ecosystem, you agree to the following terms:',
+        'legal.terms.eligibility': 'Eligibility',
+        'legal.terms.eligibility.desc': 'You must be of legal age and legally allowed to participate in cryptocurrency-related activities in your jurisdiction.',
+        'legal.terms.info': 'Information Only – No Advice',
+        'legal.terms.info.desc': 'All content on this website is provided for informational and educational purposes only. Nothing here constitutes financial, investment, legal, or tax advice. Always do your own research before making any decision.',
+        'legal.terms.guarantees': 'No Guarantees or Returns',
+        'legal.terms.guarantees.desc': 'Snake Token is an experimental community project. We do not guarantee any price, profit, return, or future value of the token or related products.',
+        'legal.terms.responsibility': 'User Responsibility',
+        'legal.terms.responsibility.desc': 'You are fully responsible for the security of your wallet, private keys, and transactions. We cannot recover lost or stolen funds and have no control over the blockchain.',
+        'legal.terms.prohibited': 'Prohibited Use',
+        'legal.terms.prohibited.desc': 'You agree not to use this website or the Snake Token ecosystem for any illegal activity, including money laundering, fraud, or sanctions violations.',
+        'legal.terms.changes': 'Changes to the Website and Terms',
+        'legal.terms.changes.desc': 'We may update or modify this website and these Terms of Service at any time without prior notice. Your continued use of the site after changes means you accept the updated terms.',
+        
+        // Legal - Other
         'legal.disclaimer': 'Important Risk Disclaimer',
         'legal.warning': 'Investment Warning:',
         'legal.warning-desc': 'Snake Token is an experimental community project. Cryptocurrency investments are highly volatile and risky. Only invest what you can afford to lose.',
@@ -125,7 +141,6 @@ const translations = {
         'legal.privacy': 'Privacy Policy',
         'legal.updated': 'Last Updated:',
         'legal.privacy-desc': 'We do not collect personal information. Our website is static and does not use tracking cookies. When connecting your wallet, we only access public blockchain information.',
-        'legal.terms': 'Terms of Service',
         
         // Footer
         'footer.desc': 'A community-driven cryptocurrency with innovative tokenomics and real utility on the Binance Smart Chain.',
@@ -248,7 +263,23 @@ const translations = {
         'faq.q5': 'SNAKE nerede listelenecek?',
         'faq.a5': 'İlk olarak PancakeSwap\'ta, oyun lansmanı sonrası büyük borsa listeleri planlanıyor.',
         
-        // Legal
+        // Legal - Terms of Service
+        'legal.terms': 'Kullanım Şartları',
+        'legal.terms.intro': 'Bu web sitesini kullanarak ve Snake Token ekosistemi ile etkileşime girerek aşağıdaki şartları kabul etmiş olursunuz:',
+        'legal.terms.eligibility': 'Uygunluk',
+        'legal.terms.eligibility.desc': 'Yargı yetkinizde yasal yaşta olmalı ve kripto para ile ilgili faaliyetlere katılmaya yasal olarak izin verilmelisiniz.',
+        'legal.terms.info': 'Yalnızca Bilgi – Tavsiye Değil',
+        'legal.terms.info.desc': 'Bu web sitesindeki tüm içerik yalnızca bilgilendirme ve eğitim amaçlıdır. Buradaki hiçbir şey finansal, yatırım, hukuki veya vergi tavsiyesi oluşturmaz. Herhangi bir karar vermeden önce mutlaka kendi araştırmanızı yapın.',
+        'legal.terms.guarantees': 'Garanti veya Getiri Yok',
+        'legal.terms.guarantees.desc': 'Snake Token deneysel bir topluluk projesidir. Token veya ilgili ürünlerin herhangi bir fiyat, kar, getiri veya gelecekteki değeri için garanti vermiyoruz.',
+        'legal.terms.responsibility': 'Kullanıcı Sorumluluğu',
+        'legal.terms.responsibility.desc': 'Cüzdanınızın, özel anahtarlarınızın ve işlemlerinizin güvenliğinden tamamen siz sorumlusunuz. Kayıp veya çalıntı fonları kurtaramayız ve blockchain üzerinde hiçbir kontrolümüz yoktur.',
+        'legal.terms.prohibited': 'Yasaklı Kullanım',
+        'legal.terms.prohibited.desc': 'Bu web sitesini veya Snake Token ekosistemini para aklama, dolandırıcılık veya yaptırım ihlalleri de dahil olmak üzere herhangi bir yasa dışı faaliyet için kullanmayacağınızı kabul edersiniz.',
+        'legal.terms.changes': 'Web Sitesi ve Şartlardaki Değişiklikler',
+        'legal.terms.changes.desc': 'Bu web sitesini ve bu Kullanım Şartlarını önceden haber vermeden istediğimiz zaman güncelleyebilir veya değiştirebiliriz. Değişikliklerden sonra siteyi kullanmaya devam etmeniz güncellenmiş şartları kabul ettiğiniz anlamına gelir.',
+        
+        // Legal - Other
         'legal.disclaimer': 'Önemli Risk Uyarısı',
         'legal.warning': 'Yatırım Uyarısı:',
         'legal.warning-desc': 'Snake Token deneysel bir topluluk projesidir. Kripto para yatırımları oldukça volatil ve risklidir. Yalnızca kaybetmeyi göze alabileceğiniz tutarları yatırın.',
@@ -257,7 +288,6 @@ const translations = {
         'legal.privacy': 'Gizlilik Politikası',
         'legal.updated': 'Son Güncelleme:',
         'legal.privacy-desc': 'Kişisel bilgi toplamıyoruz. Web sitemiz statiktir ve takip çerezleri kullanmaz. Cüzdan bağlarken yalnızca public blockchain bilgilerine erişiriz.',
-        'legal.terms': 'Kullanım Şartları',
         
         // Footer
         'footer.desc': 'Binance Smart Chain üzerinde yenilikçi tokenomikler ve gerçek kullanım alanına sahip topluluk odaklı bir kripto para.',

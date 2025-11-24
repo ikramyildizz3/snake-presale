@@ -592,6 +592,7 @@ section {
     margin-top: 2px;
 }
 
+/* Roadmap marker positions - GÜNCELLENMİŞ KISIM */
 .roadmap-marker {
     width: 20px;
     height: 20px;
@@ -603,10 +604,37 @@ section {
     z-index: 1;
 }
 
+/* Fast 1 - Tamamlandı (ilk öğe) */
+.roadmap-item:nth-child(1) .roadmap-marker {
+    background: var(--primary);
+    box-shadow: var(--shadow-glow);
+}
+
+/* Fast 2 - Devam Ediyor (ikinci öğe) - GÜNCEL KONUM */
+.roadmap-item:nth-child(2) .roadmap-marker {
+    background: var(--primary);
+    box-shadow: var(--shadow-glow);
+    animation: pulse 2s infinite;
+    width: 24px;
+    height: 24px;
+}
+
+/* Fast 3 - Gelecek (üçüncü öğe) */
+.roadmap-item:nth-child(3) .roadmap-marker {
+    background: var(--dark-border);
+}
+
+/* Fast 4 - Gelecek (dördüncü öğe) */
+.roadmap-item:nth-child(4) .roadmap-marker {
+    background: var(--dark-border);
+}
+
+/* Sol taraftaki öğeler için konum */
 .roadmap-item:nth-child(odd) .roadmap-marker {
     right: -50px;
 }
 
+/* Sağ taraftaki öğeler için konum */
 .roadmap-item:nth-child(even) .roadmap-marker {
     left: -50px;
 }
