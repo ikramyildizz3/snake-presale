@@ -35,6 +35,9 @@ const translations = {
         'presale.claim': 'Claim (Soon)',
         'presale.bnb-note': 'If you choose BNB, an indicative live rate from Binance is used. Final price is confirmed on-chain at the time of purchase.',
         
+        // Warning Message - EKLENDİ
+        'warning.direct-transfer': '⚠ Important: Do not send funds directly from an exchange to the presale contract. Always use your own Web3 wallet.',
+        
         // Section Titles
         'section.tokenomics': 'Tokenomics',
         'section.tokenomics.sub': 'Transparent and sustainable token distribution',
@@ -181,6 +184,9 @@ const translations = {
         'presale.buy-now': 'Hemen Satın Al',
         'presale.claim': 'Claim (Yakında)',
         'presale.bnb-note': 'BNB seçerseniz, Binance\'ten canlı gösterge oranı kullanılır. Son fiyat işlem anında on-chain olarak onaylanır.',
+        
+        // Warning Message - EKLENDİ
+        'warning.direct-transfer': '⚠ Önemli: Fonları doğrudan borsadan presale kontratına göndermeyin. Her zaman kendi Web3 cüzdanınızı kullanın.',
         
         // Section Titles
         'section.tokenomics': 'Tokenomik',
