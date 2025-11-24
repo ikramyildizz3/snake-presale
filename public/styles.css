@@ -210,14 +210,15 @@ header {
 }
 
 .badge .pulse {
-    width: 12px;
-    height: 12px;
+    width: 14px;                /* 10 → 14: daha belirgin */
+    height: 14px;
     background: var(--primary);
     border-radius: 50%;
     animation: pulse-badge 2s infinite;
     flex-shrink: 0;
     position: relative;
-    top: 1px; /* 2px'ten 1px'e çekip biraz yukarı aldık */
+    top: 0;                     /* 1.5px → 0: çok az yukarı çıktı */
+    box-shadow: 0 0 8px rgba(0, 212, 106, 0.7); /* dışa hafif parlama */
 }
 
 @keyframes pulse-badge {
