@@ -202,6 +202,7 @@ header {
     font-size: 14px;
     font-weight: 500;
     margin-bottom: 20px;
+    line-height: 1;            /* 🔹 EKLENDİ: metin yüksekliğini sıkıştır */
 }
 
 .badge .pulse {
@@ -210,6 +211,8 @@ header {
     background: var(--primary);
     border-radius: 50%;
     animation: pulse 2s infinite;
+    position: relative;        /* 🔹 EKLENDİ */
+    top: 1px;                  /* 🔹 Noktayı hafifçe aşağı indir */
 }
 
 @keyframes pulse {
@@ -686,24 +689,101 @@ section {
 
 /* Responsive */
 @media (max-width: 768px) {
+    /* 🔹 Hamburger görünür, sıralama: EN/TR - Cüzdan - Menü (en sağda) */
+    .menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 10px;
+        order: 3; /* en sağda */
+    }
+
+    .lang-switcher {
+        order: 1;
+    }
+
+    .connect-wallet {
+        order: 2;
+    }
+
+    /* 🔹 Mobil dropdown menü */
+    .nav-links {
+        display: none; /* varsayılan: kapalı */
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        flex-direction: column;
+        gap: 10px;
+        background: var(--dark-card);
+        padding: 12px 16px;
+        border-radius: 12px;
+        border: 1px solid var(--dark-border);
+        box-shadow: var(--shadow);
+        z-index: 1001;
+        align-items: flex-start;   /* linkleri sola hizala */
+        min-width: 160px;
+    }
+
+    .nav-links a {
+        display: block;            /* tamamı tıklanabilir satır */
+        width: 100%;
+        text-align: left;
+        text-decoration: none;
+        color: var(--text-secondary);
+    }
+
+    .nav-links a.active {
+        color: var(--primary);
+    }
+
+    /* JS .open ekleyince açılacak */
+    .nav-links.open {
+        display: flex;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .steps-container {
+        grid-template-columns: 1fr;
+    }
+    
     .roadmap::before {
-        left: 30px;
+        left: 20px;
     }
     
     .roadmap-item {
         flex-direction: row !important;
-        min-height: 120px;
     }
     
     .roadmap-content {
         margin-left: 50px !important;
         margin-right: 0 !important;
-        min-height: 120px;
     }
     
-    /* Mobilde yeşil top */
+    .roadmap-marker {
+        left: 10px !important;
+        right: auto !important;
+    }
+
+    /* 🔹 Faz 2 yanındaki yeşil topu mobilde gizle */
     .roadmap-item:nth-child(2)::before {
-        left: 18px;
+        display: none;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .footer-bottom {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
     }
 }
 
