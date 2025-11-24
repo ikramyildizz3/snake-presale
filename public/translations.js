@@ -186,7 +186,7 @@ const translations = {
         'presale.bnb-note': 'BNB seçerseniz, Binance\'ten canlı gösterge oranı kullanılır. Son fiyat işlem anında on-chain olarak onaylanır.',
         
         // Warning Message - EKLENDİ
-        'warning.direct-transfer': '⚠ Önemli: Fonları doğrudan borsadan presale kontratına göndermeyin. Her zaman kendi Web3 cüzdanınızı kullanın.',
+        'warning.direct-transfer': '⚠ Önemli: Fonları doğrudan borsadan ön satış kontratına göndermeyin. Her zaman kendi Web3 cüzdanınızı kullanın.',
         
         // Section Titles
         'section.tokenomics': 'Tokenomik',
