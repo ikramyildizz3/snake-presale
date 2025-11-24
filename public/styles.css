@@ -543,7 +543,7 @@ section {
     margin-left: 0;
 }
 
-/* Faz 2 - SAĞ TARAF (kayık) */
+/* Faz 2 - SAĞ TARAF */
 .roadmap-item:nth-child(2) {
     flex-direction: row-reverse;
 }
@@ -616,9 +616,8 @@ section {
     flex-shrink: 0;
 }
 
-/* SADECE FAZ 2 İÇİN YEŞİL TOPLAR - DÜZELTİLMİŞ */
-.roadmap-item:nth-child(2)::before,
-.roadmap-item:nth-child(2)::after {
+/* SADECE FAZ 2 İÇİN YEŞİL TOP - SOL TARAFA */
+.roadmap-item:nth-child(2)::before {
     content: '';
     position: absolute;
     top: 50%;
@@ -639,10 +638,9 @@ section {
     right: auto;
 }
 
-/* Sağ marker - KUTUNUN SAĞ KENARINDA */
+/* SAĞ MARKER'I TAMAMEN KALDIRIYORUZ */
 .roadmap-item:nth-child(2)::after {
-    right: -14px;
-    left: auto;
+    display: none;
 }
 
 .roadmap-item:nth-child(2) .roadmap-content {
@@ -683,13 +681,9 @@ section {
         min-height: 120px;
     }
     
-    /* Mobilde yeşil toplar */
+    /* Mobilde yeşil top */
     .roadmap-item:nth-child(2)::before {
         left: 18px;
-    }
-    
-    .roadmap-item:nth-child(2)::after {
-        display: none; /* Mobilde sadece solda göster */
     }
 }
 
