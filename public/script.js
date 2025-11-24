@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Dil değiştirme fonksiyonu
+// Dil değiştirme fonksiyonu - TEK BİR TANE OLMALI
 function changeLanguage(lang) {
     currentLanguage = lang;
     
@@ -226,12 +226,6 @@ function changeLanguage(lang) {
     const priceDisplay = document.getElementById('priceDisplay');
     if (priceDisplay && translations[lang]['presale.price']) {
         priceDisplay.textContent = translations[lang]['presale.price'];
-    }
-
-    // UYARI MESAJINI GÜNCELLE
-    const warning = document.getElementById('transfer-warning');
-    if (warning && translations[lang]['warning.direct-transfer']) {
-        warning.innerHTML = translations[lang]['warning.direct-transfer'];
     }
 
     // Aktif dili kaydet
