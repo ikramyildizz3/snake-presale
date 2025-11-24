@@ -229,7 +229,7 @@ const translations = {
         'roadmap.phase3.item3': 'Play-to-Earn oyun beta testi',
         'roadmap.phase3.item4': 'Büyük CEX listeleme görüşmeleri',
         
-        'roadmap.phase4': 'Faz 4 – Ekosistem Büyüme (4. Çeyrek 2026 ve Sonrası)'
+        'roadmap.phase4': 'Faz 4 – Ekosistem Büyüme (4. Çeyrek 2026 ve Sonrası)',
         'roadmap.phase4.title': 'Küresel Ölçeklenme',
         'roadmap.phase4.item1': 'Play-to-Earn ile tam oyun lansmanı',
         'roadmap.phase4.item2': 'Tier 1 borsa listeleri',
