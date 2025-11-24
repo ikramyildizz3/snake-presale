@@ -109,9 +109,9 @@ header {
     gap: 15px;
 }
 
-/* BURAYA EKLİYORSUN */
+/* Hamburger buton (desktop'ta kapalı) */
 .menu-toggle {
-    display: none; /* varsayılan: desktop'ta görünmesin, mobilde açacağız */
+    display: none;
     background: transparent;
     border: none;
     color: var(--text-secondary);
@@ -126,7 +126,6 @@ header {
     background: rgba(255, 255, 255, 0.05);
     color: var(--text-primary);
 }
-/* BURAYA KADAR */
 
 .lang-switcher {
     display: flex;
@@ -193,7 +192,7 @@ header {
 /* Presale rozeti */
 .badge {
     display: inline-flex;
-    align-items: center;                /* noktayı ve yazıyı dikeyde ortala */
+    align-items: center;
     gap: 8px;
     background: rgba(0, 212, 106, 0.1);
     border: 1px solid rgba(0, 212, 106, 0.3);
@@ -203,11 +202,11 @@ header {
     font-size: 14px;
     font-weight: 500;
     margin-bottom: 20px;
-    line-height: 1;                     /* satır yüksekliğini sıkıştır */
+    line-height: 1;
 }
 
 .badge span {
-    line-height: 1;                     /* yazıyı da tam ortala */
+    line-height: 1;
 }
 
 .badge .pulse {
@@ -215,13 +214,13 @@ header {
     height: 10px;
     background: var(--primary);
     border-radius: 50%;
-    animation: pulse 2s infinite;
+    animation: pulse-badge 2s infinite;
     flex-shrink: 0;
     position: relative;
-    top: 1.5px;                         /* hafif aşağı çek (gerekirse 2px yap) */
+    top: 2px; /* noktayı biraz aşağı al */
 }
 
-@keyframes pulse {
+@keyframes pulse-badge {
     0% { opacity: 1; }
     50% { opacity: 0.5; }
     100% { opacity: 1; }
@@ -281,7 +280,7 @@ h1 {
 
 /* Yeni stil - normal arka plan */
 .presale-details {
-    background: var(--dark-card); /* veya transparent */
+    background: var(--dark-card);
     border: 1px solid var(--dark-border);
     border-radius: 12px;
     padding: 20px;
@@ -645,7 +644,7 @@ section {
     flex-shrink: 0;
 }
 
-/* SADECE FAZ 2 İÇİN YEŞİL TOP - SOL TARAFA */
+/* SADECE FAZ 2 İÇİN YEŞİL TOP - SOL TARAFA (masaüstü) */
 .roadmap-item:nth-child(2)::before {
     content: '';
     position: absolute;
@@ -657,12 +656,8 @@ section {
     border-radius: 50%;
     z-index: 2;
     border: 3px solid var(--dark-card);
-    animation: pulse-roadmap 2s infinite;
+    animation: pulse 2s infinite;
     box-shadow: 0 0 0 3px var(--primary), 0 0 30px rgba(0, 212, 106, 0.7);
-}
-
-/* Sol marker - KUTUNUN SOL KENARINDA */
-.roadmap-item:nth-child(2)::before {
     left: -14px;
     right: auto;
 }
@@ -677,7 +672,7 @@ section {
     box-shadow: var(--shadow-glow);
 }
 
-/* Pulse Animasyonu */
+/* Faz 2 top için pulse animasyonu */
 @keyframes pulse {
     0% {
         transform: translateY(-50%) scale(1);
@@ -690,129 +685,6 @@ section {
     100% {
         transform: translateY(-50%) scale(1);
         box-shadow: 0 0 0 3px var(--primary), 0 0 30px rgba(0, 212, 106, 0.7);
-    }
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    /* HEADER HİZALAMA */
-    .nav-container {
-        align-items: center;
-    }
-
-    .nav-actions {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .lang-switcher {
-        order: 1;
-        padding: 2px 4px;
-    }
-
-    .lang-btn {
-        padding: 6px 10px;
-        line-height: 1;
-    }
-
-    .connect-wallet {
-        order: 2;
-        padding: 8px 14px;      /* biraz incelttik, yukarı çıktı */
-        line-height: 1;
-        display: flex;
-        align-items: center;
-    }
-
-    /* Hamburger: en sağda */
-    .menu-toggle {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-left: 8px;
-        order: 3;
-    }
-
-    /* MOBİL DROPDOWN MENÜ */
-    .nav-links {
-        display: none; /* varsayılan: kapalı */
-        position: absolute;
-        top: 60px;
-        right: 20px;
-        flex-direction: column;
-        gap: 10px;
-        background: var(--dark-card);
-        padding: 12px 16px;
-        border-radius: 12px;
-        border: 1px solid var(--dark-border);
-        box-shadow: var(--shadow);
-        z-index: 1001;
-        align-items: flex-start;   /* tüm blok sola */
-        min-width: 160px;
-    }
-
-    .nav-links a {
-        display: block;
-        width: 100%;
-        text-align: left !important;  /* sağ/ortayı ez */
-        text-decoration: none;
-        padding: 4px 0;
-    }
-
-    .nav-links a.active {
-        color: var(--primary);
-    }
-
-    .nav-links.open {
-        display: flex;
-    }
-
-    /* HERO */
-    h1 {
-        font-size: 2.5rem;
-    }
-    
-    .hero-stats {
-        grid-template-columns: 1fr;
-    }
-    
-    .steps-container {
-        grid-template-columns: 1fr;
-    }
-    
-    /* ROADMAP */
-    .roadmap::before {
-        left: 20px;
-    }
-    
-    .roadmap-item {
-        flex-direction: row !important;
-    }
-    
-    .roadmap-content {
-        margin-left: 50px !important;
-        margin-right: 0 !important;
-    }
-    
-    .roadmap-marker {
-        left: 10px !important;
-        right: auto !important;
-    }
-
-    /* Faz 2 yanındaki yeşil top mobilde gizli */
-    .roadmap-item:nth-child(2)::before {
-        display: none;
-    }
-    
-    /* FOOTER */
-    .footer-content {
-        grid-template-columns: 1fr;
-    }
-    
-    .footer-bottom {
-        flex-direction: column;
-        gap: 15px;
-        text-align: center;
     }
 }
 
@@ -872,7 +744,7 @@ section {
     transform: rotate(45deg);
 }
 
-/* How to Buy Styles - DÜZELTİLDİ */
+/* How to Buy Styles */
 .steps-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -1030,7 +902,7 @@ section {
     font-weight: bold;
 }
 
-/* Highlight Styles - DÜZELTİLDİ */
+/* Highlight Styles */
 .highlight {
     background: var(--dark-card);
     border: 1px solid var(--dark-border);
@@ -1182,7 +1054,9 @@ footer {
     font-size: 14px;
 }
 
-/* Responsive */
+/* -------- Responsive -------- */
+
+/* Tablet ve küçük laptoplar */
 @media (max-width: 1024px) {
     .hero-content {
         flex-direction: column;
@@ -1205,40 +1079,81 @@ footer {
     }
 }
 
+/* Mobil (≤ 768px) */
 @media (max-width: 768px) {
-    /* Hamburger görünür, desktop'ta gizli */
+    /* HEADER HİZALAMA */
+    .nav-container {
+        align-items: center;
+    }
+
+    .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .lang-switcher {
+        order: 1;
+        padding: 2px 4px;
+    }
+
+    .lang-btn {
+        padding: 6px 10px;
+        line-height: 1;
+    }
+
+    .connect-wallet {
+        order: 2;
+        padding: 8px 14px;
+        line-height: 1;
+        display: flex;
+        align-items: center;
+    }
+
+    /* Hamburger: en sağda */
     .menu-toggle {
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-left: 10px;
+        margin-left: 8px;
+        order: 3;
     }
 
-    /* Mobilde nav-links dropdown gibi davranacak */
+    /* MOBİL DROPDOWN MENÜ */
     .nav-links {
-        display: none; /* varsayılan: kapalı */
+        display: none;
         position: absolute;
         top: 60px;
         right: 20px;
         flex-direction: column;
-        gap: 15px;
+        gap: 10px;
         background: var(--dark-card);
-        padding: 15px 20px;
+        padding: 12px 16px;
         border-radius: 12px;
         border: 1px solid var(--dark-border);
         box-shadow: var(--shadow);
         z-index: 1001;
+        align-items: flex-start;
+        min-width: 160px;
     }
 
     .nav-links a {
-        text-align: right;
+        display: block;
+        width: 100%;
+        text-align: left !important;
+        text-decoration: none;
+        padding: 4px 0;
     }
 
-    /* JS ile .open class'ı gelince menü açılacak */
+    .nav-links a.active {
+        color: var(--primary);
+    }
+
     .nav-links.open {
         display: flex;
     }
 
+    /* HERO */
     h1 {
         font-size: 2.5rem;
     }
@@ -1251,6 +1166,7 @@ footer {
         grid-template-columns: 1fr;
     }
     
+    /* ROADMAP */
     .roadmap::before {
         left: 20px;
     }
@@ -1268,7 +1184,13 @@ footer {
         left: 10px !important;
         right: auto !important;
     }
+
+    /* Faz 2 yanındaki yeşil top mobilde gizli */
+    .roadmap-item:nth-child(2)::before {
+        display: none;
+    }
     
+    /* FOOTER */
     .footer-content {
         grid-template-columns: 1fr;
     }
