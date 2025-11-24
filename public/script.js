@@ -1,13 +1,31 @@
 // Ana JavaScript dosyası - Tüm fonksiyonlar burada
 
-// Global değişken
+// Global değişkenler
 let currentLanguage = 'en';
 let currentPaymentMethod = 'usdt';
 let bnbPrice = 0;
 
-// Tokenomics Chart
+// Sayfa yüklendiğinde çalışacak fonksiyon
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('Sayfa yüklendi - dil:', currentLanguage);
+    
+    // Tokenomics Chart
+    initChart();
+    
+    // Event listener'ları kur
+    setupEventListeners();
+    
+    // Sayfayı başlat
+    initializePage();
+});
+
+function initChart() {
     const ctx = document.getElementById('tokenomicsChart').getContext('2d');
+    if (!ctx) {
+        console.error('Chart canvas bulunamadı!');
+        return;
+    }
+    
     window.tokenomicsChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
@@ -23,13 +41,8 @@ document.addEventListener('DOMContentLoaded', function() {
             datasets: [{
                 data: [25, 20, 15, 15, 10, 10, 5],
                 backgroundColor: [
-                    '#22c55e',
-                    '#06b6d4',
-                    '#8b5cf6',
-                    '#f97316',
-                    '#eab308',
-                    '#ef4444',
-                    '#3b82f6'
+                    '#22c55e', '#06b6d4', '#8b5cf6', '#f97316', 
+                    '#eab308', '#ef4444', '#3b82f6'
                 ],
                 borderWidth: 0,
                 hoverOffset: 15
@@ -59,29 +72,22 @@ document.addEventListener('DOMContentLoaded', function() {
             cutout: '65%'
         }
     });
+}
 
-    // Sayfa yüklendiğinde dili ayarla
-    const savedLang = localStorage.getItem('preferred-language') || 'en';
-    currentLanguage = savedLang;
-    changeLanguage(savedLang);
+function setupEventListeners() {
+    console.log('Event listenerlar kuruluyor...');
     
-    // Aktif dil butonunu ayarla
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.classList.remove('active');
-        if (btn.getAttribute('data-lang') === savedLang) {
-            btn.classList.add('active');
-        }
-    });
-
-    // Dil butonlarına event listener ekle - DÜZELTİLDİ
-    document.querySelectorAll('.lang-btn').forEach(button => {
+    // Dil butonları
+    const langButtons = document.querySelectorAll('.lang-btn');
+    console.log('Bulunan dil butonları:', langButtons.length);
+    
+    langButtons.forEach(button => {
         button.addEventListener('click', function() {
+            console.log('Dil butonuna tıklandı:', this.getAttribute('data-lang'));
             const lang = this.getAttribute('data-lang');
             
             // Tüm butonlardan active classını kaldır
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
+            langButtons.forEach(btn => btn.classList.remove('active'));
             
             // Sadece tıklanana active classını ekle
             this.classList.add('active');
@@ -90,7 +96,21 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // FAQ Toggle Function
+    // Payment method butonları
+    const paymentButtons = document.querySelectorAll('.payment-btn');
+    paymentButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            console.log('Payment butonuna tıklandı:', this.getAttribute('data-method'));
+            paymentButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            currentPaymentMethod = this.getAttribute('data-method');
+            toggleBnbPriceInfo();
+            calculatePayment();
+        });
+    });
+
+    // FAQ toggle
     document.querySelectorAll('.faq-question').forEach(question => {
         question.addEventListener('click', () => {
             const faqItem = question.parentElement;
@@ -98,106 +118,30 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Payment method switcher - DÜZELTİLDİ
-    const paymentButtons = document.querySelectorAll('.payment-btn');
-    const bnbPriceInfo = document.getElementById('bnbPriceInfo');
-
-    paymentButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            paymentButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
-            
-            currentPaymentMethod = this.getAttribute('data-method');
-            
-            // BNB fiyat bilgisini göster/gizle
-            if (currentPaymentMethod === 'bnb') {
-                bnbPriceInfo.classList.add('visible');
-            } else {
-                bnbPriceInfo.classList.remove('visible');
-            }
-            
-            calculatePayment();
-        });
-    });
-
-    // Connect wallet button
-    const connectButton = document.querySelector('.connect-wallet');
-    connectButton.addEventListener('click', function() {
+    // Diğer butonlar
+    document.querySelector('.connect-wallet').addEventListener('click', function() {
         alert('Wallet connection functionality will be implemented soon!');
     });
 
-    // Buy button
-    const buyButton = document.querySelector('.btn-primary');
-    buyButton.addEventListener('click', function() {
+    document.querySelector('.btn-primary').addEventListener('click', function() {
         alert('Purchase functionality will be implemented after wallet integration!');
     });
 
-    // BNB Price Calculator
-    const snakeAmountInput = document.getElementById('snakeAmount');
-    const youPayElement = document.getElementById('youPay');
-    const youReceiveElement = document.getElementById('youReceive');
-    const bnbPriceElement = document.getElementById('bnbPrice');
+    // Input event
+    document.getElementById('snakeAmount').addEventListener('input', calculatePayment);
 
-    // Fetch live BNB price from Binance
-    async function fetchBNBPrice() {
-        try {
-            bnbPriceElement.textContent = `Current reference: 1 BNB ≈ Loading...`;
-            const response = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT');
-            const data = await response.json();
-            bnbPrice = parseFloat(data.price);
-            bnbPriceElement.textContent = `Current reference: 1 BNB ≈ ${bnbPrice.toFixed(2)} USDT`;
-            calculatePayment(); // Fiyat geldiğinde hesaplamayı güncelle
-            return bnbPrice;
-        } catch (error) {
-            console.error('Error fetching BNB price:', error);
-            bnbPrice = 854.51;
-            bnbPriceElement.textContent = `Current reference: 1 BNB ≈ ${bnbPrice.toFixed(2)} USDT`;
-            calculatePayment(); // Fiyat geldiğinde hesaplamayı güncelle
-            return bnbPrice;
-        }
-    }
-
-    // Calculate payment amount - DÜZELTİLDİ
-    function calculatePayment() {
-        const snakeAmount = parseFloat(snakeAmountInput.value) || 0;
-        const snakePrice = 0.02; // USDT
-        
-        youReceiveElement.textContent = `${snakeAmount.toLocaleString()} SNAKE`;
-        
-        if (currentPaymentMethod === 'usdt') {
-            const totalUSDT = snakeAmount * snakePrice;
-            youPayElement.textContent = `${totalUSDT.toFixed(2)} USDT`;
-        } else if (currentPaymentMethod === 'bnb' && bnbPrice > 0) {
-            const totalUSDT = snakeAmount * snakePrice;
-            const totalBNB = totalUSDT / bnbPrice;
-            youPayElement.textContent = `${totalBNB.toFixed(6)} BNB`;
-        } else if (currentPaymentMethod === 'bnb') {
-            youPayElement.textContent = `Loading...`;
-        }
-    }
-
-    // Smooth scroll for navigation links
+    // Smooth scroll
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
             const target = document.querySelector(this.getAttribute('href'));
             if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         });
     });
 
-    // Initialize
-    fetchBNBPrice().then(() => {
-        calculatePayment();
-    });
-    
-    snakeAmountInput.addEventListener('input', calculatePayment);
-
-    // Navbar background on scroll
+    // Scroll event
     window.addEventListener('scroll', function() {
         const header = document.querySelector('header');
         if (window.scrollY > 100) {
@@ -206,10 +150,78 @@ document.addEventListener('DOMContentLoaded', function() {
             header.style.background = 'rgba(10, 10, 10, 0.95)';
         }
     });
-});
+}
 
-// Dil değiştirme fonksiyonu - GÜNCELLENDİ
+function initializePage() {
+    // Kayıtlı dili yükle
+    const savedLang = localStorage.getItem('preferred-language') || 'en';
+    currentLanguage = savedLang;
+    
+    // Aktif dil butonunu ayarla
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        if (btn.getAttribute('data-lang') === savedLang) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+    
+    // Sayfayı çevir
+    changeLanguage(savedLang);
+    
+    // BNB fiyatını getir
+    fetchBNBPrice();
+}
+
+function toggleBnbPriceInfo() {
+    const bnbPriceInfo = document.getElementById('bnbPriceInfo');
+    if (currentPaymentMethod === 'bnb') {
+        bnbPriceInfo.classList.add('visible');
+    } else {
+        bnbPriceInfo.classList.remove('visible');
+    }
+}
+
+async function fetchBNBPrice() {
+    try {
+        const bnbPriceElement = document.getElementById('bnbPrice');
+        bnbPriceElement.textContent = `Current reference: 1 BNB ≈ Loading...`;
+        
+        const response = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT');
+        const data = await response.json();
+        bnbPrice = parseFloat(data.price);
+        
+        bnbPriceElement.textContent = `Current reference: 1 BNB ≈ ${bnbPrice.toFixed(2)} USDT`;
+        calculatePayment();
+        
+    } catch (error) {
+        console.error('Error fetching BNB price:', error);
+        bnbPrice = 854.51;
+        document.getElementById('bnbPrice').textContent = `Current reference: 1 BNB ≈ ${bnbPrice.toFixed(2)} USDT`;
+        calculatePayment();
+    }
+}
+
+function calculatePayment() {
+    const snakeAmount = parseFloat(document.getElementById('snakeAmount').value) || 0;
+    const snakePrice = 0.02;
+    
+    document.getElementById('youReceive').textContent = `${snakeAmount.toLocaleString()} SNAKE`;
+    
+    if (currentPaymentMethod === 'usdt') {
+        const totalUSDT = snakeAmount * snakePrice;
+        document.getElementById('youPay').textContent = `${totalUSDT.toFixed(2)} USDT`;
+    } else if (currentPaymentMethod === 'bnb' && bnbPrice > 0) {
+        const totalUSDT = snakeAmount * snakePrice;
+        const totalBNB = totalUSDT / bnbPrice;
+        document.getElementById('youPay').textContent = `${totalBNB.toFixed(6)} BNB`;
+    } else if (currentPaymentMethod === 'bnb') {
+        document.getElementById('youPay').textContent = `Loading...`;
+    }
+}
+
 function changeLanguage(lang) {
+    console.log('Dil değiştiriliyor:', lang);
     currentLanguage = lang;
     
     // Tüm çeviri elementlerini güncelle
@@ -237,11 +249,12 @@ function changeLanguage(lang) {
 
     // Aktif dili kaydet
     localStorage.setItem('preferred-language', lang);
+    
+    console.log('Dil değiştirme tamamlandı:', lang);
 }
 
-// Chart etiketlerini güncelleyen fonksiyon
 function updateChartLabels(lang) {
-    if (window.tokenomicsChart) {
+    if (window.tokenomicsChart && translations[lang]) {
         window.tokenomicsChart.data.labels = [
             translations[lang]['tokenomics.presale'],
             translations[lang]['tokenomics.liquidity'], 
