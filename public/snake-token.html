@@ -10,34 +10,39 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Header -->
     <header>
-        <div class="container nav-container">
-            <div class="logo">
-                <div class="logo-icon">🐍</div>
-                <span>Snake Token</span>
-            </div>
-            
-            <nav class="nav-links">
-                <a href="#home" class="active" data-translate="nav.home">Home</a>
-                <a href="#tokenomics" data-translate="nav.tokenomics">Tokenomics</a>
-                <a href="#roadmap" data-translate="nav.roadmap">Roadmap</a>
-                <a href="#how-to-buy" data-translate="nav.how-to-buy">How to Buy</a>
-                <a href="#faq" data-translate="nav.faq">FAQ</a>
-            </nav>
-            
-            <div class="nav-actions">
-                <div class="lang-switcher">
-                    <button class="lang-btn active" data-lang="en">EN</button>
-                    <button class="lang-btn" data-lang="tr">TR</button>
-                </div>
-                <button class="connect-wallet">
-                    <i class="fas fa-wallet"></i>
-                    <span data-translate="connect.wallet">Connect Wallet</span>
-                </button>
-            </div>
+    <div class="container nav-container">
+        <div class="logo">
+            <div class="logo-icon">🐍</div>
+            <span>Snake Token</span>
         </div>
-    </header>
+        
+        <!-- Masaüstü menü -->
+        <nav class="nav-links">
+            <a href="#home" class="active" data-translate="nav.home">Home</a>
+            <a href="#tokenomics" data-translate="nav.tokenomics">Tokenomics</a>
+            <a href="#roadmap" data-translate="nav.roadmap">Roadmap</a>
+            <a href="#how-to-buy" data-translate="nav.how-to-buy">How to Buy</a>
+            <a href="#faq" data-translate="nav.faq">FAQ</a>
+        </nav>
+
+        <!-- Mobile için hamburger butonu -->
+        <button class="menu-toggle" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <div class="nav-actions">
+            <div class="lang-switcher">
+                <button class="lang-btn active" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="tr">TR</button>
+            </div>
+            <button class="connect-wallet">
+                <i class="fas fa-wallet"></i>
+                <span data-translate="connect.wallet">Connect Wallet</span>
+            </button>
+        </div>
+    </div>
+</header>
 
     <!-- Hero Section -->
     <section class="hero" id="home">

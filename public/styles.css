@@ -49,6 +49,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative; /* dropdown menü buna göre hizalanacak */
 }
 
 .logo {
@@ -107,6 +108,25 @@ header {
     align-items: center;
     gap: 15px;
 }
+
+/* BURAYA EKLİYORSUN */
+.menu-toggle {
+    display: none; /* varsayılan: desktop'ta görünmesin, mobilde açacağız */
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.4rem;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: background 0.3s, color 0.3s;
+}
+
+.menu-toggle:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+}
+/* BURAYA KADAR */
 
 .lang-switcher {
     display: flex;
@@ -1077,10 +1097,39 @@ footer {
 }
 
 @media (max-width: 768px) {
-    .nav-links {
-        display: none;
+    /* Hamburger görünür, desktop'ta gizli */
+    .menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 10px;
     }
-    
+
+    /* Mobilde nav-links dropdown gibi davranacak */
+    .nav-links {
+        display: none; /* varsayılan: kapalı */
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        flex-direction: column;
+        gap: 15px;
+        background: var(--dark-card);
+        padding: 15px 20px;
+        border-radius: 12px;
+        border: 1px solid var(--dark-border);
+        box-shadow: var(--shadow);
+        z-index: 1001;
+    }
+
+    .nav-links a {
+        text-align: right;
+    }
+
+    /* JS ile .open class'ı gelince menü açılacak */
+    .nav-links.open {
+        display: flex;
+    }
+
     h1 {
         font-size: 2.5rem;
     }

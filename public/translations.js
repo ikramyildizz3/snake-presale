@@ -10,7 +10,7 @@ const translations = {
         'connect.wallet': 'Connect Wallet',
         
         // Hero Section
-        'hero.presale': 'Presale Live',
+        'hero.presale': 'Snake Token Presale',
         'hero.title': 'Snake Token: Play-to-Earn Focused',
         'hero.title2': 'BNB Chain Ecosystem Token',
         'hero.description': 'Community-focused, transparent token distribution and real in-game usage - we aim for sustainable demand, not hype.',
@@ -113,7 +113,7 @@ const translations = {
         'faq.q2': 'How can I buy Snake Token?',
         'faq.a2': 'During presale: Connect your wallet and use USDT or BNB. After launch: Available on PancakeSwap.',
         'faq.q3': 'When is the game launching?',
-        'faq.a3': 'Target Launch: Q2 2025 - Our Play-to-Earn Snake game is in active development.',
+        'faq.a3': 'Target Launch: Q2–Q3 2026 - Our Play-to-Earn Snake game is in active development.',
         'faq.q4': 'What is the total supply?',
         'faq.a4': 'Total supply is 400,000,000 SNAKE tokens with fair distribution.',
         'faq.q5': 'Where will SNAKE be listed?',
@@ -160,7 +160,7 @@ const translations = {
         'connect.wallet': 'Cüzdanı Bağla',
         
         // Hero Section
-        'hero.presale': 'Ön Satış Aktif',
+        'hero.presale': 'Snake Token Ön Satışı',
         'hero.title': 'Snake Token: Play-to-Earn Odaklı',
         'hero.title2': 'BNB Chain Ekosistem Tokeni',
         'hero.description': 'Topluluk odaklı, şeffaf token dağılımı ve gerçek oyun içi kullanım - hype değil, sürdürülebilir talep hedefliyoruz.',
@@ -263,7 +263,7 @@ const translations = {
         'faq.q2': 'Snake Token nasıl alınır?',
         'faq.a2': 'Ön satış sırasında: Cüzdanınızı bağlayıp USDT veya BNB kullanın. Lansman sonrası: PancakeSwap\'ta mevcut olacak.',
         'faq.q3': 'Oyun ne zaman çıkıyor?',
-        'faq.a3': 'Hedef Lansman: Q2 2025 - Play-to-Earn Snake oyunumuz aktif geliştirme aşamasında.',
+        'faq.a3': 'Hedef Lansman: 2026 2.–3. Çeyrek - Play-to-Earn Snake oyunumuz aktif geliştirme aşamasında.',
         'faq.q4': 'Toplam arz nedir?',
         'faq.a4': 'Toplam arz 400,000,000 SNAKE tokenıdır ve adil dağıtım yapılmıştır.',
         'faq.q5': 'SNAKE nerede listelenecek?',

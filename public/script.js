@@ -20,9 +20,15 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initChart() {
-    const ctx = document.getElementById('tokenomicsChart').getContext('2d');
-    if (!ctx) {
+    const canvas = document.getElementById('tokenomicsChart');
+    if (!canvas) {
         console.error('Chart canvas bulunamadı!');
+        return;
+    }
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+        console.error('Canvas context alınamadı!');
         return;
     }
     
@@ -76,8 +82,18 @@ function initChart() {
 
 function setupEventListeners() {
     console.log('Event listenerlar kuruluyor...');
+
+    // 🔹 Hamburger menü
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+
+    if (menuToggle && navLinks) {
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('open');
+        });
+    }
     
-    // Dil butonları
+    // 🔹 Dil butonları
     const langButtons = document.querySelectorAll('.lang-btn');
     console.log('Bulunan dil butonları:', langButtons.length);
     
@@ -96,7 +112,7 @@ function setupEventListeners() {
         });
     });
 
-    // Payment method butonları
+    // 🔹 Payment method butonları
     const paymentButtons = document.querySelectorAll('.payment-btn');
     paymentButtons.forEach(button => {
         button.addEventListener('click', function() {
@@ -110,7 +126,7 @@ function setupEventListeners() {
         });
     });
 
-    // FAQ toggle
+    // 🔹 FAQ toggle
     document.querySelectorAll('.faq-question').forEach(question => {
         question.addEventListener('click', () => {
             const faqItem = question.parentElement;
@@ -118,19 +134,28 @@ function setupEventListeners() {
         });
     });
 
-    // Diğer butonlar
-    document.querySelector('.connect-wallet').addEventListener('click', function() {
-        alert('Wallet connection functionality will be implemented soon!');
-    });
+    // 🔹 Diğer butonlar
+    const connectWalletBtn = document.querySelector('.connect-wallet');
+    if (connectWalletBtn) {
+        connectWalletBtn.addEventListener('click', function() {
+            alert('Wallet connection functionality will be implemented soon!');
+        });
+    }
 
-    document.querySelector('.btn-primary').addEventListener('click', function() {
-        alert('Purchase functionality will be implemented after wallet integration!');
-    });
+    const buyNowBtn = document.querySelector('.btn-primary');
+    if (buyNowBtn) {
+        buyNowBtn.addEventListener('click', function() {
+            alert('Purchase functionality will be implemented after wallet integration!');
+        });
+    }
 
-    // Input event
-    document.getElementById('snakeAmount').addEventListener('input', calculatePayment);
+    // 🔹 Input event
+    const snakeAmountInput = document.getElementById('snakeAmount');
+    if (snakeAmountInput) {
+        snakeAmountInput.addEventListener('input', calculatePayment);
+    }
 
-    // Smooth scroll
+    // 🔹 Smooth scroll + mobil menü kapatma
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
@@ -138,12 +163,19 @@ function setupEventListeners() {
             if (target) {
                 target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
+
+            // Eğer mobil menü açıksa linke tıklayınca kapat
+            if (navLinks && navLinks.classList.contains('open')) {
+                navLinks.classList.remove('open');
+            }
         });
     });
 
-    // Scroll event
+    // 🔹 Scroll event (header arka plan)
     window.addEventListener('scroll', function() {
         const header = document.querySelector('header');
+        if (!header) return;
+
         if (window.scrollY > 100) {
             header.style.background = 'rgba(10, 10, 10, 0.98)';
         } else {
@@ -175,6 +207,8 @@ function initializePage() {
 
 function toggleBnbPriceInfo() {
     const bnbPriceInfo = document.getElementById('bnbPriceInfo');
+    if (!bnbPriceInfo) return;
+
     if (currentPaymentMethod === 'bnb') {
         bnbPriceInfo.classList.add('visible');
     } else {
@@ -185,38 +219,51 @@ function toggleBnbPriceInfo() {
 async function fetchBNBPrice() {
     try {
         const bnbPriceElement = document.getElementById('bnbPrice');
-        bnbPriceElement.textContent = `Current reference: 1 BNB ≈ Loading...`;
+        if (bnbPriceElement) {
+            bnbPriceElement.textContent = `Current reference: 1 BNB ≈ Loading...`;
+        }
         
         const response = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT');
         const data = await response.json();
         bnbPrice = parseFloat(data.price);
         
-        bnbPriceElement.textContent = `Current reference: 1 BNB ≈ ${bnbPrice.toFixed(2)} USDT`;
+        if (bnbPriceElement) {
+            bnbPriceElement.textContent = `Current reference: 1 BNB ≈ ${bnbPrice.toFixed(2)} USDT`;
+        }
         calculatePayment();
         
     } catch (error) {
         console.error('Error fetching BNB price:', error);
         bnbPrice = 854.51;
-        document.getElementById('bnbPrice').textContent = `Current reference: 1 BNB ≈ ${bnbPrice.toFixed(2)} USDT`;
+        const bnbPriceElement = document.getElementById('bnbPrice');
+        if (bnbPriceElement) {
+            bnbPriceElement.textContent = `Current reference: 1 BNB ≈ ${bnbPrice.toFixed(2)} USDT`;
+        }
         calculatePayment();
     }
 }
 
 function calculatePayment() {
-    const snakeAmount = parseFloat(document.getElementById('snakeAmount').value) || 0;
+    const snakeAmountInput = document.getElementById('snakeAmount');
+    const youReceiveEl = document.getElementById('youReceive');
+    const youPayEl = document.getElementById('youPay');
+
+    if (!snakeAmountInput || !youReceiveEl || !youPayEl) return;
+
+    const snakeAmount = parseFloat(snakeAmountInput.value) || 0;
     const snakePrice = 0.02;
     
-    document.getElementById('youReceive').textContent = `${snakeAmount.toLocaleString()} SNAKE`;
+    youReceiveEl.textContent = `${snakeAmount.toLocaleString()} SNAKE`;
     
     if (currentPaymentMethod === 'usdt') {
         const totalUSDT = snakeAmount * snakePrice;
-        document.getElementById('youPay').textContent = `${totalUSDT.toFixed(2)} USDT`;
+        youPayEl.textContent = `${totalUSDT.toFixed(2)} USDT`;
     } else if (currentPaymentMethod === 'bnb' && bnbPrice > 0) {
         const totalUSDT = snakeAmount * snakePrice;
         const totalBNB = totalUSDT / bnbPrice;
-        document.getElementById('youPay').textContent = `${totalBNB.toFixed(6)} BNB`;
+        youPayEl.textContent = `${totalBNB.toFixed(6)} BNB`;
     } else if (currentPaymentMethod === 'bnb') {
-        document.getElementById('youPay').textContent = `Loading...`;
+        youPayEl.textContent = `Loading...`;
     }
 }
 
@@ -224,6 +271,11 @@ function changeLanguage(lang) {
     console.log('Dil değiştiriliyor:', lang);
     currentLanguage = lang;
     
+    if (!translations[lang]) {
+        console.error('Çeviri dili bulunamadı:', lang);
+        return;
+    }
+
     // Tüm çeviri elementlerini güncelle
     Object.keys(translations[lang]).forEach(key => {
         const elements = document.querySelectorAll(`[data-translate="${key}"]`);
