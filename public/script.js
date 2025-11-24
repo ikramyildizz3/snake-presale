@@ -1,5 +1,8 @@
 // Ana JavaScript dosyası - Tüm fonksiyonlar burada
 
+// Global değişken
+let currentLanguage = 'en';
+
 // Tokenomics Chart
 document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('tokenomicsChart').getContext('2d');
@@ -57,24 +60,31 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Sayfa yüklendiğinde dili ayarla
     const savedLang = localStorage.getItem('preferred-language') || 'en';
+    currentLanguage = savedLang;
     changeLanguage(savedLang);
+    
+    // Aktif dil butonunu ayarla
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.textContent.trim().toLowerCase() === savedLang) {
+            btn.classList.add('active');
+        }
+    });
 
-    // Dil butonlarına event listener ekle
-    const langButtons = document.querySelectorAll('.lang-btn');
-    langButtons.forEach(button => {
+    // Dil butonlarına event listener ekle - DÜZELTİLDİ
+    document.querySelectorAll('.lang-btn').forEach(button => {
         button.addEventListener('click', function() {
+            // Tüm butonlardan active classını kaldır
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Sadece tıklanana active classını ekle
+            this.classList.add('active');
+            
             const lang = this.textContent.trim().toLowerCase();
             changeLanguage(lang);
-            
-            // Buton stillerini güncelle
-            langButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
         });
-        
-        // Başlangıç durumunu ayarla
-        if (button.textContent.trim().toLowerCase() === savedLang) {
-            button.classList.add('active');
-        }
     });
 
     // FAQ Toggle Function
@@ -196,6 +206,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Dil değiştirme fonksiyonu
 function changeLanguage(lang) {
+    currentLanguage = lang;
+    
     // Tüm çeviri elementlerini güncelle
     Object.keys(translations[lang]).forEach(key => {
         const elements = document.querySelectorAll(`[data-translate="${key}"]`);
@@ -214,6 +226,12 @@ function changeLanguage(lang) {
     const priceDisplay = document.getElementById('priceDisplay');
     if (priceDisplay && translations[lang]['presale.price']) {
         priceDisplay.textContent = translations[lang]['presale.price'];
+    }
+
+    // UYARI MESAJINI GÜNCELLE
+    const warning = document.getElementById('transfer-warning');
+    if (warning && translations[lang]['warning.direct-transfer']) {
+        warning.innerHTML = translations[lang]['warning.direct-transfer'];
     }
 
     // Aktif dili kaydet
