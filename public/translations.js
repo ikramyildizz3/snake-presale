@@ -21,7 +21,7 @@ const translations = {
         // Presale Details
         'presale.soft-cap': 'Soft Cap:',
         'presale.hard-cap': 'Hard Cap:',
-        'presale.min-max': 'Min/Max Buy:',
+        'presale.min-max': 'Minimum Buy:',
         
         // Presale Panel
         'presale.title': 'Presale Panel',
@@ -171,7 +171,7 @@ const translations = {
         // Presale Details
         'presale.soft-cap': 'Soft Cap:',
         'presale.hard-cap': 'Hard Cap:',
-        'presale.min-max': 'Min/Max Alım:',
+        'presale.min-max': 'Minimum Alım:',
         
         // Presale Panel
         'presale.title': 'Ön Satış Paneli',
