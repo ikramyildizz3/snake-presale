@@ -118,7 +118,23 @@ const translations = {
         'faq.a4': 'Total supply is 400,000,000 SNAKE tokens with fair distribution.',
         'faq.q5': 'Where will SNAKE be listed?',
         'faq.a5': 'Initially on PancakeSwap, with plans for major CEX listings after game launch.',
-        
+
+                // Sale Types
+        'section.sales': 'Sale Types',
+        'section.sales.sub': 'Choose the presale model that fits your strategy.',
+        'sales.normal.title': 'Normal Presale (No Vesting)',
+        'sales.normal.tag': 'Flexible, short/mid-term',
+        'sales.normal.item1': 'Price: 1 SNAKE = 0.02 USDT',
+        'sales.normal.item2': 'Payment: BNB or USDT (BEP-20)',
+        'sales.normal.item3': 'Vesting: None',
+        'sales.normal.item4': 'Distribution: 100% claimable after TGE in a single transaction.',
+        'sales.vesting.title': 'Vesting Presale (Discounted Price)',
+        'sales.vesting.tag': 'Lower price, vesting schedule',
+        'sales.vesting.item1': 'Price: 1 SNAKE = 0.015 USDT',
+        'sales.vesting.item2': 'Payment: BNB or USDT (BEP-20)',
+        'sales.vesting.item3': 'Vesting: 30% at TGE, 70% over 7 months (10% per month).',
+        'sales.vesting.item4': 'Distribution: Investors claim the unlocked portion via the presale panel during the vesting period.',
+
         // Legal - Terms of Service
         'legal.terms': 'Terms of Service',
         'legal.terms.intro': 'By using this website and interacting with the Snake Token ecosystem, you agree to the following terms:',
@@ -268,7 +284,23 @@ const translations = {
         'faq.a4': 'Toplam arz 400,000,000 SNAKE tokenıdır ve adil dağıtım yapılmıştır.',
         'faq.q5': 'SNAKE nerede listelenecek?',
         'faq.a5': 'İlk olarak PancakeSwap\'ta, oyun lansmanı sonrası büyük borsa listeleri planlanıyor.',
-        
+
+                // Satış Tipleri
+        'section.sales': 'Satış Tipleri',
+        'section.sales.sub': 'Yatırım stratejinize en uygun ön satış modelini seçin.',
+        'sales.normal.title': 'Normal Presale (Vesting Yok)',
+        'sales.normal.tag': 'Daha esnek kısa/orta vade',
+        'sales.normal.item1': 'Fiyat: 1 SNAKE = 0.02 USDT',
+        'sales.normal.item2': 'Ödeme: BNB veya USDT (BEP-20)',
+        'sales.normal.item3': 'Vesting: Yok',
+        'sales.normal.item4': 'Dağıtım: TGE sonrasında tek işlemle %100 claim edilebilir.',
+        'sales.vesting.title': 'Vestingli Presale (İndirimli Fiyat)',
+        'sales.vesting.tag': 'Daha düşük fiyat, vesting takvimi',
+        'sales.vesting.item1': 'Fiyat: 1 SNAKE = 0.015 USDT',
+        'sales.vesting.item2': 'Ödeme: BNB veya USDT (BEP-20)',
+        'sales.vesting.item3': 'Vesting: %30 TGE’de, kalan %70 7 ay boyunca her ay başında %10 açılır.',
+        'sales.vesting.item4': 'Dağıtım: Yatırımcılar vesting süresince açılan kısmı presale panelinden claim eder.',
+
         // Legal - Terms of Service
         'legal.terms': 'Kullanım Şartları',
         'legal.terms.intro': 'Bu web sitesini kullanarak ve Snake Token ekosistemi ile etkileşime girerek aşağıdaki şartları kabul etmiş olursunuz:',
