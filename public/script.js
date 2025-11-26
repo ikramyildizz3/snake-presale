@@ -319,3 +319,10 @@ function updateChartLabels(lang) {
         window.tokenomicsChart.update();
     }
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+  if (window.location.pathname === '/snake-token.html') {
+    const newUrl = window.location.origin + '/' + window.location.search + window.location.hash;
+    window.history.replaceState({}, '', newUrl);
+  }
+});
