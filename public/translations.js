@@ -94,7 +94,7 @@ const translations = {
         'steps.step3.title': 'Connect & Buy',
         'steps.step3.desc': 'Connect your wallet to our presale platform, enter the SNAKE amount, and confirm the transaction.',
         'steps.step4.title': 'Claim Tokens',
-        'steps.step4.desc': 'After presale ends, return to claim your SNAKE tokens. They\'ll be automatically sent to your connected wallet.',
+        'steps.step4.desc': 'Claim opens around 2 days before listing. Come back to this page, connect your wallet and use the Claim button. Normal presale: 100% at once. Vesting presale: only the unlocked portion each month.',
 
         // Binance Wallet
         'binance.title': 'For Binance Web3 Wallet Users',
@@ -134,13 +134,16 @@ const translations = {
         'sales.normal.item1': 'Price: 1 SNAKE = 0.02 USDT',
         'sales.normal.item2': 'Payment: BNB or USDT (BEP-20)',
         'sales.normal.item3': 'Vesting: None',
-        'sales.normal.item4': 'Distribution: 100% claimable after TGE in a single transaction.',
+        'sales.normal.item4': 'Distribution: 100% claimable from the presale panel starting 2 days before listing, in a single transaction.',
+
         'sales.vesting.title': 'Vesting Presale (Discounted Price)',
         'sales.vesting.tag': 'Lower price, vesting schedule',
         'sales.vesting.item1': 'Price: 1 SNAKE = 0.015 USDT',
         'sales.vesting.item2': 'Payment: BNB or USDT (BEP-20)',
-        'sales.vesting.item3': 'Vesting: 30% at TGE, 70% over 7 months (10% per month).',
-        'sales.vesting.item4': 'Distribution: Investors claim the unlocked portion via the presale panel during the vesting period.',
+        'sales.vesting.item3': 'Vesting: 30% unlocked when claim opens (2 days before listing), remaining 70% over 7 months (10% per month).',
+        'sales.vesting.item4': 'Distribution: Investors claim the unlocked portion from the presale panel whenever they want during the vesting period.',
+
+        'sales.claim.note': 'Presale claim will open approximately 2 days before the first PancakeSwap listing. The exact date and time will be announced through our official channels (Telegram & X).',
 
         // Legal - Terms of Service
         'legal.terms': 'Terms of Service',
@@ -268,7 +271,7 @@ const translations = {
         'steps.step3.title': 'Bağlan & Satın Al',
         'steps.step3.desc': 'Cüzdanınızı ön satış platformumuza bağlayın, SNAKE miktarını girip işlemi onaylayın.',
         'steps.step4.title': 'Tokenleri Claim Et',
-        'steps.step4.desc': 'Ön satış sona erdikten sonra, SNAKE tokenlerinizi claim etmek için geri dönün. Tokenler otomatik olarak bağlı cüzdanınıza gönderilecek.',
+        'steps.step4.desc': 'Claim, listelemeden yaklaşık 2 gün önce açılır. Bu sayfaya geri dönüp cüzdanını bağlayarak Claim butonunu kullan. Normal satışta: %100 tek seferde. Vesting satışta: Her ay sadece açılan kısmı claim edebilirsin.',
 
         // Binance Wallet
         'binance.title': 'Binance Web3 Wallet Kullanıcıları İçin',
@@ -302,19 +305,22 @@ const translations = {
 
         // Satış Tipleri
         'section.sales': 'Satış Tipleri',
-        'section.sales.sub': 'Yatırım stratejinize en uygun ön satış modelini seçin.',
-        'sales.normal.title': 'Normal Presale (Vesting Yok)',
-        'sales.normal.tag': 'Daha esnek kısa/orta vade',
-        'sales.normal.item1': 'Fiyat: 1 SNAKE = 0.02 USDT',
+        'section.sales.sub': 'Yatırım stratejine en uygun ön satış modelini seç.',
+        'sales.normal.title': 'Normal Ön Satış (Vesting Yok)',
+        'sales.normal.tag': 'Esnek, kısa/orta vade',
+        'sales.normal.item1': 'Fiyat: 1 SNAKE = 0,02 USDT',
         'sales.normal.item2': 'Ödeme: BNB veya USDT (BEP-20)',
         'sales.normal.item3': 'Vesting: Yok',
-        'sales.normal.item4': 'Dağıtım: TGE sonrasında tek işlemle %100 claim edilebilir.',
-        'sales.vesting.title': 'Vestingli Presale (İndirimli Fiyat)',
+        'sales.normal.item4': 'Dağıtım: Listelemeden 2 gün önce açılan claim paneli üzerinden %100 tek seferde çekilebilir.',
+
+        'sales.vesting.title': 'Vestingli Ön Satış (İndirimli Fiyat)',
         'sales.vesting.tag': 'Daha düşük fiyat, vesting takvimi',
-        'sales.vesting.item1': 'Fiyat: 1 SNAKE = 0.015 USDT',
+        'sales.vesting.item1': 'Fiyat: 1 SNAKE = 0,015 USDT',
         'sales.vesting.item2': 'Ödeme: BNB veya USDT (BEP-20)',
-        'sales.vesting.item3': 'Vesting: %30 TGE’de, kalan %70 7 ay boyunca her ay başında %10 açılır.',
-        'sales.vesting.item4': 'Dağıtım: Yatırımcılar vesting süresince açılan kısmı presale panelinden claim eder.',
+        'sales.vesting.item3': 'Vesting: Claim açıldığında (listelemeden 2 gün önce) %30 açılır, kalan %70 7 ay boyunca ayda %10 olarak dağıtılır.',
+        'sales.vesting.item4': 'Dağıtım: Yatırımcılar vesting süresi boyunca istedikleri zaman panelden açılan kısmı claim edebilir.',
+        
+        'sales.claim.note': 'Ön satış için claim işlemi, ilk PancakeSwap listelemesinden yaklaşık 2 gün önce açılacaktır. Net tarih ve saat resmi kanallarımızdan (Telegram ve X) duyurulacaktır.',
 
         // Legal - Terms of Service
         'legal.terms': 'Kullanım Şartları',
