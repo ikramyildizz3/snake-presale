@@ -117,7 +117,9 @@ const translations = {
         'faq.q4': 'What is the total supply?',
         'faq.a4': 'Total supply is 400,000,000 SNAKE tokens with fair distribution.',
         'faq.q5': 'Where will SNAKE be listed?',
-        'faq.a5': 'Initially on PancakeSwap, with plans for major CEX listings after game launch.',
+        'faq.a5': 'Initially on PancakeSwap (BNB Chain). You will be able to trade SNAKE through Web3 wallets like MetaMask, Trust Wallet and Binance Web3 by connecting to PancakeSwap. In later phases, we plan major CEX listings after the game launch.',
+        'faq.q6': 'How can I see SNAKE in my wallet?',
+        'faq.a6': 'After you buy or claim SNAKE, the tokens are linked to your wallet address on BNB Chain. To make them visible in your wallet app, you may need to add the token manually. Binance Web3 Wallet: Open Binance → Wallet → Web3 Wallet → tap the “+” (Add Token), select BNB Smart Chain, paste the SNAKE contract address 0xc9F46963Ee83EFd45675867f622Dd3a0B7c494e7 and confirm. Other wallets (MetaMask, Trust Wallet, SafePal): Use “Add Custom Token” on BNB Smart Chain with the same contract address, symbol SNAKE and decimals 18.',
 
                 // Sale Types
         'section.sales': 'Sale Types',
@@ -159,6 +161,7 @@ const translations = {
         'legal.advice-desc': 'This website does not constitute financial advice. Always do your own research (DYOR) before investing.',
         'legal.privacy': 'Privacy Policy',
         'legal.updated': 'Last Updated:',
+        'legal.updated.date': 'November 2025',
         'legal.privacy-desc': 'We do not collect personal information. Our website is static and does not use tracking cookies. When connecting your wallet, we only access public blockchain information.',
         
         // Footer
@@ -283,7 +286,10 @@ const translations = {
         'faq.q4': 'Toplam arz nedir?',
         'faq.a4': 'Toplam arz 400,000,000 SNAKE tokenıdır ve adil dağıtım yapılmıştır.',
         'faq.q5': 'SNAKE nerede listelenecek?',
-        'faq.a5': 'İlk olarak PancakeSwap\'ta, oyun lansmanı sonrası büyük borsa listeleri planlanıyor.',
+        'faq.a5': 'İlk olarak BNB Chain üzerinde PancakeSwap\'ta listelenecek. MetaMask, Trust Wallet ve Binance Web3 gibi Web3 cüzdanlarınızı PancakeSwap\'a bağlayarak SNAKE alıp satabileceksiniz. İlerleyen aşamalarda oyun lansmanı sonrası büyük borsa listelemeleri hedefleniyor.',
+        'faq.q6': 'Cüzdanımda SNAKE\'i nasıl görebilirim?',
+        'faq.a6': 'SNAKE satın aldıktan veya claim ettikten sonra tokenlar BNB Chain üzerindeki cüzdan adresinize bağlı olur. Cüzdan uygulamanızda görünmesi için tokenı manuel eklemeniz gerekebilir. Binance Web3 Wallet: Binance uygulamasını açın → Cüzdan → Web3 Wallet → “+” (Token Ekle) butonuna dokunun, ağ olarak BNB Smart Chain’i seçin, SNAKE kontrat adresini 0xc9F46963Ee83EFd45675867f622Dd3a0B7c494e7 yapıştırıp onaylayın. Diğer cüzdanlar (MetaMask, Trust Wallet, SafePal): Aynı kontrat adresi, SNAKE sembolü ve 18 ondalık ile BNB Smart Chain’de “Custom Token Ekle” bölümünü kullanın.',
+
 
                 // Satış Tipleri
         'section.sales': 'Satış Tipleri',
@@ -325,6 +331,7 @@ const translations = {
         'legal.advice-desc': 'Bu web sitesi finansal tavsiye oluşturmaz. Yatırım yapmadan önce mutlaka kendi araştırmanızı yapın (DYOR).',
         'legal.privacy': 'Gizlilik Politikası',
         'legal.updated': 'Son Güncelleme:',
+        'legal.updated.date': 'Kasım 2025',
         'legal.privacy-desc': 'Kişisel bilgi toplamıyoruz. Web sitemiz statiktir ve takip çerezleri kullanmaz. Cüzdan bağlarken yalnızca public blockchain bilgilerine erişiriz.',
         
         // Footer
