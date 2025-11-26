@@ -12,38 +12,38 @@
 </head>
 <body>
     <header>
-    <div class="container nav-container">
-        <div class="logo">
-            <div class="logo-icon">🐍</div>
-            <span>Snake Token</span>
-        </div>
-        
-        <!-- Masaüstü menü -->
-        <nav class="nav-links">
-            <a href="#home" class="active" data-translate="nav.home">Home</a>
-            <a href="#tokenomics" data-translate="nav.tokenomics">Tokenomics</a>
-            <a href="#roadmap" data-translate="nav.roadmap">Roadmap</a>
-            <a href="#how-to-buy" data-translate="nav.how-to-buy">How to Buy</a>
-            <a href="#faq" data-translate="nav.faq">FAQ</a>
-        </nav>
-
-        <!-- Mobile için hamburger butonu -->
-        <button class="menu-toggle" aria-label="Toggle navigation">
-            <i class="fas fa-bars"></i>
-        </button>
-        
-        <div class="nav-actions">
-            <div class="lang-switcher">
-                <button class="lang-btn active" data-lang="en">EN</button>
-                <button class="lang-btn" data-lang="tr">TR</button>
+        <div class="container nav-container">
+            <div class="logo">
+                <div class="logo-icon">🐍</div>
+                <span>Snake Token</span>
             </div>
-            <button class="connect-wallet">
-                <i class="fas fa-wallet"></i>
-                <span data-translate="connect.wallet">Connect Wallet</span>
+            
+            <!-- Masaüstü menü -->
+            <nav class="nav-links">
+                <a href="#home" class="active" data-translate="nav.home">Home</a>
+                <a href="#tokenomics" data-translate="nav.tokenomics">Tokenomics</a>
+                <a href="#roadmap" data-translate="nav.roadmap">Roadmap</a>
+                <a href="#how-to-buy" data-translate="nav.how-to-buy">How to Buy</a>
+                <a href="#faq" data-translate="nav.faq">FAQ</a>
+            </nav>
+
+            <!-- Mobile için hamburger butonu -->
+            <button class="menu-toggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
             </button>
+            
+            <div class="nav-actions">
+                <div class="lang-switcher">
+                    <button class="lang-btn active" data-lang="en">EN</button>
+                    <button class="lang-btn" data-lang="tr">TR</button>
+                </div>
+                <button class="connect-wallet">
+                    <i class="fas fa-wallet"></i>
+                    <span data-translate="connect.wallet">Connect Wallet</span>
+                </button>
+            </div>
         </div>
-    </div>
-</header>
+    </header>
 
     <!-- Hero Section -->
     <section class="hero" id="home">
@@ -146,7 +146,7 @@
         </div>
     </section>
 
-        <!-- Sale Types Section -->
+    <!-- Sale Types Section -->
     <section id="sale-types">
         <div class="container">
             <div class="section-header">
@@ -482,29 +482,41 @@
                     </div>
                 </div>
                 
+                <!-- Q5 -->
                 <div class="faq-item">
                     <div class="faq-question">
                         <h3 data-translate="faq.q5">Where will SNAKE be listed?</h3>
                         <span class="faq-toggle">+</span>
                     </div>
                     <div class="faq-answer">
-                        <p data-translate="faq.a5">Initially on PancakeSwap, with plans for major CEX listings after game launch.</p>
+                        <p data-translate="faq.a5.1">
+                            Initially on PancakeSwap, with plans for major CEX listings after game launch.
+                        </p>
+                        <p data-translate="faq.a5.2">
+                            You will be able to trade SNAKE via Web3 wallets like MetaMask, Trust Wallet and Binance Web3 by connecting to PancakeSwap on BNB Chain.
+                        </p>
+                        <p data-translate="faq.a5.3">
+                            Further centralized exchange listings are planned after the game launch phase.
+                        </p>
                     </div>
                 </div>
 
+                <!-- Q6 -->
                 <div class="faq-item">
                     <div class="faq-question">
                         <h3 data-translate="faq.q6">How can I see SNAKE in my wallet?</h3>
                         <span class="faq-toggle">+</span>
                     </div>
                     <div class="faq-answer">
-                        <p data-translate="faq.a6">
+                        <p data-translate="faq.a6.1">
                             After you buy or claim SNAKE, the tokens are linked to your wallet address on BNB Chain.
-                            To make them visible in your wallet app, you may need to add the token manually.<br><br>
-                            <strong>Binance Web3 Wallet:</strong> Open Binance → Wallet → Web3 Wallet → tap the “+” (Add Token),
-                            select BNB Smart Chain, paste the SNAKE contract address
-                            <code>0xc9F46963Ee83EFd45675867f622Dd3a0B7c494e7</code> and confirm.<br><br>
-                            <strong>Other wallets (MetaMask, Trust Wallet, SafePal):</strong> Use “Add Custom Token” on BNB Smart Chain
+                        </p>
+                        <p data-translate="faq.a6.2">
+                            To make them visible in your wallet app, you may need to add the token manually as a custom token.
+                        </p>
+                        <p data-translate="faq.a6.3">
+                            Binance Web3 Wallet: Open Binance → Wallet → Web3 Wallet → tap the “+” (Add Token), select BNB Smart Chain, paste the SNAKE contract address
+                            <code>0xc9F46963Ee83EFd45675867f622Dd3a0B7c494e7</code> and confirm. Other wallets (MetaMask, Trust Wallet, SafePal): Use “Add Custom Token” on BNB Smart Chain
                             with the same contract address, symbol <code>SNAKE</code> and decimals <code>18</code>.
                         </p>
                     </div>
@@ -537,9 +549,9 @@
                 <h2 data-translate="legal.privacy">Privacy Policy</h2>
                 <div class="disclaimer-text">
                     <p>
-    <strong data-translate="legal.updated">Last Updated:</strong>
-    <span data-translate="legal.updated.date">November 2025</span>
-</p>
+                        <strong data-translate="legal.updated">Last Updated:</strong>
+                        <span data-translate="legal.updated.date">November 2025</span>
+                    </p>
                     
                     <p data-translate="legal.privacy-desc">We do not collect personal information. Our website is static and does not use tracking cookies. When connecting your wallet, we only access public blockchain information.</p>
                 </div>
