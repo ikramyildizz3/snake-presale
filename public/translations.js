@@ -116,10 +116,12 @@ const translations = {
         'faq.a3': 'Target Launch: Q2–Q3 2026 - Our Play-to-Earn Snake game is in active development.',
         'faq.q4': 'What is the total supply?',
         'faq.a4': 'Total supply is 400,000,000 SNAKE tokens with fair distribution.',
+        'faq.q5': 'Where will SNAKE be listed?',
         'faq.a5.1': 'Initially on PancakeSwap on BNB Chain.',
         'faq.a5.2': 'You will be able to trade SNAKE via Web3 wallets like MetaMask, Trust Wallet and Binance Web3 by connecting to PancakeSwap.',
         'faq.a5.3': 'In later phases, we plan major CEX listings after the game launch.',
 
+        'faq.q6': 'How can I see SNAKE in my wallet?',
         'faq.a6.1': 'After you buy or claim SNAKE, the tokens are linked to your wallet address on BNB Chain.',
         'faq.a6.2': 'To make them visible in your wallet app, you may need to add the token manually as a custom token.',
         'faq.a6.3': 'Binance Web3 Wallet: Open Binance → Wallet → Web3 Wallet → tap “+” (Add Token), select BNB Smart Chain, paste the SNAKE contract address 0xc9F46963Ee83EFd45675867f622Dd3a0B7c494e7 and confirm. Other wallets (MetaMask, Trust Wallet, SafePal): Use “Add Custom Token” on BNB Chain with the same address, symbol SNAKE and 18 decimals.',
