@@ -14,9 +14,6 @@
   const PRESALE_ADDRESS = "0xbA073B1ec8fa5d7521E1592E03F08f1F272A7f5A";
   const USDT_ADDRESS = "0x55d398326f99059fF775485246999027B3197955";
 
-  // Şimdilik panel sadece Normal Presale (no vesting) için çalışsın
-  const CURRENT_POOL_ID = 0; // 0 = normal, 1 = vesting
-
   // Ethers v5 için minimal ABI'ler
   const PRESALE_ABI = [
     "function buyWithBNB(uint8 poolId, uint256 tokenAmount) payable",
@@ -41,6 +38,23 @@
 
   let isConnectingWallet = false;
 
+  // ---------- Dil yardımcıları ----------
+
+  function getCurrentLang() {
+    try {
+      if (typeof window !== "undefined" && window.currentLanguage) {
+        return window.currentLanguage;
+      }
+    } catch (e) {}
+    return "en";
+  }
+
+  function t(en, tr) {
+    const lang = getCurrentLang();
+    if (lang === "tr" && typeof tr === "string") return tr;
+    return en;
+  }
+
   // ---------- Yardımcılar ----------
 
   function shortenAddress(addr) {
@@ -53,7 +67,7 @@
     if (isLoading) {
       btn.disabled = true;
       btn.dataset.originalText = btn.dataset.originalText || btn.innerText;
-      btn.innerText = defaultText || "Processing...";
+      btn.innerText = defaultText || t("Processing...", "İşlem yapılıyor...");
     } else {
       btn.disabled = false;
       if (btn.dataset.originalText) {
@@ -62,13 +76,53 @@
     }
   }
 
-  function logErrorContext(prefix, error) {
-    console.error(prefix, error);
-    const message =
-      (error && error.data && error.data.message) ||
+  function logErrorContext(prefixKey, error) {
+    console.error(prefixKey, error);
+
+    // Özel durum: kullanıcı cüzdanda reddetti (MetaMask kodu 4001)
+    const rawMessage =
       (error && error.message) ||
-      String(error);
-    alert(prefix + ": " + message);
+      (error && error.data && error.data.message) ||
+      "";
+
+    const lower = (rawMessage || "").toLowerCase();
+    if (
+      error &&
+      (error.code === 4001 ||
+        lower.includes("user rejected") ||
+        lower.includes("rejected the transaction"))
+    ) {
+      alert(
+        t(
+          "Transaction cancelled in wallet.",
+          "İşlem cüzdanda iptal edildi."
+        )
+      );
+      return;
+    }
+
+    let message = rawMessage;
+    if (!message) {
+      message = t(
+        "Something went wrong. Please check your wallet and try again.",
+        "Bir hata oluştu. Lütfen cüzdanınızı kontrol edip tekrar deneyin."
+      );
+    } else if (message.length > 200) {
+      // Çok uzun hata metinlerini kısalt
+      message = message.slice(0, 200) + "...";
+    }
+
+    let prefixText = prefixKey;
+    if (prefixKey === "Purchase failed") {
+      prefixText = t(
+        "Purchase failed",
+        "Satın alma işlemi başarısız"
+      );
+    } else if (prefixKey === "Claim failed") {
+      prefixText = t("Claim failed", "Claim işlemi başarısız");
+    }
+
+    alert(prefixText + ": " + message);
   }
 
   // Mevcut event listener'ları temizlemek için butonu klonla
@@ -111,16 +165,37 @@
     return "usdt";
   }
 
+  function getCurrentPoolId() {
+    try {
+      if (typeof window !== "undefined" && typeof window.currentSalePool !== "undefined") {
+        return window.currentSalePool === 1 ? 1 : 0;
+      }
+    } catch (e) {
+      // ignore
+    }
+    const active = document.querySelector(".sale-mode-btn.active");
+    if (active && active.getAttribute("data-pool")) {
+      const pool = parseInt(active.getAttribute("data-pool"), 10);
+      if (pool === 1) return 1;
+    }
+    return 0;
+  }
+
   function getSnakeAmount() {
     const input = document.getElementById("snakeAmount");
     if (!input) {
-      alert("Amount input not found.");
+      alert(t("Amount input not found.", "Miktar alanı bulunamadı."));
       return null;
     }
     const raw = (input.value || "").trim();
     const value = parseFloat(raw);
     if (!raw || isNaN(value) || value <= 0) {
-      alert("Please enter a valid SNAKE amount.");
+      alert(
+        t(
+          "Please enter a valid SNAKE amount.",
+          "Lütfen geçerli bir SNAKE miktarı girin."
+        )
+      );
       return null;
     }
     return raw; // string olarak döndürüyoruz, parseUnits için
@@ -142,13 +217,19 @@
   async function ensureProvider() {
     if (!window.ethereum) {
       alert(
-        "No Web3 wallet detected. Please install MetaMask, Trust Wallet browser, Binance Web3, etc."
+        t(
+          "No Web3 wallet detected. Please install MetaMask, Trust Wallet browser, Binance Web3, etc.",
+          "Web3 cüzdanı bulunamadı. Lütfen MetaMask, Trust Wallet, Binance Web3 vb. bir cüzdan kurun."
+        )
       );
       throw new Error("No ethereum provider");
     }
     if (typeof window.ethers === "undefined" || !window.ethers.providers) {
       alert(
-        "Ethers.js not found. Make sure the ethers UMD script is included BEFORE snake-presale.js."
+        t(
+          "Ethers.js not found. Make sure the ethers UMD script is included BEFORE snake-presale.js.",
+          "Ethers.js kütüphanesi bulunamadı. Lütfen snake-presale.js dosyasından ÖNCE ethers UMD script'ini eklediğinizden emin olun."
+        )
       );
       throw new Error("No ethers library");
     }
@@ -174,7 +255,10 @@
     } catch (switchError) {
       console.error("Failed to switch to BSC:", switchError);
       alert(
-        "Please switch your wallet to BNB Smart Chain (chainId 56) and try again."
+        t(
+          "Please switch your wallet to BNB Smart Chain (chainId 56) and try again.",
+          "Lütfen cüzdan ağınızı BNB Smart Chain (chainId 56) olarak değiştirip tekrar deneyin."
+        )
       );
       throw switchError;
     }
@@ -183,7 +267,10 @@
   async function connectWallet() {
     if (isConnectingWallet) {
       alert(
-        "There is already a pending wallet connection request. Please check your wallet extension (MetaMask/Trust/etc.) and approve or reject it."
+        t(
+          "There is already a pending wallet connection request. Please check your wallet extension and approve or reject it.",
+          "Zaten bekleyen bir cüzdan bağlantı isteği var. Lütfen cüzdan eklentinizi açıp isteği onaylayın veya reddedin."
+        )
       );
       return;
     }
@@ -220,12 +307,15 @@
             error.message.toLowerCase().includes("already pending")))
       ) {
         alert(
-          "Your wallet already has a pending connection request for this site. Please open your wallet extension and complete or cancel it."
+          t(
+            "Your wallet already has a pending connection request for this site. Please open your wallet extension and complete or cancel it.",
+            "Cüzdanınızda bu site için zaten bekleyen bir bağlantı isteği var. Lütfen cüzdan eklentinizi açıp isteği tamamlayın veya iptal edin."
+          )
         );
         return;
       }
 
-      throw error;
+      logErrorContext("Connect failed", error);
     } finally {
       isConnectingWallet = false;
     }
@@ -262,18 +352,19 @@
 
       const method = getCurrentPaymentMethod(); // "usdt" veya "bnb"
       const presale = getPresaleContract();
+      const poolId = getCurrentPoolId();
 
       // 18 decimal SNAKE
       const tokenAmount = window.ethers.utils.parseUnits(amountStr, 18);
 
       if (buyBtnEl) {
-        setButtonLoading(buyBtnEl, true, "Processing...");
+        setButtonLoading(buyBtnEl, true);
       }
 
       if (method === "bnb") {
         // Gerekli minimum BNB'yi kontrattan al
         const requiredBNB = await presale.getBNBAmountForTokens(
-          CURRENT_POOL_ID,
+          poolId,
           tokenAmount
         );
 
@@ -284,23 +375,35 @@
           "BNB required:",
           requiredBNB.toString(),
           "with buffer:",
-          bufferedBNB.toString()
+          bufferedBNB.toString(),
+          "poolId:",
+          poolId
         );
 
-        const tx = await presale.buyWithBNB(CURRENT_POOL_ID, tokenAmount, {
+        const tx = await presale.buyWithBNB(poolId, tokenAmount, {
           value: bufferedBNB
         });
 
-        alert("Transaction sent. Waiting for confirmation...");
+        alert(
+          t(
+            "Transaction sent. Waiting for confirmation...",
+            "İşlem gönderildi. Onay bekleniyor..."
+          )
+        );
         await tx.wait();
-        alert("Purchase successful!");
+        alert(
+          t(
+            "Purchase successful!",
+            "Satın alma işlemi başarılı!"
+          )
+        );
       } else {
         // USDT ile satın alma
         const requiredUSDT = await presale.getUSDTAmountForTokens(
-          CURRENT_POOL_ID,
+          poolId,
           tokenAmount
         );
-        console.log("USDT required:", requiredUSDT.toString());
+        console.log("USDT required:", requiredUSDT.toString(), "poolId:", poolId);
 
         const usdt = getUsdtContract();
 
@@ -308,18 +411,33 @@
         const allowance = await usdt.allowance(userAddress, PRESALE_ADDRESS);
         if (allowance.lt(requiredUSDT)) {
           const approveTx = await usdt.approve(PRESALE_ADDRESS, requiredUSDT);
-          alert("Approving USDT spend... Please confirm in your wallet.");
+          alert(
+            t(
+              "Approving USDT spend... Please confirm in your wallet.",
+              "USDT harcama izni veriliyor... Lütfen cüzdanınızdan onaylayın."
+            )
+          );
           await approveTx.wait();
         }
 
         const tx = await presale.buyWithUSDT(
-          CURRENT_POOL_ID,
+          poolId,
           tokenAmount,
           requiredUSDT
         );
-        alert("Transaction sent. Waiting for confirmation...");
+        alert(
+          t(
+            "Transaction sent. Waiting for confirmation...",
+            "İşlem gönderildi. Onay bekleniyor..."
+          )
+        );
         await tx.wait();
-        alert("Purchase successful!");
+        alert(
+          t(
+            "Purchase successful!",
+            "Satın alma işlemi başarılı!"
+          )
+        );
       }
 
       updateSummaryOnSuccess(amountStr);
@@ -344,29 +462,43 @@
       }
 
       const presale = getPresaleContract();
+      const poolId = getCurrentPoolId();
 
       const claimable = await presale.getClaimableAmount(
         userAddress,
-        CURRENT_POOL_ID
+        poolId
       );
-      console.log("Claimable:", claimable.toString());
+      console.log("Claimable:", claimable.toString(), "poolId:", poolId);
 
       if (claimable.lte(0)) {
         alert(
-          "You have no claimable SNAKE yet. Claim opens ~2 days before TGE / listing."
+          t(
+            "You have no claimable SNAKE yet. Claim opens ~2 days before TGE / listing and, for the vesting pool, unlocks monthly.",
+            "Şu anda claim edilebilir SNAKE bakiyeniz yok. Claim paneli, TGE / listelemeden yaklaşık 2 gün önce açılır ve vesting havuzu için bakiye aylık olarak açılır."
+          )
         );
         return;
       }
 
       if (claimBtnEl) {
-        setButtonLoading(claimBtnEl, true, "Claiming...");
+        setButtonLoading(claimBtnEl, true, t("Claiming...", "Claim ediliyor..."));
       }
 
-      const tx = await presale.claim(CURRENT_POOL_ID);
-      alert("Claim transaction sent. Waiting for confirmation...");
+      const tx = await presale.claim(poolId);
+      alert(
+        t(
+          "Claim transaction sent. Waiting for confirmation...",
+          "Claim işlemi gönderildi. Onay bekleniyor..."
+        )
+      );
       await tx.wait();
 
-      alert("Claim successful! Your SNAKE has been sent to your wallet.");
+      alert(
+        t(
+          "Claim successful! Your SNAKE has been sent to your wallet.",
+          "Claim işlemi başarılı! SNAKE tokenlarınız cüzdanınıza gönderildi."
+        )
+      );
     } catch (error) {
       logErrorContext("Claim failed", error);
     } finally {
@@ -387,7 +519,7 @@
         signer = null;
         userAddress = null;
         if (connectBtnEl) {
-          connectBtnEl.innerText = "Connect Wallet";
+          connectBtnEl.innerText = t("Connect Wallet", "Cüzdanı Bağla");
           connectBtnEl.classList.remove("connected");
         }
       } else {
