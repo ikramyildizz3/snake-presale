@@ -143,7 +143,7 @@ const translations = {
         'sales.vesting.item3': 'Vesting: 30% unlocked when claim opens (2 days before listing), remaining 70% over 7 months (10% per month).',
         'sales.vesting.item4': 'Distribution: Investors claim the unlocked portion from the presale panel whenever they want during the vesting period.',
 
-        'sales.claim.note': 'Presale claim will open approximately 2 days before the first PancakeSwap listing. The exact date and time will be announced through our official channels (Telegram & X).',
+        'sales.claim.note': 'The claim panel will open approximately 2 days before the first listing. The exact date and time will be announced through our official channels (Telegram & X).',
 
         // Legal - Terms of Service
         'legal.terms': 'Terms of Service',
@@ -320,7 +320,7 @@ const translations = {
         'sales.vesting.item3': 'Vesting: Claim açıldığında (listelemeden 2 gün önce) %30 açılır, kalan %70 7 ay boyunca ayda %10 olarak dağıtılır.',
         'sales.vesting.item4': 'Dağıtım: Yatırımcılar vesting süresi boyunca istedikleri zaman panelden açılan kısmı claim edebilir.',
         
-        'sales.claim.note': 'Ön satış için claim işlemi, ilk PancakeSwap listelemesinden yaklaşık 2 gün önce açılacaktır. Net tarih ve saat resmi kanallarımızdan (Telegram ve X) duyurulacaktır.',
+        'sales.claim.note': 'Claim paneli, ilk listelemeden yaklaşık 2 gün önce açılacaktır. Kesin tarih ve saat resmi kanallarımızdan (Telegram ve X) duyurulacaktır.',
 
         // Legal - Terms of Service
         'legal.terms': 'Kullanım Şartları',
