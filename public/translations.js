@@ -33,18 +33,15 @@ const translations = {
         'presale.title': 'Presale Panel',
         'presale.subtitle': 'Buy SNAKE tokens before listing',
         'presale.amount': 'Amount (SNAKE)',
-        'presale.price': 'Price: 1 SNAKE = 0.02 USDT',
+        'presale.price': 'Price: 1 SNAKE = 0.02 USDT',   // default
         'presale.enter-amount': 'Enter amount',
-        'presale.you-pay': 'You pay (estimated)',
-        'presale.you-receive': 'You receive',
-        'presale.buy-now': 'Buy Now',
-        'presale.claim': 'Claim (Soon)',
-        'presale.bnb-note': 'If you choose BNB, an indicative live rate from Binance is used. Final price is confirmed on-chain at the time of purchase.',
+
+        // NEW – sale type buttons + dynamic price
         'presale.sale-mode.label': 'Sale Type',
-        'presale.mode.normal.line1': 'Normal Presale',
-        'presale.mode.normal.line2': '(No Vesting)',
-        'presale.mode.vesting.line1': 'Vesting Presale',
-        'presale.mode.vesting.line2': '(Discounted)',
+        'presale.mode.normal': 'Normal Presale\n(No Vesting)',
+        'presale.mode.vesting': 'Vesting Presale\n(Discounted)',
+        'presale.price.normal': 'Price: 1 SNAKE = 0.02 USDT',
+        'presale.price.vesting': 'Price: 1 SNAKE = 0.015 USDT (vesting)',
 
         // Warning Message - EKLENDİ
         'warning.direct-transfer': '⚠ Important: Do not send funds directly from an exchange to the presale contract. Always use your own Web3 wallet.',
@@ -221,18 +218,15 @@ const translations = {
         'presale.title': 'Ön Satış Paneli',
         'presale.subtitle': 'Listeleme öncesi SNAKE tokenlerini satın alın',
         'presale.amount': 'Miktar (SNAKE)',
-        'presale.price': 'Fiyat: 1 SNAKE = 0.02 USDT',
+        'presale.price': 'Fiyat: 1 SNAKE = 0,02 USDT',   // varsayılan
         'presale.enter-amount': 'Miktar girin',
-        'presale.you-pay': 'Ödeyeceğiniz tutar (tahmini)',
-        'presale.you-receive': 'Alacağınız miktar',
-        'presale.buy-now': 'Hemen Satın Al',
-        'presale.claim': 'Claim (Yakında)',
-        'presale.bnb-note': 'BNB seçerseniz, Binance\'ten canlı gösterge oranı kullanılır. Son fiyat işlem anında on-chain olarak onaylanır.',
+
+        // NEW – satış türü butonları + dinamik fiyat
         'presale.sale-mode.label': 'Satış Türü',
-        'presale.mode.normal.line1': 'Normal Ön Satış',
-        'presale.mode.normal.line2': '(Vesting Yok)',
-        'presale.mode.vesting.line1': 'Vestingli Ön Satış',
-        'presale.mode.vesting.line2': '(İndirimli)',
+        'presale.mode.normal': 'Normal Ön Satış\n(Vesting Yok)',
+        'presale.mode.vesting': 'Vestingli Ön Satış\n(İndirimli)',
+        'presale.price.normal': 'Fiyat: 1 SNAKE = 0,02 USDT',
+        'presale.price.vesting': 'Fiyat: 1 SNAKE = 0,015 USDT (vestingli)',
 
         // Warning Message - EKLENDİ
         'warning.direct-transfer': '⚠ Önemli: Fonları doğrudan borsadan ön satış kontratına göndermeyin. Her zaman kendi Web3 cüzdanınızı kullanın.',
