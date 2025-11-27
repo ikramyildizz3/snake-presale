@@ -372,12 +372,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const saleButtons = document.querySelectorAll(".sale-mode-btn");
     if (!saleButtons.length) return;
 
+    // Dil tespiti: sadece currentLanguage'e bak
     function isTR() {
-        if (window.currentLanguage) {
-            return window.currentLanguage === "tr";
-        }
-        const lang = (document.documentElement.lang || "en").toLowerCase();
-        return lang.startsWith("tr");
+        return (window.currentLanguage || "en") === "tr";
     }
 
     function updatePriceDisplay(pool) {
@@ -398,30 +395,33 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function setPool(pool) {
-        // snake-presale.js buradan okuyor
+        // Kontrat tarafı için seçili havuzu globalde tutuyoruz
         window.currentSalePool = pool;
 
+        // Buton aktifliği
         saleButtons.forEach((btn) => {
-            const btnPool = parseInt(btn.getAttribute("data-pool"), 10) || 0;
+            const btnPool = parseInt(btn.getAttribute("data-pool") || "0", 10);
             if (btnPool === pool) btn.classList.add("active");
             else btn.classList.remove("active");
         });
 
+        // Fiyat yazısını güncelle
         updatePriceDisplay(pool);
 
-        // Mevcut hesaplama fonksiyonun varsa tekrar çağır
+        // Ödeme özetini yeniden hesapla (varsa)
         if (typeof window.calculatePayment === "function") {
             window.calculatePayment();
         }
     }
 
+    // Butonlara tıklama olayları
     saleButtons.forEach((btn) => {
         btn.addEventListener("click", function () {
-            const pool = parseInt(btn.getAttribute("data-pool"), 10) || 0;
+            const pool = parseInt(btn.getAttribute("data-pool") || "0", 10);
             setPool(pool);
         });
     });
 
-    // Varsayılan: Normal satış
+    // Varsayılan: normal satış
     setPool(0);
 });
