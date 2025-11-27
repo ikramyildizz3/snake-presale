@@ -1,9 +1,9 @@
 // Snake Presale Web3 integration
 // REQUIREMENTS:
 // 1) snake-token.html içinde, bu dosyadan ÖNCE şu scripti ekle:
-//    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+//    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 // 2) Mevcut ana JS dosyanızdan (site mantığı) SONRA şu scripti ekleyin:
-//    <script src="/snake-presale.js"></script>
+//    <script src="snake-presale.js"></script>
 // Bu dosya mevcut placeholder alert'leri kaldırıp gerçek satın alma & claim işlemlerini ekler.
 
 (function () {
@@ -39,6 +39,8 @@
   let buyBtnEl = null;
   let claimBtnEl = null;
 
+  let isConnectingWallet = false;
+
   // ---------- Yardımcılar ----------
 
   function shortenAddress(addr) {
@@ -62,9 +64,10 @@
 
   function logErrorContext(prefix, error) {
     console.error(prefix, error);
-    const message = (error && (error.data && error.data.message)) ||
-                    (error && error.message) ||
-                    String(error);
+    const message =
+      (error && error.data && error.data.message) ||
+      (error && error.message) ||
+      String(error);
     alert(prefix + ": " + message);
   }
 
@@ -74,10 +77,8 @@
     if (!oldBtn) return null;
 
     const newBtn = oldBtn.cloneNode(true);
-    if (newBtn && newBtn.parentNode == null && oldBtn.parentNode) {
-      // Çok nadir ama güvenlik için
-      oldBtn.parentNode.replaceChild(newBtn, oldBtn);
-    } else if (oldBtn.parentNode) {
+
+    if (oldBtn.parentNode) {
       oldBtn.parentNode.replaceChild(newBtn, oldBtn);
     }
 
@@ -96,7 +97,7 @@
 
   function getCurrentPaymentMethod() {
     try {
-      // Mevcut global değişkeni kullan (app.js içinde tanımlı)
+      // Mevcut global değişkeni kullan (script.js içinde tanımlı)
       if (typeof currentPaymentMethod !== "undefined") {
         return currentPaymentMethod;
       }
@@ -140,16 +141,20 @@
 
   async function ensureProvider() {
     if (!window.ethereum) {
-      alert("No Web3 wallet detected. Please install MetaMask, Trust Wallet browser, Binance Web3 etc.");
+      alert(
+        "No Web3 wallet detected. Please install MetaMask, Trust Wallet browser, Binance Web3, etc."
+      );
       throw new Error("No ethereum provider");
     }
-    if (typeof ethers === "undefined" || !ethers.providers) {
-      alert("Ethers.js not found. Make sure the ethers UMD script is included before snake-presale.js.");
+    if (typeof window.ethers === "undefined" || !window.ethers.providers) {
+      alert(
+        "Ethers.js not found. Make sure the ethers UMD script is included BEFORE snake-presale.js."
+      );
       throw new Error("No ethers library");
     }
 
     if (!provider) {
-      provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+      provider = new window.ethers.providers.Web3Provider(window.ethereum, "any");
     }
     return provider;
   }
@@ -157,7 +162,7 @@
   async function ensureCorrectNetwork() {
     const p = await ensureProvider();
     const network = await p.getNetwork();
-    if (network.chainId === BSC_CHAIN_ID) {
+    if (Number(network.chainId) === BSC_CHAIN_ID) {
       return;
     }
 
@@ -168,44 +173,76 @@
       });
     } catch (switchError) {
       console.error("Failed to switch to BSC:", switchError);
-      alert("Please switch your wallet to BNB Smart Chain (chainId 56) and try again.");
+      alert(
+        "Please switch your wallet to BNB Smart Chain (chainId 56) and try again."
+      );
       throw switchError;
     }
   }
 
   async function connectWallet() {
+    if (isConnectingWallet) {
+      alert(
+        "There is already a pending wallet connection request. Please check your wallet extension (MetaMask/Trust/etc.) and approve or reject it."
+      );
+      return;
+    }
+
     await ensureProvider();
     await ensureCorrectNetwork();
 
-    const accounts = await provider.send("eth_requestAccounts", []);
-    if (!accounts || accounts.length === 0) {
-      throw new Error("No account selected");
+    isConnectingWallet = true;
+    try {
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts"
+      });
+
+      if (!accounts || accounts.length === 0) {
+        throw new Error("No account selected");
+      }
+
+      signer = provider.getSigner();
+      userAddress = await signer.getAddress();
+
+      if (connectBtnEl) {
+        connectBtnEl.innerText = shortenAddress(userAddress);
+        connectBtnEl.classList.add("connected");
+      }
+
+      console.log("Connected wallet:", userAddress);
+      return userAddress;
+    } catch (error) {
+      // MetaMask "already pending" hatası
+      if (
+        error &&
+        (error.code === -32002 ||
+          (typeof error.message === "string" &&
+            error.message.toLowerCase().includes("already pending")))
+      ) {
+        alert(
+          "Your wallet already has a pending connection request for this site. Please open your wallet extension and complete or cancel it."
+        );
+        return;
+      }
+
+      throw error;
+    } finally {
+      isConnectingWallet = false;
     }
-
-    signer = provider.getSigner();
-    userAddress = await signer.getAddress();
-
-    if (connectBtnEl) {
-      connectBtnEl.innerText = shortenAddress(userAddress);
-      connectBtnEl.classList.add("connected");
-    }
-
-    console.log("Connected wallet:", userAddress);
-    return userAddress;
   }
 
   function getPresaleContract() {
     if (!signer) {
       throw new Error("Wallet not connected");
     }
-    return new ethers.Contract(PRESALE_ADDRESS, PRESALE_ABI, signer);
+    return new window.ethers.Contract(PRESALE_ADDRESS, PRESALE_ABI, signer);
   }
 
   function getUsdtContract() {
     if (!signer) {
       throw new Error("Wallet not connected");
     }
-    return new ethers.Contract(USDT_ADDRESS, ERC20_ABI, signer);
+    return new window.ethers.Contract(USDT_ADDRESS, ERC20_ABI, signer);
   }
 
   // ---------- İş mantığı: BUY ----------
@@ -214,6 +251,10 @@
     try {
       if (!signer || !userAddress) {
         await connectWallet();
+        if (!signer || !userAddress) {
+          // Kullanıcı bağlantıyı iptal ettiyse devam etmeyelim
+          return;
+        }
       }
 
       const amountStr = getSnakeAmount();
@@ -223,7 +264,7 @@
       const presale = getPresaleContract();
 
       // 18 decimal SNAKE
-      const tokenAmount = ethers.utils.parseUnits(amountStr, 18);
+      const tokenAmount = window.ethers.utils.parseUnits(amountStr, 18);
 
       if (buyBtnEl) {
         setButtonLoading(buyBtnEl, true, "Processing...");
@@ -231,12 +272,20 @@
 
       if (method === "bnb") {
         // Gerekli minimum BNB'yi kontrattan al
-        const requiredBNB = await presale.getBNBAmountForTokens(CURRENT_POOL_ID, tokenAmount);
+        const requiredBNB = await presale.getBNBAmountForTokens(
+          CURRENT_POOL_ID,
+          tokenAmount
+        );
 
         // Küçük bir buffer ile gönder (1% fazla), fazla olanı kontrat refund ediyor
         const bufferedBNB = requiredBNB.mul(101).div(100);
 
-        console.log("BNB required:", requiredBNB.toString(), "with buffer:", bufferedBNB.toString());
+        console.log(
+          "BNB required:",
+          requiredBNB.toString(),
+          "with buffer:",
+          bufferedBNB.toString()
+        );
 
         const tx = await presale.buyWithBNB(CURRENT_POOL_ID, tokenAmount, {
           value: bufferedBNB
@@ -245,10 +294,12 @@
         alert("Transaction sent. Waiting for confirmation...");
         await tx.wait();
         alert("Purchase successful!");
-
       } else {
         // USDT ile satın alma
-        const requiredUSDT = await presale.getUSDTAmountForTokens(CURRENT_POOL_ID, tokenAmount);
+        const requiredUSDT = await presale.getUSDTAmountForTokens(
+          CURRENT_POOL_ID,
+          tokenAmount
+        );
         console.log("USDT required:", requiredUSDT.toString());
 
         const usdt = getUsdtContract();
@@ -261,14 +312,17 @@
           await approveTx.wait();
         }
 
-        const tx = await presale.buyWithUSDT(CURRENT_POOL_ID, tokenAmount, requiredUSDT);
+        const tx = await presale.buyWithUSDT(
+          CURRENT_POOL_ID,
+          tokenAmount,
+          requiredUSDT
+        );
         alert("Transaction sent. Waiting for confirmation...");
         await tx.wait();
         alert("Purchase successful!");
       }
 
       updateSummaryOnSuccess(amountStr);
-
     } catch (error) {
       logErrorContext("Purchase failed", error);
     } finally {
@@ -284,15 +338,23 @@
     try {
       if (!signer || !userAddress) {
         await connectWallet();
+        if (!signer || !userAddress) {
+          return;
+        }
       }
 
       const presale = getPresaleContract();
 
-      const claimable = await presale.getClaimableAmount(userAddress, CURRENT_POOL_ID);
+      const claimable = await presale.getClaimableAmount(
+        userAddress,
+        CURRENT_POOL_ID
+      );
       console.log("Claimable:", claimable.toString());
 
       if (claimable.lte(0)) {
-        alert("You have no claimable SNAKE yet. Claim opens ~2 days before TGE / listing.");
+        alert(
+          "You have no claimable SNAKE yet. Claim opens ~2 days before TGE / listing."
+        );
         return;
       }
 
@@ -305,7 +367,6 @@
       await tx.wait();
 
       alert("Claim successful! Your SNAKE has been sent to your wallet.");
-
     } catch (error) {
       logErrorContext("Claim failed", error);
     } finally {
@@ -318,9 +379,9 @@
   // ---------- Ethereum event listener'ları ----------
 
   function setupEthereumEvents() {
-    if (!window.ethereum) return;
+    if (!window.ethereum || !window.ethereum.on) return;
 
-    window.ethereum.on && window.ethereum.on("accountsChanged", (accounts) => {
+    window.ethereum.on("accountsChanged", (accounts) => {
       console.log("accountsChanged:", accounts);
       if (!accounts || accounts.length === 0) {
         signer = null;
@@ -337,7 +398,7 @@
       }
     });
 
-    window.ethereum.on && window.ethereum.on("chainChanged", (chainId) => {
+    window.ethereum.on("chainChanged", (chainId) => {
       console.log("chainChanged:", chainId);
       // Basit yaklaşım: ağ değiştiyse sayfayı yenileyelim
       window.location.reload();
