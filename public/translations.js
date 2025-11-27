@@ -17,6 +17,12 @@ const translations = {
         'hero.total-supply': 'Total Supply',
         'hero.presale-price': 'Presale Price',
         'hero.network': 'Network',
+        'presale.sale-mode.label': 'Sale Type',
+        'presale.mode.normal': 'Normal Presale (No Vesting)',
+        'presale.mode.vesting': 'Vesting Presale (Discounted)',
+        'presale.price.normal': 'Price: 1 SNAKE = 0.02 USDT',
+        'presale.price.vesting': 'Price: 1 SNAKE = 0.015 USDT (vesting)',
+
 
         // Presale Details
         'presale.soft-cap': 'Soft Cap:',
@@ -34,6 +40,11 @@ const translations = {
         'presale.buy-now': 'Buy Now',
         'presale.claim': 'Claim (Soon)',
         'presale.bnb-note': 'If you choose BNB, an indicative live rate from Binance is used. Final price is confirmed on-chain at the time of purchase.',
+        'presale.sale-mode.label': 'Sale Type',
+        'presale.mode.normal.line1': 'Normal Presale',
+        'presale.mode.normal.line2': '(No Vesting)',
+        'presale.mode.vesting.line1': 'Vesting Presale',
+        'presale.mode.vesting.line2': '(Discounted)',
 
         // Warning Message - EKLENDİ
         'warning.direct-transfer': '⚠ Important: Do not send funds directly from an exchange to the presale contract. Always use your own Web3 wallet.',
@@ -194,6 +205,12 @@ const translations = {
         'hero.total-supply': 'Toplam Arz',
         'hero.presale-price': 'Ön Satış Fiyatı',
         'hero.network': 'Ağ',
+        'presale.sale-mode.label': 'Satış Türü',
+        'presale.mode.normal': 'Normal Ön Satış (Vesting Yok)',
+        'presale.mode.vesting': 'Vestingli Ön Satış (İndirimli)',
+        'presale.price.normal': 'Fiyat: 1 SNAKE = 0,02 USDT',
+        'presale.price.vesting': 'Fiyat: 1 SNAKE = 0,015 USDT (vestingli)',
+
 
         // Presale Details
         'presale.soft-cap': 'Soft Cap:',
@@ -211,6 +228,11 @@ const translations = {
         'presale.buy-now': 'Hemen Satın Al',
         'presale.claim': 'Claim (Yakında)',
         'presale.bnb-note': 'BNB seçerseniz, Binance\'ten canlı gösterge oranı kullanılır. Son fiyat işlem anında on-chain olarak onaylanır.',
+        'presale.sale-mode.label': 'Satış Türü',
+        'presale.mode.normal.line1': 'Normal Ön Satış',
+        'presale.mode.normal.line2': '(Vesting Yok)',
+        'presale.mode.vesting.line1': 'Vestingli Ön Satış',
+        'presale.mode.vesting.line2': '(İndirimli)',
 
         // Warning Message - EKLENDİ
         'warning.direct-transfer': '⚠ Önemli: Fonları doğrudan borsadan ön satış kontratına göndermeyin. Her zaman kendi Web3 cüzdanınızı kullanın.',
@@ -319,7 +341,7 @@ const translations = {
         'sales.vesting.item2': 'Ödeme: BNB veya USDT (BEP-20)',
         'sales.vesting.item3': 'Vesting: Claim açıldığında (listelemeden 2 gün önce) %30 açılır, kalan %70 7 ay boyunca ayda %10 olarak dağıtılır.',
         'sales.vesting.item4': 'Dağıtım: Yatırımcılar vesting süresi boyunca istedikleri zaman panelden açılan kısmı claim edebilir.',
-        
+
         'sales.claim.note': 'Claim paneli, ilk listelemeden yaklaşık 2 gün önce açılacaktır. Kesin tarih ve saat resmi kanallarımızdan (Telegram ve X) duyurulacaktır.',
 
         // Legal - Terms of Service
