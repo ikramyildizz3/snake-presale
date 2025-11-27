@@ -4,17 +4,18 @@
 let currentLanguage = 'en';
 let currentPaymentMethod = 'usdt';
 let bnbPrice = 0;
+let currentSalePool = 0; // 0 = Normal Presale, 1 = Vesting Presale
 
 // Sayfa yüklendiğinde çalışacak fonksiyon
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Sayfa yüklendi - dil:', currentLanguage);
-    
+
     // Tokenomics Chart
     initChart();
-    
+
     // Event listener'ları kur
     setupEventListeners();
-    
+
     // Sayfayı başlat
     initializePage();
 });
@@ -31,7 +32,7 @@ function initChart() {
         console.error('Canvas context alınamadı!');
         return;
     }
-    
+
     window.tokenomicsChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
@@ -92,22 +93,22 @@ function setupEventListeners() {
             navLinks.classList.toggle('open');
         });
     }
-    
+
     // 🔹 Dil butonları
     const langButtons = document.querySelectorAll('.lang-btn');
     console.log('Bulunan dil butonları:', langButtons.length);
-    
+
     langButtons.forEach(button => {
         button.addEventListener('click', function() {
             console.log('Dil butonuna tıklandı:', this.getAttribute('data-lang'));
             const lang = this.getAttribute('data-lang');
-            
+
             // Tüm butonlardan active classını kaldır
             langButtons.forEach(btn => btn.classList.remove('active'));
-            
+
             // Sadece tıklanana active classını ekle
             this.classList.add('active');
-            
+
             changeLanguage(lang);
         });
     });
@@ -119,9 +120,26 @@ function setupEventListeners() {
             console.log('Payment butonuna tıklandı:', this.getAttribute('data-method'));
             paymentButtons.forEach(btn => btn.classList.remove('active'));
             this.classList.add('active');
-            
+
             currentPaymentMethod = this.getAttribute('data-method');
             toggleBnbPriceInfo();
+            calculatePayment();
+        });
+    });
+
+    // 🔹 Sale mode butonları (Normal / Vesting)
+    const saleModeButtons = document.querySelectorAll('.sale-mode-btn');
+    saleModeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const pool = parseInt(this.getAttribute('data-pool'), 10);
+            if (isNaN(pool)) return;
+            currentSalePool = pool;
+
+            saleModeButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+
+            console.log('Sale mode changed to pool:', currentSalePool);
+            updatePriceLabel();
             calculatePayment();
         });
     });
@@ -134,19 +152,16 @@ function setupEventListeners() {
         });
     });
 
-    // 🔹 Diğer butonlar
+    // 🔹 Diğer butonlar (web3 entegrasyonundan önce placeholder'dı – artık snake-presale.js override ediyor)
     const connectWalletBtn = document.querySelector('.connect-wallet');
     if (connectWalletBtn) {
-        connectWalletBtn.addEventListener('click', function() {
-            alert('Wallet connection functionality will be implemented soon!');
-        });
+        // snake-presale.js bu butonu klonlayıp kendi handler'ını ekleyecek
+        console.log('Connect wallet button found (handler will be overridden by snake-presale.js)');
     }
 
     const buyNowBtn = document.querySelector('.btn-primary');
     if (buyNowBtn) {
-        buyNowBtn.addEventListener('click', function() {
-            alert('Purchase functionality will be implemented after wallet integration!');
-        });
+        console.log('Buy Now button found (handler will be overridden by snake-presale.js)');
     }
 
     // 🔹 Input event
@@ -188,7 +203,7 @@ function initializePage() {
     // Kayıtlı dili yükle
     const savedLang = localStorage.getItem('preferred-language') || 'en';
     currentLanguage = savedLang;
-    
+
     // Aktif dil butonunu ayarla
     document.querySelectorAll('.lang-btn').forEach(btn => {
         if (btn.getAttribute('data-lang') === savedLang) {
@@ -197,10 +212,10 @@ function initializePage() {
             btn.classList.remove('active');
         }
     });
-    
+
     // Sayfayı çevir
     changeLanguage(savedLang);
-    
+
     // BNB fiyatını getir
     fetchBNBPrice();
 }
@@ -222,16 +237,16 @@ async function fetchBNBPrice() {
         if (bnbPriceElement) {
             bnbPriceElement.textContent = `Current reference: 1 BNB ≈ Loading...`;
         }
-        
+
         const response = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT');
         const data = await response.json();
         bnbPrice = parseFloat(data.price);
-        
+
         if (bnbPriceElement) {
             bnbPriceElement.textContent = `Current reference: 1 BNB ≈ ${bnbPrice.toFixed(2)} USDT`;
         }
         calculatePayment();
-        
+
     } catch (error) {
         console.error('Error fetching BNB price:', error);
         bnbPrice = 854.51;
@@ -243,6 +258,11 @@ async function fetchBNBPrice() {
     }
 }
 
+function getCurrentSnakePrice() {
+    // 0 = Normal (0.02), 1 = Vesting (0.015)
+    return currentSalePool === 1 ? 0.015 : 0.02;
+}
+
 function calculatePayment() {
     const snakeAmountInput = document.getElementById('snakeAmount');
     const youReceiveEl = document.getElementById('youReceive');
@@ -251,10 +271,10 @@ function calculatePayment() {
     if (!snakeAmountInput || !youReceiveEl || !youPayEl) return;
 
     const snakeAmount = parseFloat(snakeAmountInput.value) || 0;
-    const snakePrice = 0.02;
-    
+    const snakePrice = getCurrentSnakePrice();
+
     youReceiveEl.textContent = `${snakeAmount.toLocaleString()} SNAKE`;
-    
+
     if (currentPaymentMethod === 'usdt') {
         const totalUSDT = snakeAmount * snakePrice;
         youPayEl.textContent = `${totalUSDT.toFixed(2)} USDT`;
@@ -267,10 +287,33 @@ function calculatePayment() {
     }
 }
 
+function updatePriceLabel(langOverride) {
+    const priceDisplay = document.getElementById('priceDisplay');
+    if (!priceDisplay) return;
+
+    const lang = langOverride || currentLanguage || 'en';
+    const langTranslations = translations[lang] || {};
+
+    let key = currentSalePool === 1 ? 'presale.price.vesting' : 'presale.price.normal';
+
+    if (langTranslations[key]) {
+        priceDisplay.textContent = langTranslations[key];
+    } else if (langTranslations['presale.price']) {
+        // Geriye dönük uyumluluk için
+        priceDisplay.textContent = langTranslations['presale.price'];
+    } else {
+        // Fallback
+        const defaultText = currentSalePool === 1
+            ? 'Price: 1 SNAKE = 0.015 USDT (vesting)'
+            : 'Price: 1 SNAKE = 0.02 USDT';
+        priceDisplay.textContent = defaultText;
+    }
+}
+
 function changeLanguage(lang) {
     console.log('Dil değiştiriliyor:', lang);
     currentLanguage = lang;
-    
+
     if (!translations[lang]) {
         console.error('Çeviri dili bulunamadı:', lang);
         return;
@@ -290,18 +333,15 @@ function changeLanguage(lang) {
         inputField.placeholder = translations[lang]['presale.enter-amount'];
     }
 
-    // Price display güncelle
-    const priceDisplay = document.getElementById('priceDisplay');
-    if (priceDisplay && translations[lang]['presale.price']) {
-        priceDisplay.textContent = translations[lang]['presale.price'];
-    }
+    // Fiyat label'ını güncelle (normal / vesting)
+    updatePriceLabel(lang);
 
     // Chart etiketlerini güncelle
     updateChartLabels(lang);
 
     // Aktif dili kaydet
     localStorage.setItem('preferred-language', lang);
-    
+
     console.log('Dil değiştirme tamamlandı:', lang);
 }
 
@@ -325,4 +365,63 @@ document.addEventListener('DOMContentLoaded', function () {
     const newUrl = window.location.origin + '/' + window.location.search + window.location.hash;
     window.history.replaceState({}, '', newUrl);
   }
+});
+
+// --- Sale Type (Normal / Vesting) logic ---
+document.addEventListener("DOMContentLoaded", function () {
+    const saleButtons = document.querySelectorAll(".sale-mode-btn");
+    if (!saleButtons.length) return;
+
+    function isTR() {
+        if (window.currentLanguage) {
+            return window.currentLanguage === "tr";
+        }
+        const lang = (document.documentElement.lang || "en").toLowerCase();
+        return lang.startsWith("tr");
+    }
+
+    function updatePriceDisplay(pool) {
+        const span = document.getElementById("priceDisplay");
+        if (!span) return;
+
+        const tr = isTR();
+
+        if (pool === 0) {
+            span.textContent = tr
+                ? "Fiyat: 1 SNAKE = 0,02 USDT"
+                : "Price: 1 SNAKE = 0.02 USDT";
+        } else {
+            span.textContent = tr
+                ? "Fiyat: 1 SNAKE = 0,015 USDT (vestingli)"
+                : "Price: 1 SNAKE = 0.015 USDT (vesting)";
+        }
+    }
+
+    function setPool(pool) {
+        // snake-presale.js buradan okuyor
+        window.currentSalePool = pool;
+
+        saleButtons.forEach((btn) => {
+            const btnPool = parseInt(btn.getAttribute("data-pool"), 10) || 0;
+            if (btnPool === pool) btn.classList.add("active");
+            else btn.classList.remove("active");
+        });
+
+        updatePriceDisplay(pool);
+
+        // Mevcut hesaplama fonksiyonun varsa tekrar çağır
+        if (typeof window.calculatePayment === "function") {
+            window.calculatePayment();
+        }
+    }
+
+    saleButtons.forEach((btn) => {
+        btn.addEventListener("click", function () {
+            const pool = parseInt(btn.getAttribute("data-pool"), 10) || 0;
+            setPool(pool);
+        });
+    });
+
+    // Varsayılan: Normal satış
+    setPool(0);
 });

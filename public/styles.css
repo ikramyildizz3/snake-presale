@@ -371,6 +371,36 @@ h1 {
     font-weight: 500;
 }
 
+/* --- Sale Type (Normal / Vesting) --- */
+.sale-mode {
+    margin-top: 16px;
+}
+
+.sale-mode-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.sale-mode-btn {
+    flex: 1;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--dark-border);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+    font-weight: 500;
+}
+
+.sale-mode-btn.active {
+    background: rgba(0, 212, 106, 0.1);
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
 .payment-btn.active {
     background: rgba(0, 212, 106, 0.1);
     border-color: var(--primary);
