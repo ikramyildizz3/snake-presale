@@ -109,12 +109,17 @@
   function getInjectedProvider() {
     if (typeof window === "undefined") return null;
 
-    // Binance Web3 Wallet varsa ÖNCE onu dene
+    // 1) Binance Web3 Wallet (yeni API – mobil dApp browser)
+    if (window.binancew3w && window.binancew3w.ethereum) {
+      return window.binancew3w.ethereum;
+    }
+
+    // 2) Eski Binance Chain extension (desktop)
     if (window.BinanceChain) {
       return window.BinanceChain;
     }
 
-    // Standart EIP-1193 (MetaMask, Trust, bazı mobil wallet'lar)
+    // 3) Standart EIP-1193 (MetaMask, Trust vs.)
     if (window.ethereum) {
       return window.ethereum;
     }
