@@ -28,8 +28,8 @@ const PRESALE_ADDRESS = "0xbA073B1ec8fa5d7521E1592E03F08f1F272A7f5A";
 // İleride BscScan'den gerçek deploy bloğunu bulup burayı o sayıyla güncelleyebilirsin.
 const FROM_BLOCK = 69_600_000;
 
-// Daha küçük batch deneyelim.
-const BATCH_SIZE = 10_000;
+// BlastAPI "max 2000 blok" dediği için 1500 yapalım.
+const BATCH_SIZE = 1_500;
 
 const POOL_NORMAL = 0;
 const POOL_VESTING = 1;
@@ -550,7 +550,7 @@ async function main() {
   const contract = new ethers.Contract(PRESALE_ADDRESS, PRESALE_ABI, provider);
 
   const rows = [];
-  rows.push("wallet,normal_tokens,vesting_tokens,total_tokens,bnb_spent,usdt_spent,normal_claimed,vesting_claimed");
+  rows.push("Wallet;Normal Tokens;Vesting Tokens;Total Tokens;BNB Spent;USDT Spent;Normal Claimed;Vesting Claimed");
 
   for (let i = 0; i < uniqueWallets.length; i++) {
     const addr = uniqueWallets[i];
@@ -588,7 +588,7 @@ async function main() {
       usdtSpentStr,
       normalClaimedStr,
       vestingClaimedStr
-    ].join(","));
+    ].join(";"));
 
     if ((i + 1) % 20 === 0) {
       console.log(`Processed ${i + 1}/${uniqueWallets.length} wallets...`);
