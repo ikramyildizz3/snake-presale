@@ -212,16 +212,51 @@
     }
   }
 
+
+  function isMobileDevice() {
+    if (typeof navigator === "undefined") return false;
+    return /Android|webOS|iPhone|iPad|iPod|Opera Mini|IEMobile|BlackBerry/i.test(
+      navigator.userAgent || ""
+    );
+  }
+
+  function showMobileConnectHelper() {
+    const modal = document.getElementById("mobile-connect-helper");
+    if (!modal) {
+      // Fallback to simple alert if modal is missing
+      alert(
+        t(
+          "No Web3 wallet detected. Please open this page inside a Web3 wallet browser such as MetaMask, Trust Wallet, or Binance Web3 Wallet.",
+          "Web3 cüzdanı bulunamadı. Lütfen bu sayfayı MetaMask, Trust Wallet, Binance Web3 gibi cüzdan uygulamalarının içindeki tarayıcıdan açın."
+        )
+      );
+      return;
+    }
+
+    modal.style.display = "flex";
+
+    const closeBtn = modal.querySelector(".mobile-connect-close");
+    if (closeBtn && !closeBtn.dataset.bound) {
+      closeBtn.dataset.bound = "1";
+      closeBtn.addEventListener("click", function () {
+        modal.style.display = "none";
+      });
+    }
+  }
   // ---------- Web3 / Ethers ----------
 
   async function ensureProvider() {
     if (!window.ethereum) {
-      alert(
-        t(
-          "No Web3 wallet detected. Please install MetaMask, Trust Wallet browser, Binance Web3, etc.",
-          "Web3 cüzdanı bulunamadı. Lütfen MetaMask, Trust Wallet, Binance Web3 vb. bir cüzdan kurun."
-        )
-      );
+      if (isMobileDevice()) {
+        showMobileConnectHelper();
+      } else {
+        alert(
+          t(
+            "No Web3 wallet detected. Please install MetaMask, Trust Wallet browser, Binance Web3, etc.",
+            "Web3 cüzdanı bulunamadı. Lütfen MetaMask, Trust Wallet, Binance Web3 vb. bir cüzdan kurun."
+          )
+        );
+      }
       throw new Error("No ethereum provider");
     }
     if (typeof window.ethers === "undefined" || !window.ethers.providers) {

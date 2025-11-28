@@ -20,8 +20,14 @@ const translations = {
         'presale.sale-mode.label': 'Sale Type',
         'presale.mode.normal': 'Normal Presale (No Vesting)',
         'presale.mode.vesting': 'Vesting Presale (Discounted)',
+        'presale.mode.normal.line1': 'Normal Presale',
+        'presale.mode.normal.line2': '(No Vesting)',
+        'presale.mode.vesting.line1': 'Vesting Presale',
+        'presale.mode.vesting.line2': '(Discounted)',
         'presale.price.normal': 'Price: 1 SNAKE = 0.02 USDT',
         'presale.price.vesting': 'Price: 1 SNAKE = 0.015 USDT (vesting)',
+        'mobile.helper.title': 'Connect from your wallet app',
+        'mobile.helper.text': 'On mobile, please open this page inside a Web3 wallet browser such as MetaMask, Trust Wallet, or Binance Web3 Wallet. If you already have a wallet app installed, you can try the buttons below.',
 
 
         // Presale Details
@@ -205,8 +211,14 @@ const translations = {
         'presale.sale-mode.label': 'Satış Türü',
         'presale.mode.normal': 'Normal Ön Satış (Vesting Yok)',
         'presale.mode.vesting': 'Vestingli Ön Satış (İndirimli)',
+        'presale.mode.normal.line1': 'Normal Ön Satış',
+        'presale.mode.normal.line2': '(Vesting Yok)',
+        'presale.mode.vesting.line1': 'Vestingli Ön Satış',
+        'presale.mode.vesting.line2': '(İndirimli)',
         'presale.price.normal': 'Fiyat: 1 SNAKE = 0,02 USDT',
         'presale.price.vesting': 'Fiyat: 1 SNAKE = 0,015 USDT (vestingli)',
+        'mobile.helper.title': 'Cüzdan uygulamasından bağlan',
+        'mobile.helper.text': 'Mobilde bağlanmak için bu sayfayı MetaMask, Trust Wallet, Binance Web3 gibi cüzdan uygulamalarının içindeki tarayıcıdan açın. Cüzdan uygulamanız yüklüyse aşağıdaki butonları da deneyebilirsiniz.',
 
 
         // Presale Details

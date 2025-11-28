@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Snake Presale Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      background: #050505;
+      color: #f5f5f5;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .admin-container {
+      max-width: 720px;
+      margin: 40px auto;
+      padding: 24px 20px 40px;
+      background: rgba(10,10,10,0.95);
+      border-radius: 18px;
+      border: 1px solid #262626;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+    }
+    .admin-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .admin-subtitle {
+      font-size: 13px;
+      color: #a3a3a3;
+      margin-bottom: 18px;
+    }
+    .admin-warning {
+      font-size: 12px;
+      color: #facc15;
+      background: rgba(250,204,21,0.06);
+      border: 1px solid rgba(250,204,21,0.3);
+      border-radius: 10px;
+      padding: 8px 10px;
+      margin-bottom: 18px;
+    }
+    .admin-field {
+      margin-bottom: 18px;
+    }
+    .admin-label {
+      font-size: 13px;
+      margin-bottom: 6px;
+      color: #d4d4d4;
+    }
+    .admin-input-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .admin-input {
+      flex: 1 1 260px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid #27272a;
+      background: #020617;
+      color: #e5e7eb;
+      font-size: 13px;
+    }
+    .admin-input:focus {
+      outline: none;
+      border-color: #22c55e;
+      box-shadow: 0 0 0 1px rgba(34,197,94,0.4);
+    }
+    .admin-button {
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: none;
+      background: #22c55e;
+      color: #020617;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .admin-button:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+    .admin-connect-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    .admin-status {
+      font-size: 12px;
+      color: #a1a1aa;
+    }
+    .admin-status span {
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 11px;
+    }
+    .admin-error {
+      font-size: 12px;
+      color: #f97373;
+      margin-top: 4px;
+    }
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .admin-card {
+      padding: 10px 10px 12px;
+      border-radius: 12px;
+      border: 1px solid #27272a;
+      background: #020617;
+      font-size: 13px;
+    }
+    .admin-card-title {
+      font-size: 12px;
+      color: #9ca3af;
+      margin-bottom: 4px;
+    }
+    .admin-card-value {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .admin-footer {
+      margin-top: 20px;
+      font-size: 11px;
+      color: #6b7280;
+      text-align: right;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid #27272a;
+      background: rgba(15,23,42,0.9);
+      font-size: 11px;
+      color: #9ca3af;
+    }
+    .pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-container">
+    <div class="admin-header">
+      <div class="admin-title">Snake Presale – Admin Panel</div>
+      <div class="admin-subtitle">Read‑only view for purchased / claimed amounts per wallet.</div>
+    </div>
+
+    <div class="admin-warning">
+      <strong>IMPORTANT:</strong> This panel is guarded only by <em>admin wallet address check</em>. 
+      Make sure this page is not indexed / publicly shared. Edit <code>ADMIN_ADDRESSES</code> in <strong>snake-admin.js</strong> with your real wallet.
+    </div>
+
+    <div class="admin-field">
+      <div class="admin-connect-row">
+        <button id="admin-connect-btn" class="admin-button">Connect Admin Wallet</button>
+        <div class="admin-status" id="admin-status">
+          <span class="pill"><span class="pill-dot"></span> Not connected</span>
+        </div>
+      </div>
+      <div class="admin-error" id="admin-connect-error"></div>
+    </div>
+
+    <div id="admin-panel" style="display:none;">
+      <div class="admin-field">
+        <div class="admin-label">Wallet to check (any user)</div>
+        <div class="admin-input-row">
+          <input
+            id="admin-wallet-input"
+            class="admin-input"
+            placeholder="0x1234... wallet address"
+          />
+          <button id="admin-check-btn" class="admin-button">Check wallet</button>
+        </div>
+        <div class="admin-error" id="admin-check-error"></div>
+      </div>
+
+      <div class="admin-field">
+        <div class="admin-label">Per‑wallet SNAKE amounts (18 decimals)</div>
+        <div class="admin-grid">
+          <div class="admin-card">
+            <div class="admin-card-title">Normal Presale Purchased (pool 0)</div>
+            <div class="admin-card-value" id="val-normal-purchased">-</div>
+          </div>
+          <div class="admin-card">
+            <div class="admin-card-title">Vesting Presale Purchased (pool 1)</div>
+            <div class="admin-card-value" id="val-vesting-purchased">-</div>
+          </div>
+          <div class="admin-card">
+            <div class="admin-card-title">Normal Claimed</div>
+            <div class="admin-card-value" id="val-normal-claimed">-</div>
+          </div>
+          <div class="admin-card">
+            <div class="admin-card-title">Vesting Claimed</div>
+            <div class="admin-card-value" id="val-vesting-claimed">-</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-field">
+        <div class="admin-label">Global Presale Stats</div>
+        <div class="admin-grid">
+          <div class="admin-card">
+            <div class="admin-card-title">Total Sold Tokens</div>
+            <div class="admin-card-value" id="val-total-sold">-</div>
+          </div>
+          <div class="admin-card">
+            <div class="admin-card-title">Total Claimed Tokens</div>
+            <div class="admin-card-value" id="val-total-claimed">-</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-footer">
+        Read‑only data fetched directly from the Snake Presale contract on BNB Chain.
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script src="snake-admin.js"></script>
+</body>
+</html>
