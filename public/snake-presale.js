@@ -639,9 +639,8 @@
 
     // Butonları HTML yapına göre seçiyoruz
     connectBtnEl = document.querySelector(".connect-wallet");
-    buyBtnEl = document.querySelector(".hero-actions .btn-primary");
-    claimBtnEl = document.querySelector(".hero-actions .btn-secondary");
-
+    buyBtnEl = document.querySelector(".action-buttons .btn-primary");
+    claimBtnEl = document.querySelector(".action-buttons .btn-secondary");
     if (connectBtnEl) {
       connectBtnEl.addEventListener("click", function () {
         connectWallet().catch((err) => {
