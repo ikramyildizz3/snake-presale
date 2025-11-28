@@ -131,8 +131,8 @@
         type === "error"
           ? "web3-message-error"
           : type === "success"
-          ? "web3-message-success"
-          : "web3-message-info";
+            ? "web3-message-success"
+            : "web3-message-info";
       box.classList.add(className);
     } else if (text) {
       // HTML'de kutu yoksa son çare alert
@@ -164,18 +164,19 @@
       return true;
     }
 
-    // Eski Binance Chain extension
-    if (window.BinanceChain) {
+    // Binance Web3 Wallet için özel kontrol
+    if (window.ethereum && window.ethereum.isBinance) {
       return true;
     }
 
-    // Bazı sürümlerde ethereum objesi üzerinde bayraklar oluyor
-    if (
-      window.ethereum &&
-      (window.ethereum.isBinance ||
-        window.ethereum.isBinanceChain ||
-        window.ethereum.bnbChain)
-    ) {
+    // User agent kontrolü
+    const ua = navigator.userAgent || '';
+    if (ua.includes('Binance') || ua.includes('BNB') || ua.includes('Web3Wallet')) {
+      return true;
+    }
+
+    // Eski Binance Chain extension
+    if (window.BinanceChain) {
       return true;
     }
 
@@ -190,12 +191,17 @@
       return window.binancew3w.ethereum;
     }
 
-    // 2) Eski Binance Chain extension (desktop)
+    // 2) Binance Web3 Wallet (eski API)
+    if (window.ethereum && window.ethereum.isBinance) {
+      return window.ethereum;
+    }
+
+    // 3) Eski Binance Chain extension (desktop)
     if (window.BinanceChain) {
       return window.BinanceChain;
     }
 
-    // 3) Standart EIP-1193 (MetaMask, Trust vs.)
+    // 4) Standart EIP-1193 (MetaMask, Trust vs.)
     if (window.ethereum) {
       return window.ethereum;
     }
@@ -209,13 +215,13 @@
     if (!injected) {
       const msg = isMobileDevice()
         ? t(
-            "No Web3 wallet detected. Please open this page inside MetaMask, Trust Wallet, Binance Web3, etc.",
-            "Web3 cüzdanı bulunamadı. Lütfen bu sayfayı MetaMask, Trust Wallet, Binance Web3 vb. cüzdanın içindeki tarayıcıdan açın."
-          )
+          "No Web3 wallet detected. Please open this page inside MetaMask, Trust Wallet, Binance Web3, etc.",
+          "Web3 cüzdanı bulunamadı. Lütfen bu sayfayı MetaMask, Trust Wallet, Binance Web3 vb. cüzdanın içindeki tarayıcıdan açın."
+        )
         : t(
-            "No Web3 wallet detected. Please install MetaMask, Trust Wallet, Binance Web3, etc.",
-            "Web3 cüzdanı bulunamadı. Lütfen MetaMask, Trust Wallet, Binance Web3 vb. bir cüzdan kurun."
-          );
+          "No Web3 wallet detected. Please install MetaMask, Trust Wallet, Binance Web3, etc.",
+          "Web3 cüzdanı bulunamadı. Lütfen MetaMask, Trust Wallet, Binance Web3 vb. bir cüzdan kurun."
+        );
 
       showWeb3Message(msg, "error");
       throw new Error("No injected provider");
@@ -247,17 +253,37 @@
 
     const injected = getInjectedProvider();
 
-    // Binance Web3 / Binance Chain: wallet_switchEthereumChain ile uğraşma,
-    // sadece kullanıcıya manuel BSC'ye geçmesini söyle.
+    // Binance Web3 Wallet için network değiştirme
     if (isBinanceWallet()) {
-      showWeb3Message(
-        t(
-          "Please switch your Binance wallet to BNB Smart Chain (chainId 56) and try again.",
-          "Lütfen Binance cüzdan ağını BNB Smart Chain (chainId 56) olarak değiştirip tekrar deneyin."
-        ),
-        "error"
-      );
-      throw new Error("Wrong network on Binance wallet");
+      try {
+        // Binance Web3 Wallet için BSC'ye geçiş deneyelim
+        if (window.binancew3w && window.binancew3w.ethereum) {
+          await window.binancew3w.ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: '0x38' }]
+          });
+          return;
+        }
+        
+        if (window.ethereum && window.ethereum.isBinance) {
+          await window.ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: '0x38' }]
+          });
+          return;
+        }
+      } catch (err) {
+        console.error('Binance network switch error:', err);
+        // Hata olursa kullanıcıya manuel geçiş yapmasını söyle
+        showWeb3Message(
+          t(
+            "Please switch your Binance wallet to BNB Smart Chain (chainId 56) and try again.",
+            "Lütfen Binance cüzdan ağını BNB Smart Chain (chainId 56) olarak değiştirip tekrar deneyin."
+          ),
+          "error"
+        );
+        throw new Error("Wrong network on Binance wallet");
+      }
     }
 
     if (!injected || typeof injected.request !== "function") {
@@ -304,7 +330,7 @@
   }
 
   // --------------------------
-  // Wallet bağlantısı
+  // Wallet bağlantısı - GÜNCELLENDİ
   // --------------------------
   async function connectWallet() {
     clearWeb3Message();
@@ -330,9 +356,17 @@
         throw new Error("No EIP-1193 provider");
       }
 
-      const accounts = await injected.request({
-        method: "eth_requestAccounts"
-      });
+      // Binance Web3 Wallet için özel yaklaşım
+      let accounts;
+      if (window.binancew3w && window.binancew3w.ethereum) {
+        accounts = await window.binancew3w.ethereum.request({
+          method: "eth_requestAccounts"
+        });
+      } else {
+        accounts = await injected.request({
+          method: "eth_requestAccounts"
+        });
+      }
 
       if (!accounts || accounts.length === 0) {
         throw new Error("No account selected");
