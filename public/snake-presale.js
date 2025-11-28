@@ -4,17 +4,18 @@
 //    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 // 2) Mevcut ana JS dosyanızdan (site mantığı) SONRA şu scripti ekleyin:
 //    <script src="snake-presale.js"></script>
-// Bu dosya mevcut placeholder alert'leri kaldırıp gerçek satın alma & claim işlemlerini ekler.
 
 (function () {
+  // --------------------------
   // Ağ ve kontrat sabitleri
+  // --------------------------
   const BSC_CHAIN_ID = 56; // BNB Smart Chain mainnet
 
   const SNAKE_TOKEN_ADDRESS = "0xc9F46963Ee83EFd45675867f622Dd3a0B7c494e7";
   const PRESALE_ADDRESS = "0xbA073B1ec8fa5d7521E1592E03F08f1F272A7f5A";
   const USDT_ADDRESS = "0x55d398326f99059fF775485246999027B3197955";
 
-  // SnakePresale ABI (kısaltılmış, sadece kullanılan fonksiyonlar)
+  // SnakePresale ABI (sadece kullanılan fonksiyonlar)
   const PRESALE_ABI = [
     "function POOL_NORMAL() view returns (uint8)",
     "function POOL_VESTING() view returns (uint8)",
@@ -42,6 +43,9 @@
     "function approve(address spender, uint256 value) returns (bool)"
   ];
 
+  // --------------------------
+  // Durum değişkenleri
+  // --------------------------
   let provider = null;
   let signer = null;
   let userAddress = null;
@@ -52,12 +56,15 @@
 
   let isConnectingWallet = false;
 
-  let currentPoolId = 0; // 0 = normal, 1 = vesting
+  // Varsayılan havuz (0: normal, 1: vesting)
+  let currentPoolId =
+    typeof window !== "undefined" && typeof window.currentSalePool === "number"
+      ? window.currentSalePool
+      : 0;
 
   // --------------------------
-  // Yardımcılar
+  // Yardımcı fonksiyonlar
   // --------------------------
-
   function logErrorContext(context, error) {
     console.error(`[SnakePresale] ${context}`, error);
   }
@@ -84,7 +91,7 @@
     return Number(window.ethers.utils.formatUnits(value, 18));
   }
 
-  // Dil yardımcı (mevcut translate sisteminle uyumlu)
+  // Dil helper (mevcut translate sisteminle uyumlu)
   function t(en, tr) {
     try {
       const htmlLang = document.documentElement.getAttribute("lang") || "en";
@@ -122,15 +129,16 @@
     }
   }
 
-  // Buradan itibaren provider seçimi:
-  // MetaMask / Trust / Binance Web3 vb. ne varsa onu döndür.
+  // --------------------------
+  // Provider seçimi
+  // --------------------------
   function getInjectedProvider() {
     if (typeof window === "undefined") return null;
 
-    // Öncelikle standart EIP-1193 provider varsa onu kullan (MetaMask, Trust, vb.)
+    // Standart EIP-1193 provider (MetaMask, Trust, çoğu cüzdan)
     if (window.ethereum) return window.ethereum;
 
-    // Binance Web3 Wallet gibi alternatif provider'lar
+    // Binance Web3 Wallet vb.
     if (window.BinanceChain) return window.BinanceChain;
 
     return null;
@@ -139,7 +147,6 @@
   // --------------------------
   // Provider & ağ kontrolü
   // --------------------------
-
   async function ensureProvider() {
     const injected = getInjectedProvider();
 
@@ -156,6 +163,7 @@
       }
       throw new Error("No ethereum provider");
     }
+
     if (typeof window.ethers === "undefined" || !window.ethers.providers) {
       alert(
         t(
@@ -208,9 +216,8 @@
   }
 
   // --------------------------
-  // Kontrat instance helper
+  // Kontrat helper'ları
   // --------------------------
-
   function getPresaleContract() {
     if (!signer) throw new Error("No signer");
     return new window.ethers.Contract(PRESALE_ADDRESS, PRESALE_ABI, signer);
@@ -224,7 +231,6 @@
   // --------------------------
   // Wallet bağlama
   // --------------------------
-
   async function connectWallet() {
     if (isConnectingWallet) {
       alert(
@@ -267,7 +273,7 @@
     } catch (error) {
       if (
         error &&
-        (error.code === 4001 || // Metamask user rejected
+        (error.code === 4001 ||
           String(error.message || "").toLowerCase().includes("user rejected"))
       ) {
         alert(
@@ -301,9 +307,8 @@
   }
 
   // --------------------------
-  // UI'den pool seçimi
+  // Sale pool (Normal / Vesting)
   // --------------------------
-
   function initPoolSwitcher() {
     const poolButtons = document.querySelectorAll(".sale-mode-btn");
     if (!poolButtons || poolButtons.length === 0) return;
@@ -315,8 +320,13 @@
 
         const poolId = Number(btn.dataset.pool || "0");
         currentPoolId = poolId;
+        if (typeof window !== "undefined") {
+          window.currentSalePool = poolId;
+        }
+
         updatePayButtonLabel();
         updateClaimInfo();
+        updateCostPreview();
       });
     });
   }
@@ -336,15 +346,14 @@
   }
 
   // --------------------------
-  // Fiyat hesaplama (UI tarafı)
+  // Fiyat önizleme (sadece bilgilendirme)
   // --------------------------
-
   async function updateCostPreview() {
     try {
-      const amountInput = document.querySelector("#token-amount-input");
-      const methodBtnActive = document.querySelector(
-        ".payment-method-btn.active"
-      );
+      const amountInput = document.querySelector("#snakeAmount");
+      const methodBtnActive =
+        document.querySelector(".payment-method-btn.active") ||
+        document.querySelector(".payment-btn.active");
       const costPreviewEl = document.querySelector("#cost-preview");
       if (!amountInput || !methodBtnActive || !costPreviewEl) return;
 
@@ -399,9 +408,8 @@
   }
 
   // --------------------------
-  // Satın alma işlemleri
+  // Satın alma işlemi
   // --------------------------
-
   async function handleBuyClick() {
     try {
       await ensureProvider();
@@ -414,10 +422,11 @@
 
       const presale = getPresaleContract();
 
-      const amountInput = document.querySelector("#token-amount-input");
-      const methodBtnActive = document.querySelector(
-        ".payment-method-btn.active"
-      );
+      const amountInput = document.querySelector("#snakeAmount");
+      const methodBtnActive =
+        document.querySelector(".payment-method-btn.active") ||
+        document.querySelector(".payment-btn.active");
+
       if (!amountInput || !methodBtnActive) {
         alert(
           t(
@@ -442,10 +451,14 @@
       const tokenAmountWei = toWei(tokenAmountNumber);
       const method = methodBtnActive.dataset.method;
 
-      if (!window.confirm(t(
-        "Are you sure you want to buy this amount of SNAKE tokens?",
-        "Bu miktarda SNAKE token almak istediğinizden emin misiniz?"
-      ))) {
+      if (
+        !window.confirm(
+          t(
+            "Are you sure you want to buy this amount of SNAKE tokens?",
+            "Bu miktarda SNAKE token almak istediğinizden emin misiniz?"
+          )
+        )
+      ) {
         return;
       }
 
@@ -465,12 +478,7 @@
           )
         );
         await tx.wait();
-        alert(
-          t(
-            "Purchase successful!",
-            "Satın alma işlemi başarılı!"
-          )
-        );
+        alert(t("Purchase successful!", "Satın alma işlemi başarılı!"));
       } else {
         const usdt = getUsdtContract();
         const requiredUSDT = await presale.getUSDTAmountForTokens(
@@ -504,12 +512,7 @@
           )
         );
         await tx.wait();
-        alert(
-          t(
-            "Purchase successful!",
-            "Satın alma işlemi başarılı!"
-          )
-        );
+        alert(t("Purchase successful!", "Satın alma işlemi başarılı!"));
       }
 
       updateCostPreview();
@@ -528,7 +531,6 @@
   // --------------------------
   // Claim işlemleri
   // --------------------------
-
   async function updateClaimInfo() {
     try {
       const claimInfoEl = document.querySelector("#claim-info");
@@ -584,8 +586,12 @@
       }
 
       claimInfoEl.innerText = t(
-        `Total purchased: ${purchasedNum.toFixed(2)} SNAKE | Claimable now: ${claimableNum.toFixed(2)} SNAKE`,
-        `Toplam satın aldığınız: ${purchasedNum.toFixed(2)} SNAKE | Şu anda çekilebilir: ${claimableNum.toFixed(2)} SNAKE`
+        `Total purchased: ${purchasedNum.toFixed(
+          2
+        )} SNAKE | Claimable now: ${claimableNum.toFixed(2)} SNAKE`,
+        `Toplam satın aldığınız: ${purchasedNum.toFixed(
+          2
+        )} SNAKE | Şu anda çekilebilir: ${claimableNum.toFixed(2)} SNAKE`
       );
     } catch (err) {
       logErrorContext("updateClaimInfo failed", err);
@@ -618,12 +624,14 @@
         return;
       }
 
-      if (!window.confirm(
-        t(
-          "Do you want to claim your unlocked SNAKE tokens now?",
-          "Şu anda açılmış SNAKE token hak edişinizi çekmek istiyor musunuz?"
+      if (
+        !window.confirm(
+          t(
+            "Do you want to claim your unlocked SNAKE tokens now?",
+            "Şu anda açılmış SNAKE token hak edişinizi çekmek istiyor musunuz?"
+          )
         )
-      )) {
+      ) {
         return;
       }
 
@@ -637,13 +645,7 @@
       );
       await tx.wait();
 
-      alert(
-        t(
-          "Claim successful!",
-          "Claim işlemi başarılı!"
-        )
-      );
-
+      alert(t("Claim successful!", "Claim işlemi başarılı!"));
       updateClaimInfo();
     } catch (error) {
       logErrorContext("handleClaimClick failed", error);
@@ -657,9 +659,8 @@
   }
 
   // --------------------------
-  // Event listener’lar
+  // Ethereum event listener’ları
   // --------------------------
-
   function setupEthereumEvents() {
     const injected = getInjectedProvider();
     if (!injected || typeof injected.on !== "function") return;
@@ -680,6 +681,7 @@
           connectBtnEl.classList.add("connected");
         }
       }
+      updateClaimInfo();
     });
 
     injected.on("chainChanged", (chainId) => {
@@ -692,16 +694,27 @@
   // --------------------------
   // Başlatma
   // --------------------------
-
   function initSnakePresaleWeb3() {
-    // Sadece snake-token sayfasında çalışsın
+    // Bu sayfada presale paneli yoksa hiç çalışmasın
     if (!document.querySelector(".payment-methods")) {
       return;
     }
 
-    connectBtnEl = document.querySelector("#connect-wallet-btn");
-    buyBtnEl = document.querySelector("#buy-tokens-btn");
-    claimBtnEl = document.querySelector("#claim-tokens-btn");
+    // Connect: önce id dene, yoksa .connect-wallet sınıfını kullan
+    connectBtnEl =
+      document.querySelector("#connect-wallet-btn") ||
+      document.querySelector(".connect-wallet");
+
+    // Buy: id yoksa ilk .btn-primary (ana "Buy Now") butonunu kullan
+    buyBtnEl =
+      document.querySelector("#buy-tokens-btn") ||
+      document.querySelector(".btn-primary");
+
+    // Claim: varsa id, yoksa yedek selector’lar
+    claimBtnEl =
+      document.querySelector("#claim-tokens-btn") ||
+      document.querySelector("[data-claim-btn]") ||
+      document.querySelector(".btn-claim");
 
     if (connectBtnEl) {
       connectBtnEl.addEventListener("click", () => {
@@ -727,14 +740,16 @@
       });
     }
 
-    const tokenAmountInput = document.querySelector("#token-amount-input");
+    // Token amount input (id = snakeAmount)
+    const tokenAmountInput = document.querySelector("#snakeAmount");
     if (tokenAmountInput) {
       tokenAmountInput.addEventListener("input", () => {
         updateCostPreview();
       });
     }
 
-    const payMethodButtons = document.querySelectorAll(".payment-method-btn");
+    // Payment method butonları: .payment-btn
+    const payMethodButtons = document.querySelectorAll(".payment-btn");
     if (payMethodButtons && payMethodButtons.length > 0) {
       payMethodButtons.forEach((btn) => {
         btn.addEventListener("click", () => {
