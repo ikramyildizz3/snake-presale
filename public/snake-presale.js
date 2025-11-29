@@ -198,8 +198,11 @@
       alert(t("Amount input not found.", "Miktar alanı bulunamadı."));
       return null;
     }
+
     const raw = (input.value || "").trim();
     const value = parseFloat(raw);
+
+    // 1) Boş / geçersiz giriş kontrolü
     if (!raw || isNaN(value) || value <= 0) {
       alert(
         t(
@@ -209,7 +212,41 @@
       );
       return null;
     }
-    return raw; // string → parseUnits için
+
+    // 2) Hangi havuzda olduğumuzu bul (0 = normal, 1 = vesting)
+    const poolId = getCurrentPoolId();
+
+    // 3) Havuzun fiyatını al
+    //    Normal  : 1 SNAKE = 0.02 USDT
+    //    Vesting : 1 SNAKE = 0.015 USDT
+    const pricePerSnake = poolId === 1 ? 0.015 : 0.02;
+
+    // 4) Girilen tutarın yaklaşık USD karşılığını hesapla
+    const usdTotal = value * pricePerSnake;
+
+    // 5) Minimum ≈ 99 USDT (yani 100$ ve üzeri alımlara izin ver)
+    if (usdTotal < 99) {
+      // Bu havuz için gereken minimum SNAKE adedini hesapla
+      const minSnake = Math.ceil(99 / pricePerSnake); // normal: 4950, vesting: 6600
+
+      const msgEn =
+        "Minimum purchase amount is about 100 USDT. " +
+        "For this pool, please enter at least " +
+        minSnake.toLocaleString() +
+        " SNAKE.";
+
+      const msgTr =
+        "Minimum alım tutarı yaklaşık 100 USDT'dir. " +
+        "Bu havuz için lütfen en az " +
+        minSnake.toLocaleString("tr-TR") +
+        " SNAKE girin.";
+
+      alert(t(msgEn, msgTr));
+      return null;
+    }
+
+    // 6) Her şey tamamsa, string olarak geri dön (parseUnits için)
+    return raw;
   }
 
   function updateSummaryOnSuccess(amountStr) {
