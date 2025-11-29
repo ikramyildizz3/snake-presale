@@ -25,7 +25,8 @@
 
   const ERC20_ABI = [
     "function allowance(address owner, address spender) view returns (uint256)",
-    "function approve(address spender, uint256 value) returns (bool)"
+    "function approve(address spender, uint256 value) returns (bool)",
+    "function balanceOf(address owner) view returns (uint256)"
   ];
 
   let provider = null;
@@ -101,6 +102,21 @@
       return;
     }
 
+    // ✅ İç JSON-RPC / revert hataları için daha anlamlı uyarı
+    if (
+      prefixKey === "Purchase failed" &&
+      (lower.includes("internal json-rpc error") ||
+        lower.includes("execution reverted"))
+    ) {
+      alert(
+        t(
+          "Purchase failed. Please check your wallet balance (BNB/USDT) and the minimum/maximum purchase limits, then try again.",
+          "Satın alma işlemi başarısız. Lütfen BNB/USDT bakiyenizi ve minimum/maksimum alım limitlerini kontrol edip tekrar deneyin."
+        )
+      );
+      return;
+    }
+
     let message = rawMessage;
     if (!message) {
       message = t(
@@ -108,6 +124,7 @@
         "Bir hata oluştu. Lütfen cüzdanınızı kontrol edip tekrar deneyin."
       );
     } else if (message.length > 200) {
+      // Çok uzun hata metinlerini kısalt
       message = message.slice(0, 200) + "...";
     }
 
@@ -500,6 +517,18 @@
           poolId
         );
 
+        // Kullanıcının BNB bakiyesini kontrol et
+        const bnbBalance = await signer.getBalance();
+        if (bnbBalance.lt(bufferedBNB)) {
+          alert(
+            t(
+              "Insufficient BNB balance. Please make sure you have enough BNB on BNB Smart Chain (including gas fees) and try again.",
+              "BNB bakiyeniz yetersiz. Lütfen BNB Smart Chain üzerinde yeterli BNB (işlem ücretleri dahil) bulundurduğunuzdan emin olun ve tekrar deneyin."
+            )
+          );
+          return;
+        }
+
         const tx = await presale.buyWithBNB(poolId, tokenAmount, {
           value: bufferedBNB
         });
@@ -518,6 +547,7 @@
           )
         );
       } else {
+        // USDT ile satın alma
         const requiredUSDT = await presale.getUSDTAmountForTokens(
           poolId,
           tokenAmount
@@ -526,6 +556,19 @@
 
         const usdt = getUsdtContract();
 
+        // ✅ USDT bakiyesini kontrol et
+        const usdtBalance = await usdt.balanceOf(userAddress);
+        if (usdtBalance.lt(requiredUSDT)) {
+          alert(
+            t(
+              "Insufficient USDT balance. Please make sure you have enough USDT (BEP-20) in your wallet and try again.",
+              "USDT bakiyeniz yetersiz. Lütfen cüzdanınızda yeterli USDT (BEP-20) bulundurduğunuzdan emin olun ve tekrar deneyin."
+            )
+          );
+          return;
+        }
+
+        // Allowance kontrol
         const allowance = await usdt.allowance(userAddress, PRESALE_ADDRESS);
         if (allowance.lt(requiredUSDT)) {
           const approveTx = await usdt.approve(PRESALE_ADDRESS, requiredUSDT);
