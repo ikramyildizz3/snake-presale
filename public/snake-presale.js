@@ -10,8 +10,8 @@
   const BSC_CHAIN_ID = 56; // BNB Smart Chain mainnet
 
   const SNAKE_TOKEN_ADDRESS = "0xc9F46963Ee83EFd45675867f622Dd3a0B7c494e7";
-  const PRESALE_ADDRESS     = "0xbA073B1ec8fa5d7521E1592E03F08f1F272A7f5A";
-  const USDT_ADDRESS        = "0x55d398326f99059fF775485246999027B3197955";
+  const PRESALE_ADDRESS = "0xbA073B1ec8fa5d7521E1592E03F08f1F272A7f5A";
+  const USDT_ADDRESS = "0x55d398326f99059fF775485246999027B3197955";
 
   // Ethers v5 için minimal ABI'ler
   const PRESALE_ABI = [
@@ -28,14 +28,14 @@
     "function approve(address spender, uint256 value) returns (bool)"
   ];
 
-  let provider         = null;
-  let signer           = null;
-  let userAddress      = null;
+  let provider = null;
+  let signer = null;
+  let userAddress = null;
   let injectedProvider = null;
 
   let connectBtnEl = null;
-  let buyBtnEl     = null;
-  let claimBtnEl   = null;
+  let buyBtnEl = null;
+  let claimBtnEl = null;
 
   let isConnectingWallet = false;
 
@@ -46,7 +46,7 @@
       if (typeof window !== "undefined" && window.currentLanguage) {
         return window.currentLanguage;
       }
-    } catch (e) {}
+    } catch (e) { }
     return "en";
   }
 
@@ -153,7 +153,7 @@
       if (typeof currentPaymentMethod !== "undefined") {
         return currentPaymentMethod;
       }
-    } catch (e) {}
+    } catch (e) { }
     const activeBtn = document.querySelector(".payment-btn.active");
     if (activeBtn && activeBtn.getAttribute("data-method")) {
       return activeBtn.getAttribute("data-method");
@@ -166,7 +166,7 @@
       if (typeof window !== "undefined" && typeof window.currentSalePool !== "undefined") {
         return window.currentSalePool === 1 ? 1 : 0;
       }
-    } catch (e) {}
+    } catch (e) { }
     const active = document.querySelector(".sale-mode-btn.active");
     if (active && active.getAttribute("data-pool")) {
       const pool = parseInt(active.getAttribute("data-pool"), 10);
@@ -303,13 +303,10 @@
   }
 
   async function ensureCorrectNetwork() {
+    // Ethers provider hazır olsun (ileride kullanıyoruz)
     const p = await ensureProvider();
-    const network = await p.getNetwork();
-    if (Number(network.chainId) === BSC_CHAIN_ID) {
-      return;
-    }
-
     const injected = getInjectedProvider();
+
     if (!injected || typeof injected.request !== "function") {
       alert(
         t(
@@ -317,9 +314,48 @@
           "Lütfen cüzdan ağınızı BNB Smart Chain (chainId 56) olarak değiştirip tekrar deneyin."
         )
       );
-      throw new Error("Cannot switch network from script");
+      throw new Error("No request-capable provider for network");
     }
 
+    let chainId = null;
+
+    // Önce eth_chainId dene
+    try {
+      chainId = await injected.request({ method: "eth_chainId" });
+    } catch (e) {
+      // Bazı cüzdanlar için fallback: net_version
+      try {
+        const netVersion = await injected.request({ method: "net_version" });
+        if (typeof netVersion === "string") {
+          const parsed = parseInt(netVersion, 10);
+          if (!isNaN(parsed)) {
+            chainId = "0x" + parsed.toString(16);
+          }
+        }
+      } catch (e2) {
+        console.warn("Failed to read chain id from provider", e, e2);
+      }
+    }
+
+    // chainId boşsa ethers'in "invalid BigNumber string" hatasını tetiklemeyelim
+    if (!chainId || chainId === "") {
+      alert(
+        t(
+          "Please make sure your wallet is connected to BNB Smart Chain (chainId 56) and try again.",
+          "Lütfen cüzdan ağınızı BNB Smart Chain (chainId 56) olarak ayarlayıp tekrar deneyin."
+        )
+      );
+      return;
+    }
+
+    const normalized = String(chainId).toLowerCase();
+
+    // Zaten BSC ise çık
+    if (normalized === "0x38" || normalized === "56") {
+      return;
+    }
+
+    // Değilse BSC'ye geçirmeyi dene
     try {
       await injected.request({
         method: "wallet_switchEthereumChain",
@@ -348,7 +384,6 @@
       return;
     }
 
-    const p = await ensureProvider();
     const injected = getInjectedProvider();
     if (!injected || typeof injected.request !== "function") {
       alert(
@@ -360,10 +395,12 @@
       throw new Error("No request-capable provider");
     }
 
-    await ensureCorrectNetwork();
-
     isConnectingWallet = true;
     try {
+      // 1) Önce ethers provider'ı hazırla
+      const p = await ensureProvider();
+
+      // 2) Kullanıcıdan hesap izni iste
       const accounts = await injected.request({
         method: "eth_requestAccounts"
       });
@@ -372,6 +409,10 @@
         throw new Error("No account selected");
       }
 
+      // 3) Ağ doğru mu, değilse BSC'ye geçir
+      await ensureCorrectNetwork();
+
+      // 4) Signer ve adresi al
       signer = p.getSigner();
       userAddress = await signer.getAddress();
 
@@ -432,9 +473,9 @@
       const amountStr = getSnakeAmount();
       if (!amountStr) return;
 
-      const method  = getCurrentPaymentMethod(); // "usdt" veya "bnb"
+      const method = getCurrentPaymentMethod(); // "usdt" veya "bnb"
       const presale = getPresaleContract();
-      const poolId  = getCurrentPoolId();
+      const poolId = getCurrentPoolId();
 
       const tokenAmount = window.ethers.utils.parseUnits(amountStr, 18); // 18 decimal
 
@@ -539,7 +580,7 @@
       }
 
       const presale = getPresaleContract();
-      const poolId  = getCurrentPoolId();
+      const poolId = getCurrentPoolId();
 
       const claimable = await presale.getClaimableAmount(
         userAddress,
