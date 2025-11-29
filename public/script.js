@@ -249,6 +249,7 @@ async function fetchBNBPrice() {
 
     } catch (error) {
         console.error('Error fetching BNB price:', error);
+        // Fallback sabit değer
         bnbPrice = 854.51;
         const bnbPriceElement = document.getElementById('bnbPrice');
         if (bnbPriceElement) {
@@ -360,68 +361,10 @@ function updateChartLabels(lang) {
     }
 }
 
+// URL'de snake-token.html varsa köke rewrite
 document.addEventListener('DOMContentLoaded', function () {
-  if (window.location.pathname === '/snake-token.html') {
-    const newUrl = window.location.origin + '/' + window.location.search + window.location.hash;
-    window.history.replaceState({}, '', newUrl);
-  }
-});
-
-// --- Sale Type (Normal / Vesting) logic ---
-document.addEventListener("DOMContentLoaded", function () {
-    const saleButtons = document.querySelectorAll(".sale-mode-btn");
-    if (!saleButtons.length) return;
-
-    // Dil tespiti: sadece currentLanguage'e bak
-    function isTR() {
-        return (window.currentLanguage || "en") === "tr";
+    if (window.location.pathname === '/snake-token.html') {
+        const newUrl = window.location.origin + '/' + window.location.search + window.location.hash;
+        window.history.replaceState({}, '', newUrl);
     }
-
-    function updatePriceDisplay(pool) {
-        const span = document.getElementById("priceDisplay");
-        if (!span) return;
-
-        const tr = isTR();
-
-        if (pool === 0) {
-            span.textContent = tr
-                ? "Fiyat: 1 SNAKE = 0,02 USDT"
-                : "Price: 1 SNAKE = 0.02 USDT";
-        } else {
-            span.textContent = tr
-                ? "Fiyat: 1 SNAKE = 0,015 USDT (vestingli)"
-                : "Price: 1 SNAKE = 0.015 USDT (vesting)";
-        }
-    }
-
-    function setPool(pool) {
-        // Kontrat tarafı için seçili havuzu globalde tutuyoruz
-        window.currentSalePool = pool;
-
-        // Buton aktifliği
-        saleButtons.forEach((btn) => {
-            const btnPool = parseInt(btn.getAttribute("data-pool") || "0", 10);
-            if (btnPool === pool) btn.classList.add("active");
-            else btn.classList.remove("active");
-        });
-
-        // Fiyat yazısını güncelle
-        updatePriceDisplay(pool);
-
-        // Ödeme özetini yeniden hesapla (varsa)
-        if (typeof window.calculatePayment === "function") {
-            window.calculatePayment();
-        }
-    }
-
-    // Butonlara tıklama olayları
-    saleButtons.forEach((btn) => {
-        btn.addEventListener("click", function () {
-            const pool = parseInt(btn.getAttribute("data-pool") || "0", 10);
-            setPool(pool);
-        });
-    });
-
-    // Varsayılan: normal satış
-    setPool(0);
 });

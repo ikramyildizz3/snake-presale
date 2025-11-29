@@ -4,15 +4,14 @@
 //    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 // 2) Mevcut ana JS dosyanızdan (site mantığı) SONRA şu scripti ekleyin:
 //    <script src="snake-presale.js"></script>
-// Bu dosya mevcut placeholder alert'leri kaldırıp gerçek satın alma & claim işlemlerini ekler.
 
 (function () {
   // Ağ ve kontrat sabitleri
   const BSC_CHAIN_ID = 56; // BNB Smart Chain mainnet
 
   const SNAKE_TOKEN_ADDRESS = "0xc9F46963Ee83EFd45675867f622Dd3a0B7c494e7";
-  const PRESALE_ADDRESS = "0xbA073B1ec8fa5d7521E1592E03F08f1F272A7f5A";
-  const USDT_ADDRESS = "0x55d398326f99059fF775485246999027B3197955";
+  const PRESALE_ADDRESS     = "0xbA073B1ec8fa5d7521E1592E03F08f1F272A7f5A";
+  const USDT_ADDRESS        = "0x55d398326f99059fF775485246999027B3197955";
 
   // Ethers v5 için minimal ABI'ler
   const PRESALE_ABI = [
@@ -20,7 +19,8 @@
     "function buyWithUSDT(uint8 poolId, uint256 tokenAmount, uint256 maxUSDT)",
     "function getBNBAmountForTokens(uint8 poolId, uint256 tokenAmount) view returns (uint256)",
     "function getUSDTAmountForTokens(uint8 poolId, uint256 tokenAmount) view returns (uint256)",
-    "function getClaimableAmount(address user, uint8 poolId) view returns (uint256)"
+    "function getClaimableAmount(address user, uint8 poolId) view returns (uint256)",
+    "function claim(uint8 poolId)"
   ];
 
   const ERC20_ABI = [
@@ -28,13 +28,14 @@
     "function approve(address spender, uint256 value) returns (bool)"
   ];
 
-  let provider = null;
-  let signer = null;
-  let userAddress = null;
+  let provider         = null;
+  let signer           = null;
+  let userAddress      = null;
+  let injectedProvider = null;
 
   let connectBtnEl = null;
-  let buyBtnEl = null;
-  let claimBtnEl = null;
+  let buyBtnEl     = null;
+  let claimBtnEl   = null;
 
   let isConnectingWallet = false;
 
@@ -79,7 +80,6 @@
   function logErrorContext(prefixKey, error) {
     console.error(prefixKey, error);
 
-    // Özel durum: kullanıcı cüzdanda reddetti (MetaMask kodu 4001)
     const rawMessage =
       (error && error.message) ||
       (error && error.data && error.data.message) ||
@@ -108,7 +108,6 @@
         "Bir hata oluştu. Lütfen cüzdanınızı kontrol edip tekrar deneyin."
       );
     } else if (message.length > 200) {
-      // Çok uzun hata metinlerini kısalt
       message = message.slice(0, 200) + "...";
     }
 
@@ -151,13 +150,10 @@
 
   function getCurrentPaymentMethod() {
     try {
-      // Mevcut global değişkeni kullan (script.js içinde tanımlı)
       if (typeof currentPaymentMethod !== "undefined") {
         return currentPaymentMethod;
       }
-    } catch (e) {
-      // yoksa DOM'dan oku
-    }
+    } catch (e) {}
     const activeBtn = document.querySelector(".payment-btn.active");
     if (activeBtn && activeBtn.getAttribute("data-method")) {
       return activeBtn.getAttribute("data-method");
@@ -170,9 +166,7 @@
       if (typeof window !== "undefined" && typeof window.currentSalePool !== "undefined") {
         return window.currentSalePool === 1 ? 1 : 0;
       }
-    } catch (e) {
-      // ignore
-    }
+    } catch (e) {}
     const active = document.querySelector(".sale-mode-btn.active");
     if (active && active.getAttribute("data-pool")) {
       const pool = parseInt(active.getAttribute("data-pool"), 10);
@@ -198,7 +192,7 @@
       );
       return null;
     }
-    return raw; // string olarak döndürüyoruz, parseUnits için
+    return raw; // string → parseUnits için
   }
 
   function updateSummaryOnSuccess(amountStr) {
@@ -212,7 +206,6 @@
     }
   }
 
-
   function isMobileDevice() {
     if (typeof navigator === "undefined") return false;
     return /Android|webOS|iPhone|iPad|iPod|Opera Mini|IEMobile|BlackBerry/i.test(
@@ -223,7 +216,6 @@
   function showMobileConnectHelper() {
     const modal = document.getElementById("mobile-connect-helper");
     if (!modal) {
-      // Fallback to simple alert if modal is missing
       alert(
         t(
           "No Web3 wallet detected. Please open this page inside a Web3 wallet browser such as MetaMask, Trust Wallet, or Binance Web3 Wallet.",
@@ -243,10 +235,44 @@
       });
     }
   }
+
+  // ---------- Provider seçimi ----------
+
+  function detectInjectedProvider() {
+    if (typeof window === "undefined") return null;
+
+    // 1) Binance Web3 Wallet (mobil dApp browser)
+    if (window.binancew3w && window.binancew3w.ethereum) {
+      return window.binancew3w.ethereum;
+    }
+
+    // 2) Eski Binance Chain extension (desktop)
+    if (window.BinanceChain) {
+      return window.BinanceChain;
+    }
+
+    // 3) Standart EIP-1193 (MetaMask, Rabby, Trust, vs.)
+    if (window.ethereum) {
+      if (Array.isArray(window.ethereum.providers) && window.ethereum.providers.length > 0) {
+        return window.ethereum.providers[0];
+      }
+      return window.ethereum;
+    }
+
+    return null;
+  }
+
+  function getInjectedProvider() {
+    if (injectedProvider) return injectedProvider;
+    injectedProvider = detectInjectedProvider();
+    return injectedProvider;
+  }
+
   // ---------- Web3 / Ethers ----------
 
   async function ensureProvider() {
-    if (!window.ethereum) {
+    const injected = getInjectedProvider();
+    if (!injected) {
       if (isMobileDevice()) {
         showMobileConnectHelper();
       } else {
@@ -259,6 +285,7 @@
       }
       throw new Error("No ethereum provider");
     }
+
     if (typeof window.ethers === "undefined" || !window.ethers.providers) {
       alert(
         t(
@@ -270,7 +297,7 @@
     }
 
     if (!provider) {
-      provider = new window.ethers.providers.Web3Provider(window.ethereum, "any");
+      provider = new window.ethers.providers.Web3Provider(injected, "any");
     }
     return provider;
   }
@@ -282,8 +309,19 @@
       return;
     }
 
+    const injected = getInjectedProvider();
+    if (!injected || typeof injected.request !== "function") {
+      alert(
+        t(
+          "Please switch your wallet to BNB Smart Chain (chainId 56) and try again.",
+          "Lütfen cüzdan ağınızı BNB Smart Chain (chainId 56) olarak değiştirip tekrar deneyin."
+        )
+      );
+      throw new Error("Cannot switch network from script");
+    }
+
     try {
-      await window.ethereum.request({
+      await injected.request({
         method: "wallet_switchEthereumChain",
         params: [{ chainId: "0x38" }] // 56
       });
@@ -310,12 +348,23 @@
       return;
     }
 
-    await ensureProvider();
+    const p = await ensureProvider();
+    const injected = getInjectedProvider();
+    if (!injected || typeof injected.request !== "function") {
+      alert(
+        t(
+          "No Web3 wallet detected. Please install MetaMask, Trust Wallet browser, Binance Web3, etc.",
+          "Web3 cüzdanı bulunamadı. Lütfen MetaMask, Trust Wallet, Binance Web3 vb. bir cüzdan kurun."
+        )
+      );
+      throw new Error("No request-capable provider");
+    }
+
     await ensureCorrectNetwork();
 
     isConnectingWallet = true;
     try {
-      const accounts = await window.ethereum.request({
+      const accounts = await injected.request({
         method: "eth_requestAccounts"
       });
 
@@ -323,7 +372,7 @@
         throw new Error("No account selected");
       }
 
-      signer = provider.getSigner();
+      signer = p.getSigner();
       userAddress = await signer.getAddress();
 
       if (connectBtnEl) {
@@ -334,7 +383,6 @@
       console.log("Connected wallet:", userAddress);
       return userAddress;
     } catch (error) {
-      // MetaMask "already pending" hatası
       if (
         error &&
         (error.code === -32002 ||
@@ -377,7 +425,6 @@
       if (!signer || !userAddress) {
         await connectWallet();
         if (!signer || !userAddress) {
-          // Kullanıcı bağlantıyı iptal ettiyse devam etmeyelim
           return;
         }
       }
@@ -385,26 +432,23 @@
       const amountStr = getSnakeAmount();
       if (!amountStr) return;
 
-      const method = getCurrentPaymentMethod(); // "usdt" veya "bnb"
+      const method  = getCurrentPaymentMethod(); // "usdt" veya "bnb"
       const presale = getPresaleContract();
-      const poolId = getCurrentPoolId();
+      const poolId  = getCurrentPoolId();
 
-      // 18 decimal SNAKE
-      const tokenAmount = window.ethers.utils.parseUnits(amountStr, 18);
+      const tokenAmount = window.ethers.utils.parseUnits(amountStr, 18); // 18 decimal
 
       if (buyBtnEl) {
         setButtonLoading(buyBtnEl, true);
       }
 
       if (method === "bnb") {
-        // Gerekli minimum BNB'yi kontrattan al
         const requiredBNB = await presale.getBNBAmountForTokens(
           poolId,
           tokenAmount
         );
 
-        // Küçük bir buffer ile gönder (1% fazla), fazla olanı kontrat refund ediyor
-        const bufferedBNB = requiredBNB.mul(101).div(100);
+        const bufferedBNB = requiredBNB.mul(101).div(100); // +%1 buffer
 
         console.log(
           "BNB required:",
@@ -433,7 +477,6 @@
           )
         );
       } else {
-        // USDT ile satın alma
         const requiredUSDT = await presale.getUSDTAmountForTokens(
           poolId,
           tokenAmount
@@ -442,7 +485,6 @@
 
         const usdt = getUsdtContract();
 
-        // Allowance kontrol
         const allowance = await usdt.allowance(userAddress, PRESALE_ADDRESS);
         if (allowance.lt(requiredUSDT)) {
           const approveTx = await usdt.approve(PRESALE_ADDRESS, requiredUSDT);
@@ -497,7 +539,7 @@
       }
 
       const presale = getPresaleContract();
-      const poolId = getCurrentPoolId();
+      const poolId  = getCurrentPoolId();
 
       const claimable = await presale.getClaimableAmount(
         userAddress,
@@ -546,9 +588,10 @@
   // ---------- Ethereum event listener'ları ----------
 
   function setupEthereumEvents() {
-    if (!window.ethereum || !window.ethereum.on) return;
+    const injected = getInjectedProvider();
+    if (!injected || typeof injected.on !== "function") return;
 
-    window.ethereum.on("accountsChanged", (accounts) => {
+    injected.on("accountsChanged", (accounts) => {
       console.log("accountsChanged:", accounts);
       if (!accounts || accounts.length === 0) {
         signer = null;
@@ -565,9 +608,8 @@
       }
     });
 
-    window.ethereum.on("chainChanged", (chainId) => {
+    injected.on("chainChanged", (chainId) => {
       console.log("chainChanged:", chainId);
-      // Basit yaklaşım: ağ değiştiyse sayfayı yenileyelim
       window.location.reload();
     });
   }
@@ -580,7 +622,6 @@
       return;
     }
 
-    // Mevcut placeholder click handler'ları kaldırmak için butonları klonluyoruz
     connectBtnEl = replaceButtonAndAttach(".connect-wallet", async () => {
       try {
         await connectWallet();
@@ -599,7 +640,6 @@
 
     setupEthereumEvents();
 
-    // Debug için global'e de ekleyelim
     window.snakePresaleWeb3 = {
       connectWallet,
       buyNow: handleBuyNow,
