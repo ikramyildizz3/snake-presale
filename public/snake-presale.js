@@ -50,7 +50,7 @@
       if (typeof window !== "undefined" && window.currentLanguage) {
         return window.currentLanguage;
       }
-    } catch (e) {}
+    } catch (e) { }
     return "en";
   }
 
@@ -173,7 +173,7 @@
       if (typeof currentPaymentMethod !== "undefined") {
         return currentPaymentMethod;
       }
-    } catch (e) {}
+    } catch (e) { }
     const activeBtn = document.querySelector(".payment-btn.active");
     if (activeBtn && activeBtn.getAttribute("data-method")) {
       return activeBtn.getAttribute("data-method");
@@ -189,7 +189,7 @@
       ) {
         return window.currentSalePool === 1 ? 1 : 0;
       }
-    } catch (e) {}
+    } catch (e) { }
     const active = document.querySelector(".sale-mode-btn.active");
     if (active && active.getAttribute("data-pool")) {
       const pool = parseInt(active.getAttribute("data-pool"), 10);
@@ -305,8 +305,8 @@
     const providers = Array.isArray(eth && eth.providers) && eth.providers.length > 0
       ? eth.providers
       : eth
-      ? [eth]
-      : [];
+        ? [eth]
+        : [];
 
     function pickProvider(matchFn) {
       for (let i = 0; i < providers.length; i++) {
@@ -481,8 +481,8 @@
     const providers = Array.isArray(eth && eth.providers) && eth.providers.length > 0
       ? eth.providers
       : eth
-      ? [eth]
-      : [];
+        ? [eth]
+        : [];
 
     const hasFlag = (flag) => providers.some((p) => p && p[flag]);
 
@@ -612,7 +612,19 @@
     }
 
     const injected = getInjectedProvider(preferredWallet);
+
+    // 📱 Mobilde, provider yoksa: helper modalı aç ve sessizce çık
     if (!injected || typeof injected.request !== "function") {
+      if (isMobileDevice && isMobileDevice()) {
+        // Deep-link butonlarının olduğu modal
+        if (typeof showMobileConnectHelper === "function") {
+          showMobileConnectHelper();
+        }
+        // Hata fırlatma yok → "Connect failed" görmezsin
+        return;
+      }
+
+      // 💻 Desktop için eski davranışı koru
       alert(
         t(
           "No Web3 wallet detected. Please install MetaMask, Trust Wallet browser, Binance Web3, etc.",
