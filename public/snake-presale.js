@@ -394,95 +394,32 @@
     };
   }
 
-  // Mobil işletim sistemi tespiti
-  function getMobileOS() {
-    if (typeof navigator === "undefined") return "other";
-
-    const ua = navigator.userAgent || navigator.vendor || window.opera;
-
-    if (/android/i.test(ua)) return "android";
-    if (/iPad|iPhone|iPod/.test(ua)) return "ios";
-
-    return "other";
-  }
-
-  // Mobilde: ilgili wallet uygulamasını (veya store sayfasını) aç
+  // Mobilde: ilgili wallet uygulamasını açmaya zorla (yüklü değilse App Store / Play'e düşüyor)
   function openWalletDeepLink(walletKey) {
     if (typeof window === "undefined") return;
 
-    const os = getMobileOS();
+    const parts = getCurrentDappUrlParts();
 
     switch (walletKey) {
       case "metamask":
-        if (os === "ios") {
-          // MetaMask iOS App Store
-          window.location.href =
-            "https://apps.apple.com/tr/app/metamask-kripto-cüzdanı/id1438144202";
-        } else if (os === "android") {
-          // MetaMask Android Play Store
-          window.location.href =
-            "https://play.google.com/store/apps/details?id=io.metamask";
-        } else {
-          // Masaüstü vs. için genel download
-          window.location.href = "https://metamask.io/download/";
-        }
+        // MetaMask resmi deep-link
+        window.location.href = "https://link.metamask.io/dapp/" + parts.hostPath;
         break;
-
       case "trust":
-        if (os === "ios") {
-          // Trust Wallet iOS App Store
-          window.location.href =
-            "https://apps.apple.com/tr/app/trust-kripto-bitcoin-cüzdanı/id1288339409";
-        } else if (os === "android") {
-          // Trust Wallet Android Play Store
-          window.location.href =
-            "https://play.google.com/store/apps/details?id=com.wallet.crypto.trustapp";
-        } else {
-          window.location.href = "https://trustwallet.com/download";
-        }
+        window.location.href =
+          "https://link.trustwallet.com/open_url?coin_id=60&url=" + parts.encoded;
         break;
-
       case "coinbase":
-        if (os === "ios") {
-          // Coinbase Wallet / Base iOS
-          window.location.href =
-            "https://apps.apple.com/us/app/base-formerly-coinbase-wallet/id1278383455";
-        } else if (os === "android") {
-          // Coinbase Wallet Android
-          window.location.href =
-            "https://play.google.com/store/apps/details?id=org.toshi";
-        } else {
-          window.location.href = "https://www.coinbase.com/wallet/downloads";
-        }
+        window.location.href =
+          "https://go.cb-w.com/dapp?cb_url=" + parts.encoded;
         break;
-
       case "okx":
-        if (os === "ios") {
-          // OKX Wallet iOS
-          window.location.href =
-            "https://apps.apple.com/tr/app/okx-wallet-crypto-web3/id6743309484";
-        } else if (os === "android") {
-          // OKX Wallet Android
-          window.location.href =
-            "https://play.google.com/store/apps/details?id=com.okx.wallet";
-        } else {
-          window.location.href = "https://web3.okx.com/";
-        }
+        window.location.href =
+          "okx://wallet/dapp/url?dappUrl=" + parts.encoded;
         break;
-
       case "binance":
-        if (os === "ios") {
-          // Binance uygulaması (içinde Web3 Wallet)
-          window.location.href =
-            "https://apps.apple.com/app/binance-buy-bitcoin-crypto/id1436799971";
-        } else if (os === "android") {
-          window.location.href =
-            "https://play.google.com/store/apps/details?id=com.binance.dev";
-        } else {
-          window.location.href = "https://www.binance.com/en/download";
-        }
+        // Binance Web3 için resmi bir deep-link standardı yok; kullanıcıya tarayıcıdan açmasını söyleyeceğiz.
         break;
-
       default:
         break;
     }
