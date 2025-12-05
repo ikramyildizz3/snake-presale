@@ -257,7 +257,7 @@ const translations = {
         'presale.title': 'Ön Satış Paneli',
         'presale.subtitle': 'Listeleme öncesi SNAKE tokenlerini satın alın',
         'presale.amount': 'Miktar (SNAKE)',
-        'presale.price': 'Fiyat: 1 SNAKE = 0,02 USDT',   // varsayılan
+        'presale.price': 'Fiyat: 1 SNAKE = 0,03 USDT',   // varsayılan
         'presale.enter-amount': 'Miktar girin',
 
         // Presale Countdown

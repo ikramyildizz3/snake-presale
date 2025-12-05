@@ -263,7 +263,7 @@ async function fetchBNBPrice() {
 }
 
 function getCurrentSnakePrice() {
-    // 0 = Normal (0.02), 1 = Vesting (0.015)
+    // 0 = Normal (0.020), 1 = Vesting (0.015)
     return currentSalePool === 1 ? 0.015 : 0.02;
 }
 

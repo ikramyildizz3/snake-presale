@@ -297,16 +297,16 @@
   }
 
   // ---------- Provider seçimi (wallet tipiyle) ----------
-
   function detectInjectedProvider(preferredWallet) {
     if (typeof window === "undefined") return null;
 
     const eth = window.ethereum;
-    const providers = Array.isArray(eth && eth.providers) && eth.providers.length > 0
-      ? eth.providers
-      : eth
-        ? [eth]
-        : [];
+    const providers =
+      Array.isArray(eth && eth.providers) && eth.providers.length > 0
+        ? eth.providers
+        : eth
+          ? [eth]
+          : [];
 
     function pickProvider(matchFn) {
       for (let i = 0; i < providers.length; i++) {
@@ -316,20 +316,47 @@
       return null;
     }
 
-    // Binance Web3 (mobil dApp tarayıcı + eski extension)
+    // Tek bir isimsiz provider varsa (mobil dApp tarayıcı senaryosu)
+    function getUnknownSingleProvider() {
+      if (providers.length !== 1) return null;
+      const p = providers[0];
+      if (!p) return null;
+
+      const knownFlags = [
+        "isMetaMask",
+        "isCoinbaseWallet",
+        "isTrust",
+        "isTrustWallet",
+        "isOkxWallet",
+        "isOKXWallet"
+      ];
+
+      const isKnown = knownFlags.some((flag) => p[flag]);
+      // Hiçbir bilinen flag yoksa "bilinmeyen ama tek provider" kabul et
+      return isKnown ? null : p;
+    }
+
+    // 🔹 Binance Web3 (mobil dApp tarayıcı + eski extension)
     if (!preferredWallet || preferredWallet === "binance") {
       if (window.binancew3w && window.binancew3w.ethereum) {
         return window.binancew3w.ethereum;
       }
-      if (window.BinanceChain) {
+      if (window.BinanceChain && typeof window.BinanceChain.request === "function") {
         return window.BinanceChain;
       }
+
+      // Mobil Binance Web3: bazen sadece tek bir provider (ethereum) veriyor,
+      // özel flag yok -> onu da Binance olarak kabul et.
+      const unknown = getUnknownSingleProvider();
+      if (unknown) return unknown;
+
+      // Özellikle Binance seçilip hiç provider yoksa, diğerlerine düşme
       if (preferredWallet === "binance") {
-        // Özellikle Binance seçilip bulunamadıysa başka cüzdana düşme
         return null;
       }
     }
 
+    // 🔹 MetaMask
     if (preferredWallet === "metamask") {
       const mm = pickProvider((p) => p.isMetaMask);
       if (mm) return mm;
@@ -337,6 +364,7 @@
       return null;
     }
 
+    // 🔹 Coinbase Wallet
     if (preferredWallet === "coinbase") {
       const cb = pickProvider((p) => p.isCoinbaseWallet);
       if (cb) return cb;
@@ -345,6 +373,7 @@
       return null;
     }
 
+    // 🔹 Trust Wallet
     if (preferredWallet === "trust") {
       const tw = pickProvider((p) => p.isTrust || p.isTrustWallet);
       if (tw) return tw;
@@ -352,6 +381,7 @@
       return null;
     }
 
+    // 🔹 OKX Wallet
     if (preferredWallet === "okx") {
       if (window.okxwallet && window.okxwallet.ethereum) {
         return window.okxwallet.ethereum;
@@ -361,10 +391,8 @@
       return null;
     }
 
-    // Hiç tercih yoksa: genel fallback
-    if (providers.length > 0) {
-      return providers[0];
-    }
+    // 🔹 Hiç tercih yoksa: ilk provider'a düş
+    if (providers.length > 0) return providers[0];
     if (eth) return eth;
 
     return null;
@@ -580,13 +608,32 @@
     if (typeof window === "undefined") return false;
 
     const eth = window.ethereum;
-    const providers = Array.isArray(eth && eth.providers) && eth.providers.length > 0
-      ? eth.providers
-      : eth
-        ? [eth]
-        : [];
+    const providers =
+      Array.isArray(eth && eth.providers) && eth.providers.length > 0
+        ? eth.providers
+        : eth
+          ? [eth]
+          : [];
 
     const hasFlag = (flag) => providers.some((p) => p && p[flag]);
+
+    // Tek ve isimsiz provider varsa (mobil dApp)
+    const unknownSingleProvider = (() => {
+      if (providers.length !== 1) return null;
+      const p = providers[0];
+      if (!p) return null;
+
+      const knownFlags = [
+        "isMetaMask",
+        "isCoinbaseWallet",
+        "isTrust",
+        "isTrustWallet",
+        "isOkxWallet",
+        "isOKXWallet"
+      ];
+      const isKnown = knownFlags.some((f) => p[f]);
+      return isKnown ? null : p;
+    })();
 
     switch (walletKey) {
       case "metamask":
@@ -606,11 +653,13 @@
       case "binance":
         return !!(
           (window.binancew3w && window.binancew3w.ethereum) ||
-          window.BinanceChain
+          window.BinanceChain ||
+          unknownSingleProvider // mobil Binance Web3 tarayıcı durumu
         );
       case "okx":
         return !!(
-          (window.okxwallet && (window.okxwallet.ethereum || window.okxwallet.okxwallet)) ||
+          (window.okxwallet &&
+            (window.okxwallet.ethereum || window.okxwallet.okxwallet)) ||
           hasFlag("isOkxWallet") ||
           hasFlag("isOKXWallet")
         );
