@@ -336,22 +336,21 @@
       return isKnown ? null : p;
     }
 
-    // 🔹 Binance Web3 (mobil dApp tarayıcı + eski extension)
+    // Binance Web3 (mobil dApp tarayıcı + eski extension)
     if (!preferredWallet || preferredWallet === "binance") {
       if (window.binancew3w && window.binancew3w.ethereum) {
         return window.binancew3w.ethereum;
       }
-      if (window.BinanceChain && typeof window.BinanceChain.request === "function") {
+      if (window.BinanceChain) {
         return window.BinanceChain;
       }
 
-      // Mobil Binance Web3: bazen sadece tek bir provider (ethereum) veriyor,
-      // özel flag yok -> onu da Binance olarak kabul et.
-      const unknown = getUnknownSingleProvider();
-      if (unknown) return unknown;
-
-      // Özellikle Binance seçilip hiç provider yoksa, diğerlerine düşme
+      // Mobil Binance Web3 dApp tarayıcısında çoğu zaman sadece window.ethereum geliyor
       if (preferredWallet === "binance") {
+        if (isMobileDevice() && window.ethereum) {
+          return window.ethereum;
+        }
+        // Desktop’ta yanlışlıkla MetaMask vs seçilmesin diye fallback yok
         return null;
       }
     }
@@ -1086,9 +1085,25 @@
       return;
     }
 
-    // Connect Wallet tıklandığında HER ZAMAN önce menü açılsın
+    // Connect Wallet
     connectBtnEl = replaceButtonAndAttach(".connect-wallet", () => {
-      openWalletSelectModal();
+      // Binance Web3 mobil dApp tarayıcısı ise direkt Binance’e bağlanmayı dene
+      if (
+        isMobileDevice() &&
+        (
+          window.binancew3w ||
+          window.BinanceChain ||
+          (typeof navigator !== "undefined" &&
+            /Binance/i.test(navigator.userAgent || ""))
+        )
+      ) {
+        connectWallet("binance").catch((err) =>
+          logErrorContext("Connect failed", err)
+        );
+      } else {
+        // Diğer durumlarda modal aç
+        openWalletSelectModal();
+      }
     });
 
     buyBtnEl = replaceButtonAndAttach(".btn-primary", () => {
