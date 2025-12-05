@@ -49,7 +49,8 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: relative; /* dropdown menü buna göre hizalanacak */
+    position: relative;
+    /* dropdown menü buna göre hizalanacak */
 }
 
 .logo {
@@ -175,7 +176,7 @@ header {
 .hero {
     padding: 180px 0 100px;
     background: radial-gradient(circle at top right, rgba(0, 212, 106, 0.1), transparent 50%),
-                radial-gradient(circle at bottom left, rgba(0, 255, 136, 0.05), transparent 50%);
+        radial-gradient(circle at bottom left, rgba(0, 255, 136, 0.05), transparent 50%);
 }
 
 .hero-content {
@@ -210,21 +211,32 @@ header {
 }
 
 .badge .pulse {
-    width: 14px;                /* 10 → 14: daha belirgin */
+    width: 14px;
+    /* 10 → 14: daha belirgin */
     height: 14px;
     background: var(--primary);
     border-radius: 50%;
     animation: pulse-badge 2s infinite;
     flex-shrink: 0;
     position: relative;
-    top: 0;                     /* 1.5px → 0: çok az yukarı çıktı */
-    box-shadow: 0 0 8px rgba(0, 212, 106, 0.7); /* dışa hafif parlama */
+    top: 0;
+    /* 1.5px → 0: çok az yukarı çıktı */
+    box-shadow: 0 0 8px rgba(0, 212, 106, 0.7);
+    /* dışa hafif parlama */
 }
 
 @keyframes pulse-badge {
-    0% { opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { opacity: 1; }
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
 
 h1 {
@@ -761,10 +773,12 @@ section {
         transform: translateY(-50%) scale(1);
         box-shadow: 0 0 0 3px var(--primary), 0 0 30px rgba(0, 212, 106, 0.7);
     }
+
     50% {
         transform: translateY(-50%) scale(1.1);
         box-shadow: 0 0 0 4px var(--primary), 0 0 40px rgba(0, 212, 106, 0.9);
     }
+
     100% {
         transform: translateY(-50%) scale(1);
         box-shadow: 0 0 0 3px var(--primary), 0 0 30px rgba(0, 212, 106, 0.7);
@@ -1144,19 +1158,19 @@ footer {
     .hero-content {
         flex-direction: column;
     }
-    
+
     .presale-card {
         max-width: 100%;
     }
-    
+
     .tokenomics-container {
         grid-template-columns: 1fr;
     }
-    
+
     .steps-container {
         grid-template-columns: repeat(2, 1fr);
     }
-    
+
     .footer-content {
         grid-template-columns: 1fr 1fr;
     }
@@ -1164,6 +1178,7 @@ footer {
 
 /* Mobil (≤ 768px) */
 @media (max-width: 768px) {
+
     /* HEADER HİZALAMA */
     .nav-container {
         align-items: center;
@@ -1193,7 +1208,6 @@ footer {
         align-items: center;
     }
 
-    /* Hamburger: en sağda */
     .menu-toggle {
         display: flex;
         align-items: center;
@@ -1202,7 +1216,6 @@ footer {
         order: 3;
     }
 
-    /* MOBİL DROPDOWN MENÜ */
     .nav-links {
         display: none;
         position: absolute;
@@ -1236,55 +1249,50 @@ footer {
         display: flex;
     }
 
-    /* HERO */
     h1 {
         font-size: 2.5rem;
     }
-    
+
     .hero-stats {
         grid-template-columns: 1fr;
     }
-    
+
     .steps-container {
         grid-template-columns: 1fr;
     }
-    
-    /* ROADMAP */
+
     .roadmap::before {
         left: 20px;
     }
-    
+
     .roadmap-item {
         flex-direction: row !important;
     }
-    
+
     .roadmap-content {
         margin-left: 50px !important;
         margin-right: 0 !important;
     }
-    
+
     .roadmap-marker {
         left: 10px !important;
         right: auto !important;
     }
 
-    /* Faz 2 yanındaki yeşil top mobilde gizli */
     .roadmap-item:nth-child(2)::before {
         display: none;
     }
-    
-    /* FOOTER */
+
     .footer-content {
         grid-template-columns: 1fr;
     }
-    
+
     .footer-bottom {
         flex-direction: column;
         gap: 15px;
         text-align: center;
     }
 }
-)
 
 /* === Mobile Wallet Connect Helper === */
 .mobile-connect-helper {
@@ -1302,51 +1310,280 @@ footer {
     border: 1px solid var(--dark-border);
     border-radius: 16px;
     padding: 24px 20px;
-    max-width: 380px;
-    width: 90%;
-    text-align: center;
-    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
+    max-width: 420px;
+    width: 92%;
+    box-shadow: var(--shadow);
+    text-align: left;
 }
 
-.mobile-connect-box h3 {
-    margin-bottom: 10px;
-    font-size: 18px;
-}
+/* … (buradan sonrası senin dosyandaki 
+   mobile-connect, wallet-modal, enhanced-countdown
+   ve presale-countdown-card CSS’leriyle bire bir
+   aynı kalabilir – onlara dokunmana gerek yok) */
 
-.mobile-connect-box p {
-    color: var(--text-secondary);
-    font-size: 14px;
-    margin-bottom: 16px;
-}
+/* --- Compact Presale Countdown (inside presale card) --- */
 
-.mobile-connect-buttons {
+.presale-countdown-card {
+    margin-top: 14px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: radial-gradient(circle at top left, rgba(34, 197, 94, 0.12), transparent 55%) #020617;
+    border: 1px solid rgba(34, 197, 94, 0.32);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.55);
     display: flex;
     flex-direction: column;
     gap: 8px;
-    margin-bottom: 16px;
+    font-size: 11px;
 }
 
-.mobile-connect-buttons .wallet-link {
-    display: block;
-    padding: 10px 12px;
+.presale-countdown-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.presale-countdown-title-block {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.presale-countdown-icon {
+    width: 22px;
+    height: 22px;
     border-radius: 10px;
-    border: 1px solid var(--dark-border);
-    text-decoration: none;
-    font-size: 14px;
-    color: var(--text-primary);
+    background: rgba(34, 197, 94, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #22c55e;
 }
 
-.mobile-connect-buttons .wallet-link:hover {
-    background: rgba(255, 255, 255, 0.06);
-}
-
-.mobile-connect-close {
-    border: none;
-    background: var(--primary);
-    color: #000;
-    border-radius: 999px;
-    padding: 8px 18px;
+.presale-countdown-title {
+    font-size: 12px;
     font-weight: 600;
-    cursor: pointer;
+    color: #e5e7eb;
+}
+
+.presale-countdown-subtitle {
+    font-size: 10px;
+    color: #9ca3af;
+}
+
+.presale-countdown-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 7px;
+    border-radius: 999px;
+    background: rgba(22, 163, 74, 0.18);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #bbf7d0;
+}
+
+.presale-countdown-live .live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: #22c55e;
+    box-shadow: 0 0 5px rgba(34, 197, 94, 0.8);
+}
+
+.presale-countdown-timer {
+    margin-top: 4px;
+    padding-top: 5px;
+    border-top: 1px solid rgba(15, 23, 42, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+}
+
+.presale-countdown-item {
+    flex: 1;
+    background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9), #020617);
+    border-radius: 10px;
+    padding: 6px 3px 6px;
+    text-align: center;
+    box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.9);
+}
+
+.presale-countdown-number {
+    display: block;
+    font-size: 15px;
+    font-weight: 700;
+    color: #22c55e;
+}
+
+.presale-countdown-unit {
+    display: block;
+    margin-top: 1px;
+    font-size: 8px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #9ca3af;
+}
+
+.presale-countdown-separator {
     font-size: 14px;
+    color: #22c55e;
+    padding-bottom: 2px;
+}
+
+/* Wallet select modal */
+.wallet-select-modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    font-family: inherit;
+}
+
+.wallet-select-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.wallet-select-dialog {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 440px;
+    background: #09090b;
+    /* panel zemin */
+    border-radius: 20px;
+    padding: 18px 18px 14px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+    color: #e5e7eb;
+    /* varsayılan metin rengi */
+    border: 1px solid #27272f;
+}
+
+.wallet-select-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.wallet-select-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #f9fafb;
+    /* başlık beyaz */
+    margin: 0;
+}
+
+.wallet-select-close {
+    border: none;
+    background: transparent;
+    color: #a1a1aa;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.wallet-select-close:hover {
+    color: #e5e7eb;
+}
+
+.wallet-select-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.wallet-option {
+    width: 100%;
+    border: 1px solid #27272f;
+    background: #111827;
+    /* koyu gri zemin */
+    border-radius: 16px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, transform 0.06s;
+}
+
+.wallet-option:hover {
+    background: #1f2937;
+    border-color: #00d46a;
+    transform: translateY(-1px);
+}
+
+.wallet-option-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.wallet-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background-color: #020617;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Logo dosyaları – senin png adlarınla uyumlu */
+.wallet-icon-metamask {
+    background-image: url("/wallet-icons/metamask-icon.png");
+}
+
+.wallet-icon-trust {
+    background-image: url("/wallet-icons/trust-wallet-seeklogo.png");
+}
+
+.wallet-icon-coinbase {
+    background-image: url("/wallet-icons/coinbase-icon.png");
+}
+
+.wallet-icon-binance {
+    background-image: url("/wallet-icons/binance-icon-seeklogo.png");
+}
+
+.wallet-icon-okx {
+    background-image: url("/wallet-icons/okx-seeklogo.png");
+}
+
+.wallet-option-text {
+    text-align: left;
+}
+
+.wallet-name {
+    font-size: 15px;
+    font-weight: 500;
+    color: #f9fafb;
+    /* cüzdan adı beyaz */
+}
+
+.wallet-desc {
+    font-size: 12px;
+    color: #9ca3af;
+    /* açıklama gri */
+}
+
+.wallet-option-right {
+    display: flex;
+    align-items: center;
+}
+
+.wallet-installed-badge {
+    display: none;
+    /* JS yüklü olanlarda açıyor */
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(34, 197, 94, 0.15);
+    color: #4ade80;
+    border: 1px solid rgba(34, 197, 94, 0.6);
 }

@@ -7,7 +7,7 @@ let bnbPrice = 0;
 let currentSalePool = 0; // 0 = Normal Presale, 1 = Vesting Presale
 
 // Sayfa yüklendiğinde çalışacak fonksiyon
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     console.log('Sayfa yüklendi - dil:', currentLanguage);
 
     // Tokenomics Chart
@@ -15,6 +15,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Event listener'ları kur
     setupEventListeners();
+
+    // Mobil cüzdan yönlendirme yardımcı paneli
+    setupMobileConnectHelper();
 
     // Sayfayı başlat
     initializePage();
@@ -38,7 +41,7 @@ function initChart() {
         data: {
             labels: [
                 translations['en']['tokenomics.presale'],
-                translations['en']['tokenomics.liquidity'], 
+                translations['en']['tokenomics.liquidity'],
                 translations['en']['tokenomics.staking'],
                 translations['en']['tokenomics.marketing'],
                 translations['en']['tokenomics.team'],
@@ -48,7 +51,7 @@ function initChart() {
             datasets: [{
                 data: [25, 20, 15, 15, 10, 10, 5],
                 backgroundColor: [
-                    '#22c55e', '#06b6d4', '#8b5cf6', '#f97316', 
+                    '#22c55e', '#06b6d4', '#8b5cf6', '#f97316',
                     '#eab308', '#ef4444', '#3b82f6'
                 ],
                 borderWidth: 0,
@@ -70,7 +73,7 @@ function initChart() {
                 },
                 tooltip: {
                     callbacks: {
-                        label: function(context) {
+                        label: function (context) {
                             return `${context.label}: ${context.raw}%`;
                         }
                     }
@@ -99,7 +102,7 @@ function setupEventListeners() {
     console.log('Bulunan dil butonları:', langButtons.length);
 
     langButtons.forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             console.log('Dil butonuna tıklandı:', this.getAttribute('data-lang'));
             const lang = this.getAttribute('data-lang');
 
@@ -116,7 +119,7 @@ function setupEventListeners() {
     // 🔹 Payment method butonları
     const paymentButtons = document.querySelectorAll('.payment-btn');
     paymentButtons.forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             console.log('Payment butonuna tıklandı:', this.getAttribute('data-method'));
             paymentButtons.forEach(btn => btn.classList.remove('active'));
             this.classList.add('active');
@@ -130,7 +133,7 @@ function setupEventListeners() {
     // 🔹 Sale mode butonları (Normal / Vesting)
     const saleModeButtons = document.querySelectorAll('.sale-mode-btn');
     saleModeButtons.forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const pool = parseInt(this.getAttribute('data-pool'), 10);
             if (isNaN(pool)) return;
             currentSalePool = pool;
@@ -187,7 +190,7 @@ function setupEventListeners() {
     });
 
     // 🔹 Scroll event (header arka plan)
-    window.addEventListener('scroll', function() {
+    window.addEventListener('scroll', function () {
         const header = document.querySelector('header');
         if (!header) return;
 
@@ -350,7 +353,7 @@ function updateChartLabels(lang) {
     if (window.tokenomicsChart && translations[lang]) {
         window.tokenomicsChart.data.labels = [
             translations[lang]['tokenomics.presale'],
-            translations[lang]['tokenomics.liquidity'], 
+            translations[lang]['tokenomics.liquidity'],
             translations[lang]['tokenomics.staking'],
             translations[lang]['tokenomics.marketing'],
             translations[lang]['tokenomics.team'],
@@ -358,6 +361,81 @@ function updateChartLabels(lang) {
             translations[lang]['tokenomics.community']
         ];
         window.tokenomicsChart.update();
+    }
+}
+
+function setupMobileConnectHelper() {
+    try {
+        const modal = document.getElementById('mobile-connect-helper');
+        if (!modal) {
+            return;
+        }
+
+        const currentUrl = window.location.origin + window.location.pathname + window.location.search + window.location.hash;
+        const encodedUrl = encodeURIComponent(currentUrl);
+        const dappHost = currentUrl.replace(/^https?:\/\//, '');
+
+        // MetaMask deep link (MetaMask in-app browser) :contentReference[oaicite:0]{index=0}
+        const metamaskLink = modal.querySelector('[data-wallet="metamask"]');
+        if (metamaskLink) {
+            metamaskLink.href = 'https://link.metamask.io/dapp/' + dappHost;
+        }
+
+        // Trust Wallet deep link :contentReference[oaicite:1]{index=1}
+        const trustLink = modal.querySelector('[data-wallet="trust"]');
+        if (trustLink) {
+            trustLink.href = 'https://link.trustwallet.com/open_url?coin_id=60&url=' + encodedUrl;
+        }
+
+        // Coinbase Wallet deep link :contentReference[oaicite:2]{index=2}
+        const coinbaseLink = modal.querySelector('[data-wallet="coinbase"]');
+        if (coinbaseLink) {
+            coinbaseLink.href = 'https://go.cb-w.com/dapp?cb_url=' + encodedUrl;
+        }
+
+        // OKX Web3 Wallet deeplink :contentReference[oaicite:3]{index=3}
+        const okxLink = modal.querySelector('[data-wallet="okx"]');
+        if (okxLink) {
+            okxLink.href = 'okx://wallet/dapp/url?dappUrl=' + encodedUrl;
+        }
+
+        // URL gösterimi
+        const urlSpan = modal.querySelector('.mobile-connect-url');
+        if (urlSpan) {
+            urlSpan.textContent = currentUrl;
+        }
+
+        // Kopyalama butonu
+        const copyBtn = modal.querySelector('.mobile-connect-copy');
+        if (copyBtn && !copyBtn.dataset.bound) {
+            copyBtn.dataset.bound = '1';
+            copyBtn.addEventListener('click', async function () {
+                try {
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        await navigator.clipboard.writeText(currentUrl);
+                    } else {
+                        const tempInput = document.createElement('input');
+                        tempInput.value = currentUrl;
+                        document.body.appendChild(tempInput);
+                        tempInput.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(tempInput);
+                    }
+
+                    const originalText = copyBtn.textContent;
+                    const translated = translations[currentLanguage] && translations[currentLanguage]['mobile.helper.copied'];
+                    copyBtn.textContent = translated || 'Copied!';
+                    setTimeout(function () {
+                        copyBtn.textContent = originalText;
+                    }, 1200);
+                } catch (err) {
+                    console.error('Clipboard write failed:', err);
+                    alert(currentUrl);
+                }
+            });
+        }
+    } catch (err) {
+        console.error('setupMobileConnectHelper error:', err);
     }
 }
 

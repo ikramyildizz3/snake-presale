@@ -1,4 +1,4 @@
-// Snake Presale Web3 integration
+// Snake Presale Web3 integration (multi‑wallet + modal)
 // REQUIREMENTS:
 // 1) snake-token.html içinde, bu dosyadan ÖNCE şu scripti ekle:
 //    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
@@ -32,13 +32,16 @@
   let provider = null;
   let signer = null;
   let userAddress = null;
-  let injectedProvider = null;
 
   let connectBtnEl = null;
   let buyBtnEl = null;
   let claimBtnEl = null;
 
   let isConnectingWallet = false;
+
+  // Modal durumu
+  let walletModalEl = null;
+  let lastSelectedWalletType = null; // "metamask", "trust", "coinbase", "binance", "okx"
 
   // ---------- Dil yardımcıları ----------
 
@@ -47,7 +50,7 @@
       if (typeof window !== "undefined" && window.currentLanguage) {
         return window.currentLanguage;
       }
-    } catch (e) { }
+    } catch (e) {}
     return "en";
   }
 
@@ -170,7 +173,7 @@
       if (typeof currentPaymentMethod !== "undefined") {
         return currentPaymentMethod;
       }
-    } catch (e) { }
+    } catch (e) {}
     const activeBtn = document.querySelector(".payment-btn.active");
     if (activeBtn && activeBtn.getAttribute("data-method")) {
       return activeBtn.getAttribute("data-method");
@@ -180,10 +183,13 @@
 
   function getCurrentPoolId() {
     try {
-      if (typeof window !== "undefined" && typeof window.currentSalePool !== "undefined") {
+      if (
+        typeof window !== "undefined" &&
+        typeof window.currentSalePool !== "undefined"
+      ) {
         return window.currentSalePool === 1 ? 1 : 0;
       }
-    } catch (e) { }
+    } catch (e) {}
     const active = document.querySelector(".sale-mode-btn.active");
     if (active && active.getAttribute("data-pool")) {
       const pool = parseInt(active.getAttribute("data-pool"), 10);
@@ -290,42 +296,89 @@
     }
   }
 
-  // ---------- Provider seçimi ----------
+  // ---------- Provider seçimi (wallet tipiyle) ----------
 
-  function detectInjectedProvider() {
+  function detectInjectedProvider(preferredWallet) {
     if (typeof window === "undefined") return null;
 
-    // 1) Binance Web3 Wallet (mobil dApp browser)
-    if (window.binancew3w && window.binancew3w.ethereum) {
-      return window.binancew3w.ethereum;
-    }
+    const eth = window.ethereum;
+    const providers = Array.isArray(eth && eth.providers) && eth.providers.length > 0
+      ? eth.providers
+      : eth
+      ? [eth]
+      : [];
 
-    // 2) Eski Binance Chain extension (desktop)
-    if (window.BinanceChain) {
-      return window.BinanceChain;
-    }
-
-    // 3) Standart EIP-1193 (MetaMask, Rabby, Trust, vs.)
-    if (window.ethereum) {
-      if (Array.isArray(window.ethereum.providers) && window.ethereum.providers.length > 0) {
-        return window.ethereum.providers[0];
+    function pickProvider(matchFn) {
+      for (let i = 0; i < providers.length; i++) {
+        const p = providers[i];
+        if (p && matchFn(p)) return p;
       }
-      return window.ethereum;
+      return null;
     }
+
+    // Binance Web3 (mobil dApp tarayıcı + eski extension)
+    if (!preferredWallet || preferredWallet === "binance") {
+      if (window.binancew3w && window.binancew3w.ethereum) {
+        return window.binancew3w.ethereum;
+      }
+      if (window.BinanceChain) {
+        return window.BinanceChain;
+      }
+      if (preferredWallet === "binance") {
+        // Özellikle Binance seçilip bulunamadıysa başka cüzdana düşme
+        return null;
+      }
+    }
+
+    if (preferredWallet === "metamask") {
+      const mm = pickProvider((p) => p.isMetaMask);
+      if (mm) return mm;
+      if (eth && eth.isMetaMask) return eth;
+      return null;
+    }
+
+    if (preferredWallet === "coinbase") {
+      const cb = pickProvider((p) => p.isCoinbaseWallet);
+      if (cb) return cb;
+      if (eth && eth.isCoinbaseWallet) return eth;
+      if (window.coinbaseWalletExtension) return window.coinbaseWalletExtension;
+      return null;
+    }
+
+    if (preferredWallet === "trust") {
+      const tw = pickProvider((p) => p.isTrust || p.isTrustWallet);
+      if (tw) return tw;
+      if (eth && (eth.isTrust || eth.isTrustWallet)) return eth;
+      return null;
+    }
+
+    if (preferredWallet === "okx") {
+      if (window.okxwallet && window.okxwallet.ethereum) {
+        return window.okxwallet.ethereum;
+      }
+      const okx = pickProvider((p) => p.isOkxWallet || p.isOKXWallet);
+      if (okx) return okx;
+      return null;
+    }
+
+    // Hiç tercih yoksa: genel fallback
+    if (providers.length > 0) {
+      return providers[0];
+    }
+    if (eth) return eth;
 
     return null;
   }
 
-  function getInjectedProvider() {
-    if (injectedProvider) return injectedProvider;
-    injectedProvider = detectInjectedProvider();
-    return injectedProvider;
+  function getInjectedProvider(preferredWallet) {
+    const walletKey = preferredWallet || lastSelectedWalletType || null;
+    return detectInjectedProvider(walletKey);
   }
 
   // ---------- Web3 / Ethers ----------
 
-  async function ensureProvider() {
-    const injected = getInjectedProvider();
+  async function ensureProvider(preferredWallet) {
+    const injected = getInjectedProvider(preferredWallet);
     if (!injected) {
       if (isMobileDevice()) {
         showMobileConnectHelper();
@@ -350,16 +403,13 @@
       throw new Error("No ethers library");
     }
 
-    if (!provider) {
-      provider = new window.ethers.providers.Web3Provider(injected, "any");
-    }
+    // Her seferinde güncel provider’dan oluştur (wallet değişimine hazır)
+    provider = new window.ethers.providers.Web3Provider(injected, "any");
     return provider;
   }
 
-  async function ensureCorrectNetwork() {
-    // Ethers provider hazır olsun (ileride kullanıyoruz)
-    const p = await ensureProvider();
-    const injected = getInjectedProvider();
+  async function ensureCorrectNetwork(preferredWallet) {
+    const injected = getInjectedProvider(preferredWallet);
 
     if (!injected || typeof injected.request !== "function") {
       alert(
@@ -373,11 +423,9 @@
 
     let chainId = null;
 
-    // Önce eth_chainId dene
     try {
       chainId = await injected.request({ method: "eth_chainId" });
     } catch (e) {
-      // Bazı cüzdanlar için fallback: net_version
       try {
         const netVersion = await injected.request({ method: "net_version" });
         if (typeof netVersion === "string") {
@@ -391,7 +439,6 @@
       }
     }
 
-    // chainId boşsa ethers'in "invalid BigNumber string" hatasını tetiklemeyelim
     if (!chainId || chainId === "") {
       alert(
         t(
@@ -404,12 +451,10 @@
 
     const normalized = String(chainId).toLowerCase();
 
-    // Zaten BSC ise çık
     if (normalized === "0x38" || normalized === "56") {
       return;
     }
 
-    // Değilse BSC'ye geçirmeyi dene
     try {
       await injected.request({
         method: "wallet_switchEthereumChain",
@@ -427,7 +472,135 @@
     }
   }
 
-  async function connectWallet() {
+  // ---------- Wallet seçim menüsü ----------
+
+  function isWalletInstalled(walletKey) {
+    if (typeof window === "undefined") return false;
+
+    const eth = window.ethereum;
+    const providers = Array.isArray(eth && eth.providers) && eth.providers.length > 0
+      ? eth.providers
+      : eth
+      ? [eth]
+      : [];
+
+    const hasFlag = (flag) => providers.some((p) => p && p[flag]);
+
+    switch (walletKey) {
+      case "metamask":
+        return (eth && eth.isMetaMask) || hasFlag("isMetaMask");
+      case "coinbase":
+        return (
+          !!window.coinbaseWalletExtension ||
+          (eth && eth.isCoinbaseWallet) ||
+          hasFlag("isCoinbaseWallet")
+        );
+      case "trust":
+        return (
+          (eth && (eth.isTrust || eth.isTrustWallet)) ||
+          hasFlag("isTrust") ||
+          hasFlag("isTrustWallet")
+        );
+      case "binance":
+        return !!(
+          (window.binancew3w && window.binancew3w.ethereum) ||
+          window.BinanceChain
+        );
+      case "okx":
+        return !!(
+          (window.okxwallet && (window.okxwallet.ethereum || window.okxwallet.okxwallet)) ||
+          hasFlag("isOkxWallet") ||
+          hasFlag("isOKXWallet")
+        );
+      default:
+        return false;
+    }
+  }
+
+  function refreshWalletInstalledBadges() {
+    if (typeof document === "undefined") return;
+    const options = document.querySelectorAll(".wallet-option");
+    options.forEach((opt) => {
+      const key = opt.getAttribute("data-wallet");
+      const badge = opt.querySelector("[data-installed-badge]");
+      if (!badge) return;
+      if (isWalletInstalled(key)) {
+        badge.style.display = "inline-flex";
+      } else {
+        badge.style.display = "none";
+      }
+    });
+  }
+
+  function closeWalletSelectModal() {
+    if (walletModalEl) {
+      walletModalEl.style.display = "none";
+    }
+  }
+
+  function openWalletSelectModal() {
+    if (!walletModalEl && typeof document !== "undefined") {
+      walletModalEl = document.getElementById("wallet-select-modal");
+    }
+
+    // Modal yoksa (yanlışlıkla silindiyse) eski davranışa düş
+    if (!walletModalEl) {
+      // Fallback: direkt cüzdan bağla
+      connectWallet().catch((err) => logErrorContext("Connect failed", err));
+      return;
+    }
+
+    refreshWalletInstalledBadges();
+    walletModalEl.style.display = "flex";
+  }
+
+  function setupWalletSelector() {
+    if (typeof document === "undefined") return;
+
+    walletModalEl = document.getElementById("wallet-select-modal");
+    if (!walletModalEl) return;
+
+    const closeBtn = walletModalEl.querySelector(".wallet-select-close");
+    if (closeBtn && !closeBtn.dataset.bound) {
+      closeBtn.dataset.bound = "1";
+      closeBtn.addEventListener("click", () => {
+        closeWalletSelectModal();
+      });
+    }
+
+    const backdrop = walletModalEl.querySelector(".wallet-select-backdrop");
+    if (backdrop && !backdrop.dataset.bound) {
+      backdrop.dataset.bound = "1";
+      backdrop.addEventListener("click", () => {
+        closeWalletSelectModal();
+      });
+    }
+
+    const options = walletModalEl.querySelectorAll(".wallet-option");
+    options.forEach((opt) => {
+      if (opt.dataset.bound === "1") return;
+      opt.dataset.bound = "1";
+
+      opt.addEventListener("click", async () => {
+        const walletKey = opt.getAttribute("data-wallet");
+        lastSelectedWalletType = walletKey || null;
+        closeWalletSelectModal();
+
+        try {
+          await connectWallet(walletKey);
+        } catch (error) {
+          logErrorContext("Connect failed", error);
+        }
+      });
+    });
+
+    // İlk açılışta da bir kere hesapla
+    refreshWalletInstalledBadges();
+  }
+
+  // ---------- Cüzdan bağlama ----------
+
+  async function connectWallet(preferredWallet) {
     if (isConnectingWallet) {
       alert(
         t(
@@ -438,7 +611,7 @@
       return;
     }
 
-    const injected = getInjectedProvider();
+    const injected = getInjectedProvider(preferredWallet);
     if (!injected || typeof injected.request !== "function") {
       alert(
         t(
@@ -451,8 +624,8 @@
 
     isConnectingWallet = true;
     try {
-      // 1) Önce ethers provider'ı hazırla
-      const p = await ensureProvider();
+      // 1) Ethers provider'ı hazırla
+      const p = await ensureProvider(preferredWallet);
 
       // 2) Kullanıcıdan hesap izni iste
       const accounts = await injected.request({
@@ -464,7 +637,7 @@
       }
 
       // 3) Ağ doğru mu, değilse BSC'ye geçir
-      await ensureCorrectNetwork();
+      await ensureCorrectNetwork(preferredWallet);
 
       // 4) Signer ve adresi al
       signer = p.getSigner();
@@ -494,6 +667,7 @@
       }
 
       logErrorContext("Connect failed", error);
+      throw error;
     } finally {
       isConnectingWallet = false;
     }
@@ -679,7 +853,11 @@
       }
 
       if (claimBtnEl) {
-        setButtonLoading(claimBtnEl, true, t("Claiming...", "Claim ediliyor..."));
+        setButtonLoading(
+          claimBtnEl,
+          true,
+          t("Claiming...", "Claim ediliyor...")
+        );
       }
 
       const tx = await presale.claim(poolId);
@@ -743,12 +921,9 @@
       return;
     }
 
-    connectBtnEl = replaceButtonAndAttach(".connect-wallet", async () => {
-      try {
-        await connectWallet();
-      } catch (error) {
-        logErrorContext("Connect failed", error);
-      }
+    // Connect Wallet tıklandığında HER ZAMAN önce menü açılsın
+    connectBtnEl = replaceButtonAndAttach(".connect-wallet", () => {
+      openWalletSelectModal();
     });
 
     buyBtnEl = replaceButtonAndAttach(".btn-primary", () => {
@@ -759,8 +934,13 @@
       handleClaim();
     });
 
+    // Wallet seçim modal'ını hazırla
+    setupWalletSelector();
+
+    // Ethereum eventleri
     setupEthereumEvents();
 
+    // Gerekirse dışarıdan erişim için
     window.snakePresaleWeb3 = {
       connectWallet,
       buyNow: handleBuyNow,

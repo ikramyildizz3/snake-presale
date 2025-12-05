@@ -7,6 +7,7 @@
 
   // TODO: Replace with your real admin wallet(s)
   const ADMIN_ADDRESSES = [
+    "0x8b49b6887aA087d27c88071E08FABD875D8345E4",
     "0xd2541854d142ffe0bd81bf21b646209f45b1d98d"
   ];
 

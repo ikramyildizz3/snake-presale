@@ -27,7 +27,16 @@ const translations = {
         'presale.price.normal': 'Price: 1 SNAKE = 0.02 USDT',
         'presale.price.vesting': 'Price: 1 SNAKE = 0.015 USDT (vesting)',
         'mobile.helper.title': 'Connect from your wallet app',
-        'mobile.helper.text': 'On mobile, please open this page inside a Web3 wallet browser such as MetaMask, Trust Wallet, or Binance Web3 Wallet. If you already have a wallet app installed, you can try the buttons below.',
+        'mobile.helper.text': 'On mobile, please open this page inside a Web3 wallet (MetaMask, Trust Wallet, Binance Web3, etc.). If you already have a wallet app installed, you can use the shortcuts below or copy the dApp link.',
+        'mobile.helper.metamask': 'Open in MetaMask',
+        'mobile.helper.trust': 'Open in Trust Wallet',
+        'mobile.helper.coinbase': 'Open in Coinbase Wallet',
+        'mobile.helper.okx': 'Open in OKX Web3 Wallet',
+        'mobile.helper.other-title': 'Other wallets',
+        'mobile.helper.other-text': 'You can also open the DApp browser of your wallet (Binance Web3, Bitget, SafePal, Rainbow, imToken, etc.) and paste the link below.',
+        'mobile.helper.copy': 'Copy dApp link',
+        'mobile.helper.copied': 'Copied!',
+        'mobile.helper.close': 'Close',
 
 
         // Presale Details
@@ -41,6 +50,14 @@ const translations = {
         'presale.amount': 'Amount (SNAKE)',
         'presale.price': 'Price: 1 SNAKE = 0.02 USDT',   // default
         'presale.enter-amount': 'Enter amount',
+
+        // Presale Countdown
+        'presale.countdown.title': 'Presale Countdown',
+        'presale.countdown.live': 'LIVE',
+        'presale.countdown.days': 'DAYS',
+        'presale.countdown.hours': 'HOURS',
+        'presale.countdown.minutes': 'MIN',
+        'presale.countdown.seconds': 'SEC',
 
         // NEW – sale type buttons + dynamic price
         'presale.sale-mode.label': 'Sale Type',
@@ -217,8 +234,18 @@ const translations = {
         'presale.mode.vesting.line2': '(İndirimli)',
         'presale.price.normal': 'Fiyat: 1 SNAKE = 0,02 USDT',
         'presale.price.vesting': 'Fiyat: 1 SNAKE = 0,015 USDT (vestingli)',
-        'mobile.helper.title': 'Cüzdan uygulamasından bağlan',
-        'mobile.helper.text': 'Mobilde bağlanmak için bu sayfayı MetaMask, Trust Wallet, Binance Web3 gibi cüzdan uygulamalarının içindeki tarayıcıdan açın. Cüzdan uygulamanız yüklüyse aşağıdaki butonları da deneyebilirsiniz.',
+        'mobile.helper.title': 'Cüzdan uygulamanızdan bağlanın',
+        'mobile.helper.text': 'Mobilde lütfen bu sayfayı MetaMask, Trust Wallet, Binance Web3 gibi bir Web3 cüzdanının içindeki tarayıcıdan açın. Telefonunuzda zaten bir cüzdan yüklüyse aşağıdaki kısayollardan birini kullanabilir veya bağlantıyı kopyalayıp DApp tarayıcısına yapıştırabilirsiniz.',
+        'mobile.helper.metamask': 'MetaMask’te aç',
+        'mobile.helper.trust': 'Trust Wallet’ta aç',
+        'mobile.helper.coinbase': 'Coinbase Wallet’ta aç',
+        'mobile.helper.okx': 'OKX Web3 Wallet’ta aç',
+        'mobile.helper.other-title': 'Diğer cüzdanlar',
+        'mobile.helper.other-text': 'Cüzdanınızın DApp tarayıcısını açıp aşağıdaki bağlantıyı yapıştırarak (Binance Web3, Bitget, SafePal, Rainbow, imToken vb.) bağlanabilirsiniz.',
+        'mobile.helper.copy': 'Bağlantıyı kopyala',
+        'mobile.helper.copied': 'Kopyalandı!',
+        'mobile.helper.close': 'Kapat',
+
 
 
         // Presale Details
@@ -232,6 +259,14 @@ const translations = {
         'presale.amount': 'Miktar (SNAKE)',
         'presale.price': 'Fiyat: 1 SNAKE = 0,02 USDT',   // varsayılan
         'presale.enter-amount': 'Miktar girin',
+
+        // Presale Countdown
+        'presale.countdown.title': 'Ön Satış Geri Sayımı',
+        'presale.countdown.live': 'AKTİF',
+        'presale.countdown.days': 'GÜN',
+        'presale.countdown.hours': 'SAAT',
+        'presale.countdown.minutes': 'DK',
+        'presale.countdown.seconds': 'SN',
 
         // NEW – satış türü butonları + dinamik fiyat
         'presale.sale-mode.label': 'Satış Türü',
