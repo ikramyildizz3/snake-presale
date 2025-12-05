@@ -375,17 +375,109 @@
     return detectInjectedProvider(walletKey);
   }
 
+  // ---------- Deep link & install helpers ----------
+
+  function getCurrentDappUrlParts() {
+    if (typeof window === "undefined") {
+      return { full: "", encoded: "", hostPath: "" };
+    }
+    const full =
+      window.location.origin +
+      window.location.pathname +
+      window.location.search +
+      window.location.hash;
+
+    return {
+      full,
+      encoded: encodeURIComponent(full),
+      hostPath: full.replace(/^https?:\/\//, "")
+    };
+  }
+
+  // Mobilde: ilgili wallet uygulamasını açmaya zorla (yüklü değilse App Store / Play'e düşüyor)
+  function openWalletDeepLink(walletKey) {
+    if (typeof window === "undefined") return;
+
+    const parts = getCurrentDappUrlParts();
+
+    switch (walletKey) {
+      case "metamask":
+        // MetaMask resmi deep-link
+        window.location.href = "https://link.metamask.io/dapp/" + parts.hostPath;
+        break;
+      case "trust":
+        window.location.href =
+          "https://link.trustwallet.com/open_url?coin_id=60&url=" + parts.encoded;
+        break;
+      case "coinbase":
+        window.location.href =
+          "https://go.cb-w.com/dapp?cb_url=" + parts.encoded;
+        break;
+      case "okx":
+        window.location.href =
+          "okx://wallet/dapp/url?dappUrl=" + parts.encoded;
+        break;
+      case "binance":
+        // Binance Web3 için resmi bir deep-link standardı yok; kullanıcıya tarayıcıdan açmasını söyleyeceğiz.
+        break;
+      default:
+        break;
+    }
+  }
+
+  // Desktop’ta wallet yoksa: resmi download sayfasını yeni sekmede aç
+  function openWalletInstallPage(walletKey) {
+    if (typeof window === "undefined") return;
+
+    let url = null;
+    switch (walletKey) {
+      case "metamask":
+        url = "https://metamask.io/download/";
+        break;
+      case "trust":
+        url = "https://trustwallet.com/download";
+        break;
+      case "coinbase":
+        url = "https://www.coinbase.com/wallet/downloads";
+        break;
+      case "okx":
+        url = "https://www.okx.com/web3";
+        break;
+      case "binance":
+        url = "https://www.binance.com/en/web3wallet";
+        break;
+      default:
+        break;
+    }
+
+    if (url) {
+      window.open(url, "_blank");
+    }
+  }
+
   // ---------- Web3 / Ethers ----------
 
   async function ensureProvider(preferredWallet) {
     const injected = getInjectedProvider(preferredWallet);
+
     if (!injected) {
-      if (isMobileDevice()) {
-        showMobileConnectHelper();
+      // Hiç provider yoksa:
+      if (preferredWallet && isMobileDevice()) {
+        // Mobil + belirli bir cüzdan seçilmiş -> uygulamaya deep-link
+        openWalletDeepLink(preferredWallet);
+      } else if (preferredWallet) {
+        // Desktop + belirli cüzdan -> download sayfasını aç
+        openWalletInstallPage(preferredWallet);
+        alert(
+          t(
+            "No Web3 wallet detected. Please install the selected wallet or another Web3 wallet and try again.",
+            "Web3 cüzdanı bulunamadı. Lütfen seçtiğiniz cüzdanı veya başka bir Web3 cüzdanı kurup tekrar deneyin."
+          )
+        );
       } else {
         alert(
           t(
-            "No Web3 wallet detected. Please install MetaMask, Trust Wallet browser, Binance Web3, etc.",
+            "No Web3 wallet detected. Please install MetaMask, Trust Wallet, Binance Web3, etc.",
             "Web3 cüzdanı bulunamadı. Lütfen MetaMask, Trust Wallet, Binance Web3 vb. bir cüzdan kurun."
           )
         );
@@ -612,16 +704,29 @@
     }
 
     const injected = getInjectedProvider(preferredWallet);
+
     if (!injected || typeof injected.request !== "function") {
-      alert(
-        t(
-          "No Web3 wallet detected. Please install MetaMask, Trust Wallet browser, Binance Web3, etc.",
-          "Web3 cüzdanı bulunamadı. Lütfen MetaMask, Trust Wallet, Binance Web3 vb. bir cüzdan kurun."
-        )
-      );
+      // Burada da aynı mantık: önce mobil deep-link, değilse download sayfası
+      if (preferredWallet && isMobileDevice()) {
+        openWalletDeepLink(preferredWallet);
+      } else if (preferredWallet) {
+        openWalletInstallPage(preferredWallet);
+        alert(
+          t(
+            "No Web3 wallet detected. Please install the selected wallet or another Web3 wallet and try again.",
+            "Web3 cüzdanı bulunamadı. Lütfen seçtiğiniz cüzdanı veya başka bir Web3 cüzdanı kurup tekrar deneyin."
+          )
+        );
+      } else {
+        alert(
+          t(
+            "No Web3 wallet detected. Please install MetaMask, Trust Wallet, Binance Web3, etc.",
+            "Web3 cüzdanı bulunamadı. Lütfen MetaMask, Trust Wallet, Binance Web3 vb. bir cüzdan kurun."
+          )
+        );
+      }
       throw new Error("No request-capable provider");
     }
-
 
     isConnectingWallet = true;
     try {
