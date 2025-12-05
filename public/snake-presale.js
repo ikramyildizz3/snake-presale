@@ -612,19 +612,7 @@
     }
 
     const injected = getInjectedProvider(preferredWallet);
-
-    // 📱 Mobilde, provider yoksa: helper modalı aç ve sessizce çık
     if (!injected || typeof injected.request !== "function") {
-      if (isMobileDevice && isMobileDevice()) {
-        // Deep-link butonlarının olduğu modal
-        if (typeof showMobileConnectHelper === "function") {
-          showMobileConnectHelper();
-        }
-        // Hata fırlatma yok → "Connect failed" görmezsin
-        return;
-      }
-
-      // 💻 Desktop için eski davranışı koru
       alert(
         t(
           "No Web3 wallet detected. Please install MetaMask, Trust Wallet browser, Binance Web3, etc.",
@@ -633,6 +621,7 @@
       );
       throw new Error("No request-capable provider");
     }
+
 
     isConnectingWallet = true;
     try {
