@@ -425,26 +425,36 @@
     }
   }
 
-  // Desktop’ta wallet yoksa: resmi download sayfasını yeni sekmede aç
+  // Desktop’ta wallet yoksa: doğrudan Chrome Web Store / resmi indirme sayfası
   function openWalletInstallPage(walletKey) {
     if (typeof window === "undefined") return;
 
     let url = null;
     switch (walletKey) {
       case "metamask":
-        url = "https://metamask.io/download/";
+        // MetaMask – Chrome Web Store
+        url =
+          "https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn";
         break;
       case "trust":
-        url = "https://trustwallet.com/download";
+        // Trust Wallet – Chrome Web Store
+        url =
+          "https://chromewebstore.google.com/detail/trust-wallet/egjidjbpglichdcondbcbdnbeeppgdph";
         break;
       case "coinbase":
-        url = "https://www.coinbase.com/wallet/downloads";
+        // Coinbase Wallet – Chrome Web Store
+        url =
+          "https://chromewebstore.google.com/detail/coinbase-wallet-extension/hnfanknocfeofbddgcijnmhnfnkdnaad";
         break;
       case "okx":
-        url = "https://www.okx.com/web3";
+        // OKX Wallet – Chrome Web Store
+        url =
+          "https://chromewebstore.google.com/detail/okx-wallet/mcohilncbfahbmgdjkbpemcciiolgcge";
         break;
       case "binance":
-        url = "https://www.binance.com/en/web3wallet";
+        // Binance Wallet – Chrome Web Store
+        url =
+          "https://chromewebstore.google.com/detail/binance-wallet/cadiboklkpojfamcoggejbbdjcoiljjk";
         break;
       default:
         break;
