@@ -170,47 +170,8 @@
                     </button>
                 </div>
 
-                <!-- COMPACT COUNTDOWN – Buy/Claim ALTINDA -->
-                <div class="presale-countdown-card">
-                    <div class="presale-countdown-header">
-                        <div class="presale-countdown-title-block">
-                            <div class="presale-countdown-icon">
-                                <i class="fas fa-clock"></i>
-                            </div>
-                            <div>
-                                <div class="presale-countdown-title" data-i18n="countdown.title">
-                                    Presale Countdown
-                                </div>
-                            </div>
-                        </div>
-                        <div class="presale-countdown-live">
-                            <span class="live-dot"></span>
-                            <span data-i18n="countdown.live">LIVE</span>
-                        </div>
-                    </div>
-
-                    <div class="presale-countdown-timer" id="presale-countdown" data-presale-end="2025-12-27T00:00:00Z">
-                        <div class="presale-countdown-item">
-                            <span class="presale-countdown-number" data-unit="days">--</span>
-                            <span class="presale-countdown-unit" data-i18n="countdown.days">DAYS</span>
-                        </div>
-                        <span class="presale-countdown-separator">:</span>
-                        <div class="presale-countdown-item">
-                            <span class="presale-countdown-number" data-unit="hours">--</span>
-                            <span class="presale-countdown-unit" data-i18n="countdown.hours">HOURS</span>
-                        </div>
-                        <span class="presale-countdown-separator">:</span>
-                        <div class="presale-countdown-item">
-                            <span class="presale-countdown-number" data-unit="minutes">--</span>
-                            <span class="presale-countdown-unit" data-i18n="countdown.minutes">MIN</span>
-                        </div>
-                        <span class="presale-countdown-separator">:</span>
-                        <div class="presale-countdown-item">
-                            <span class="presale-countdown-number" data-unit="seconds">--</span>
-                            <span class="presale-countdown-unit" data-i18n="countdown.seconds">SEC</span>
-                        </div>
-                    </div>
-                </div>
+            </div> <!-- .presale-card -->
+        </div> <!-- .hero-content -->
     </section>
 
     <!-- Sale Types Section -->
@@ -961,75 +922,6 @@
             </button>
         </div>
     </div>
-
-    <!-- Presale countdown script -->
-    <script>
-        (function () {
-            function initPresaleCountdown() {
-                var el = document.getElementById("presale-countdown");
-                if (!el) return;
-
-                var endIso = el.getAttribute("data-presale-end");
-                if (!endIso) return;
-
-                var endTime = Date.parse(endIso);
-                if (isNaN(endTime)) return;
-
-                var subtextEl = document.getElementById("presale-countdown-subtext");
-
-                function pad(n) {
-                    return n < 10 ? "0" + n : "" + n;
-                }
-
-                function update() {
-                    var now = Date.now();
-                    var diff = endTime - now;
-
-                    var daysEl = el.querySelector('[data-unit="days"]');
-                    var hoursEl = el.querySelector('[data-unit="hours"]');
-                    var minsEl = el.querySelector('[data-unit="minutes"]');
-                    var secsEl = el.querySelector('[data-unit="seconds"]');
-
-                    if (!daysEl || !hoursEl || !minsEl || !secsEl) return;
-
-                    if (diff <= 0) {
-                        daysEl.textContent = "00";
-                        hoursEl.textContent = "00";
-                        minsEl.textContent = "00";
-                        secsEl.textContent = "00";
-
-                        if (subtextEl) {
-                            subtextEl.textContent =
-                                "Presale is live. Claims may be open depending on your pool.";
-                        }
-
-                        clearInterval(timer);
-                        return;
-                    }
-
-                    var totalSeconds = Math.floor(diff / 1000);
-                    var days = Math.floor(totalSeconds / 86400);
-                    var hours = Math.floor((totalSeconds % 86400) / 3600);
-                    var minutes = Math.floor((totalSeconds % 3600) / 60);
-                    var seconds = totalSeconds % 60;
-
-                    daysEl.textContent = pad(days);
-                    hoursEl.textContent = pad(hours);
-                    minsEl.textContent = pad(minutes);
-                    secsEl.textContent = pad(seconds);
-                }
-
-                update();
-                var timer = setInterval(update, 1000);
-            }
-
-            if (document.readyState === "loading") {
-                document.addEventListener("DOMContentLoaded", initPresaleCountdown);
-            } else {
-                initPresaleCountdown();
-            }
-        })();
-    </script>
 
 </body>
 
